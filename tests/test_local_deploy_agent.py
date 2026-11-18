@@ -102,14 +102,41 @@ class TestSafety(unittest.TestCase):
             pause.assert_called_once()
             self.assertEqual(save.call_args.args[0]['blocked_sha'],sha)
 
-    def test_review_zero_blocks_auto_deploy(self):
+    def test_review_zero_still_requires_ci(self):
         fake = {'enforcement':'active','conditions':{'ref_name':{'include':['~DEFAULT_BRANCH']}},'rules':[
             {'type':'required_signatures'},
             {'type':'pull_request','parameters':{'required_approving_review_count':0}},
             {'type':'required_status_checks','parameters':{'required_status_checks':[]}}]}
         with patch.object(agent, 'api_json', return_value=fake):
-            with self.assertRaisesRegex(agent.Stop,'Required approvals is still 0'):
+            with self.assertRaisesRegex(agent.Stop,'Missing one or more of 5 required CI checks'):
                 agent.verify_merge_policy()
+
+    def test_zero_review_with_required_ci_is_allowed(self):
+        required = [
+            "Unit and API (preview)",
+            "Browser UI smoke",
+            "Hybrid DB (PostgreSQL + MongoDB)",
+            "Build container images",
+            "Dependency vulnerability audit",
+        ]
+        fake = {
+            "enforcement": "active",
+            "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"]}},
+            "rules": [
+                {"type": "required_signatures"},
+                {"type": "pull_request", "parameters": {
+                    "required_approving_review_count": 0
+                }},
+                {"type": "required_status_checks", "parameters": {
+                    "required_status_checks": [
+                        {"context": name} for name in required
+                    ]
+                }},
+            ],
+        }
+        with patch.object(agent, "api_json", return_value=fake), \
+             patch.object(agent, "log"):
+            agent.verify_merge_policy()
 
     def test_health_denies_demo(self):
         vals={'PUBLIC_ORIGIN':'https://example.ts.net','REQUIRE_BACKGROUND_AI':'0'}
