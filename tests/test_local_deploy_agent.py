@@ -138,6 +138,38 @@ class TestSafety(unittest.TestCase):
              patch.object(agent, "log"):
             agent.verify_merge_policy()
 
+    def test_connection_reset_is_retryable(self):
+        with patch.object(
+            agent.urllib.request, "urlopen",
+            side_effect=ConnectionResetError("peer reset")
+        ):
+            with self.assertRaisesRegex(agent.Stop, "ConnectionResetError"):
+                agent.get_json("http://127.0.0.1:3100/api/ready")
+
+    def test_health_recovers_after_transient_failure(self):
+        ready = {
+            "ready": True,
+            "sql": "PostgreSQL",
+            "nosql": "MongoDB",
+        }
+        responses = [
+            agent.Stop("temporary connection reset"),
+            ready,
+            ready,
+            {"demo_enabled": False, "invite_required": True},
+        ]
+        with patch.object(agent, "get_json", side_effect=responses) as getter:
+            with patch.object(agent.time, "sleep") as sleeper:
+                agent.assert_health(
+                    {
+                        "PUBLIC_ORIGIN": "https://example.ts.net",
+                        "REQUIRE_BACKGROUND_AI": "0",
+                    },
+                    attempts=2,
+                )
+        self.assertEqual(getter.call_count, 4)
+        sleeper.assert_called_once_with(3)
+
     def test_health_denies_demo(self):
         vals={'PUBLIC_ORIGIN':'https://example.ts.net','REQUIRE_BACKGROUND_AI':'0'}
         def get(url,timeout=6):
