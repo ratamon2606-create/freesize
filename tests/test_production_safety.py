@@ -24,25 +24,27 @@ def isolated_app(*, invite=''):
     return temp, importlib.import_module('app')
 
 
-def test_invite_only_registration_and_no_seed():
-    code = 'example-private-code-should-be-random-12345'
-    temp, server = isolated_app(invite=code)
+def test_registration_without_invitation_code_and_no_seed():
+    # An older private Compose override may still forward this legacy secret.
+    # It must not affect signups after the feature is removed.
+    legacy_code = 'unused-legacy-code'
+    temp, server = isolated_app(invite=legacy_code)
     try:
         with TestClient(server.app) as client:
             config = client.get('/api/health').json()
-            assert config['invite_required'] is True
+            assert config['invite_required'] is False
             assert config['demo_enabled'] is False
-            assert client.post('/api/auth/login', json={'username':'taa','password':'demo12345'}).status_code == 401
-            details={'username':'member1','email':'member1@example.com','password':'goodpassword123'}
-            assert client.post('/api/auth/register', json=details).status_code == 403
-            assert client.post('/api/auth/register', json={**details,'invite_code':'wrong'}).status_code == 403
-            success=client.post('/api/auth/register', json={**details,'invite_code':code})
+            assert client.post('/api/auth/login', json={
+                'username': 'taa', 'password': 'demo12345'
+            }).status_code == 401
+            details = {'username': 'member1', 'email': 'member1@example.com',
+                       'password': 'goodpassword123'}
+            success = client.post('/api/auth/register', json=details)
             assert success.status_code == 200, success.text
-            assert client.get('/api/me').json()['username']=='member1'
+            assert client.get('/api/me').json()['username'] == 'member1'
     finally:
-        os.environ.pop('REGISTRATION_INVITE_CODE',None)
+        os.environ.pop('REGISTRATION_INVITE_CODE', None)
         temp.cleanup()
-
 
 def test_login_rate_limit_rejects_repeated_guesses():
     temp, server = isolated_app()
@@ -68,30 +70,33 @@ def test_reject_disguised_nonimage_upload():
         temp.cleanup()
 
 
-def test_public_production_fails_closed_without_database_and_invite():
-    env=os.environ.copy()
-    env.update({'COOKIE_SECURE':'1','PUBLIC_ORIGIN':'https://closet.example.org','SEED_DEMO':'0','REGISTRATION_INVITE_CODE':'','DATABASE_URL':'','MONGO_URL':''})
-    result=subprocess.run([sys.executable,'-c','import app'],env=env,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    assert result.returncode!=0
+def test_production_fails_closed_without_databases():
+    env = os.environ.copy()
+    env.update({'COOKIE_SECURE': '1', 'SEED_DEMO': '0',
+                'DATABASE_URL': '', 'MONGO_URL': ''})
+    result = subprocess.run([sys.executable, '-c', 'import app'], env=env,
+                            text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    assert result.returncode != 0
     assert 'Production requires both PostgreSQL and MongoDB' in result.stderr
 
 
-def test_production_rejects_example_invitation_code():
-    env=os.environ.copy()
-    env.update({'COOKIE_SECURE':'1','PUBLIC_ORIGIN':'https://closet.example.org',
-                'SEED_DEMO':'0','REGISTRATION_INVITE_CODE':'REPLACE_THIRD_RANDOM_64_HEX_CHARS',
-                'DATABASE_URL':'postgresql://wardrobe:x@postgres:5432/wardrobeshare',
-                'MONGO_URL':'mongodb://user:pass@mongo:27017/'})
-    result=subprocess.run([sys.executable,'-c','import app'],env=env,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+def test_production_rejects_demo_accounts_even_without_invite_code():
+    env = os.environ.copy()
+    env.update({'COOKIE_SECURE': '1', 'SEED_DEMO': '1',
+                'DATABASE_URL': 'postgresql://wardrobe:x@postgres:5432/wardrobeshare',
+                'MONGO_URL': 'mongodb://user:pass@mongo:27017/'})
+    result = subprocess.run([sys.executable, '-c', 'import app'], env=env,
+                            text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     assert result.returncode != 0
-    assert 'random hex' in result.stderr
-
+    assert 'Production requires SEED_DEMO=0' in result.stderr
 
 def test_production_source_config_guards():
     from pathlib import Path
     code=Path('app.py').read_text()
     compose=Path('deploy/compose.production.yml').read_text()
-    assert 'REGISTRATION_INVITE_CODE' in code
+    assert 'REGISTRATION_INVITE_CODE' not in code
+    assert 'REGISTRATION_INVITE_CODE' not in compose
+    assert 'name="invite_code"' not in Path('static/js/app.js').read_text()
     assert "'no-new-privileges:true'" in compose
     assert "SEED_DEMO: '0'" in compose
     assert "COOKIE_SECURE: '1'" in compose

@@ -48,7 +48,6 @@ services:
       SEED_DEMO: '0'
       COOKIE_SECURE: '1'
       PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?Set PUBLIC_ORIGIN}
-      REGISTRATION_INVITE_CODE: ${REGISTRATION_INVITE_CODE:?Set REGISTRATION_INVITE_CODE}
       MAX_BETA_USERS: '25'
     depends_on:
       postgres: {condition: service_healthy}

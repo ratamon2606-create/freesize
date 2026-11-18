@@ -157,8 +157,8 @@ Rollback เพราะ SQL/Mongo อาจมีข้อมูลใหม่
 - [ ] HTTPS ผ่าน Browser, ไม่มี Mixed Content, cookies Secure + HttpOnly
 - [ ] ไม่มี Demo accounts / Demo data (ใช้ฐานใหม่และ `SEED_DEMO=0`)
 - [ ] ไม่มี `/.env`, SSH key, Database port หรือ private upload URL เปิดสาธารณะ
-- [ ] สมัคร User A ด้วย Invite Code; ไม่ใส่/ใส่ผิด ต้องสมัครไม่ได้
-- [ ] User B ใช้ Invite Code สมัคร, อัปโหลด JPEG/PNG, AI ตัดพื้นหลังได้จริง
+- [ ] สมัคร User A ได้โดยไม่ต้องใช้ Invitation Code เมื่อเข้าถึงเว็บผ่านเครือข่ายที่อนุญาต
+- [ ] User B สมัครได้โดยไม่ต้องใช้ Invitation Code, อัปโหลด JPEG/PNG, AI ตัดพื้นหลังได้จริง
 - [ ] User A ไม่เห็นรูปส่วนตัวของ B จนเป็นเพื่อน, ไม่เห็น OOTD ที่มีเจ้าของคนอื่นที่ไม่ใช่เพื่อน
 - [ ] User A/B เพิ่มเพื่อน, จัด OOTD, Save/Edit/Delete, ยืม/ส่งมอบ/คืน
 - [ ] Logout/Login ข้าม Browser และ Restart Container แล้วข้อมูล+รูปยังอยู่

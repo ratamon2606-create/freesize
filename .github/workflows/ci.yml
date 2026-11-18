@@ -120,7 +120,6 @@ jobs:
           POSTGRES_PASSWORD: ci_example_password
           MONGO_ROOT_USERNAME: ci_example_user
           MONGO_ROOT_PASSWORD: ci_example_password
-          REGISTRATION_INVITE_CODE: ci_example_invitation_code
           PUBLIC_ORIGIN: https://closet.example.org
           SITE_DOMAIN: closet.example.org
           WEB_IMAGE: ghcr.io/example/wardrobe-web@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

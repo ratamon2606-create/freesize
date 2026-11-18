@@ -184,6 +184,31 @@ class TestSafety(unittest.TestCase):
         self.assertEqual(getter.call_count, 4)
         sleeper.assert_called_once_with(3)
 
+    def test_preflight_accepts_current_legacy_invite_requirement(self):
+        vals = {'PUBLIC_ORIGIN': 'https://example.ts.net', 'REQUIRE_BACKGROUND_AI': '0'}
+        def get(url, timeout=6):
+            if url.endswith('/api/health'):
+                return {'demo_enabled': False, 'invite_required': True}
+            return {'ready': True, 'sql': 'PostgreSQL', 'nosql': 'MongoDB'}
+        with patch.object(agent, 'get_json', side_effect=get):
+            agent.assert_health(vals, attempts=1)
+
+    def test_new_release_requires_open_registration(self):
+        vals = {'PUBLIC_ORIGIN': 'https://example.ts.net', 'REQUIRE_BACKGROUND_AI': '0'}
+        def old(url, timeout=6):
+            if url.endswith('/api/health'):
+                return {'demo_enabled': False, 'invite_required': True}
+            return {'ready': True, 'sql': 'PostgreSQL', 'nosql': 'MongoDB'}
+        def new(url, timeout=6):
+            if url.endswith('/api/health'):
+                return {'demo_enabled': False, 'invite_required': False}
+            return {'ready': True, 'sql': 'PostgreSQL', 'nosql': 'MongoDB'}
+        with patch.object(agent, 'get_json', side_effect=old):
+            with self.assertRaisesRegex(agent.Stop, 'still requires an invitation'):
+                agent.assert_health(vals, require_no_invite=True)
+        with patch.object(agent, 'get_json', side_effect=new):
+            agent.assert_health(vals, require_no_invite=True)
+
     def test_health_denies_demo(self):
         vals={'PUBLIC_ORIGIN':'https://example.ts.net','REQUIRE_BACKGROUND_AI':'0'}
         def get(url,timeout=6):

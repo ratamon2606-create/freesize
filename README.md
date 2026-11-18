@@ -20,7 +20,7 @@ The interface uses a warm **vintage textile / brown gingham** design with real c
 
 | Area | What you can do |
 | --- | --- |
-| Account & profile | Register, sign in/out, edit your profile and avatar; invite-only registration for closed beta |
+| Account & profile | Register without an invitation code, sign in/out, edit your profile and avatar; shared site access stays restricted by Tailscale |
 | My Wardrobe | Upload or take clothing photos, remove backgrounds locally, manage details, edit/delete items, track current holder |
 | OOTD Gallery & Studio | Build outfits on a drag-and-drop canvas, resize and layer clothes, save/edit/delete slots, inspect item ownership |
 | Friends | Search usernames, send/accept/reject requests, manage friends, explore their permitted wardrobes |

@@ -95,8 +95,6 @@ def env_values() -> dict[str, str]:
         raise Stop("SEED_DEMO must be 0 before shared updates.")
     if vals.get("COOKIE_SECURE") != "1":
         raise Stop("COOKIE_SECURE must be 1 for HTTPS shared site.")
-    if not re.fullmatch(r"[0-9a-fA-F]{48,}", vals.get("REGISTRATION_INVITE_CODE", "")):
-        raise Stop("Secure REGISTRATION_INVITE_CODE must be >=48 hex characters.")
     origin = vals.get("PUBLIC_ORIGIN", "")
     if not re.fullmatch(r"https://[a-z0-9-]+\.[a-z0-9-]+\.ts\.net", origin):
         raise Stop("PUBLIC_ORIGIN must be your exact Tailscale HTTPS URL (no trailing slash).")
@@ -145,7 +143,7 @@ def get_json(url: str, timeout: int = 6) -> dict[str, Any]:
         raise Stop(f"Health endpoint failed at {url}: {type(exc).__name__}") from exc
 
 
-def assert_health(vals: dict[str, str], attempts: int = 1) -> None:
+def assert_health(vals: dict[str, str], attempts: int = 1, *, require_no_invite: bool = False) -> None:
     origin = vals["PUBLIC_ORIGIN"]
     last = "No health checks performed"
     for i in range(attempts):
@@ -158,8 +156,10 @@ def assert_health(vals: dict[str, str], attempts: int = 1) -> None:
                 if vals.get("REQUIRE_BACKGROUND_AI") == "1" and d.get("background_ai") != "in-process model ready":
                     raise Stop(f"Local AI not ready at {url}.")
             health = get_json("http://127.0.0.1:3100/api/health")
-            if health.get("demo_enabled") is not False or health.get("invite_required") is not True:
-                raise Stop("Demo or invite registration check failed.")
+            if health.get("demo_enabled") is not False:
+                raise Stop("Demo users must remain disabled.")
+            if require_no_invite and health.get("invite_required") is not False:
+                raise Stop("New web image still requires an invitation code.")
             return
         except Stop as exc:
             last = str(exc)
@@ -346,7 +346,7 @@ def check_once() -> None:
     log("Pinned previous running web image locally for rollback.")
     try:
         swap_web(target)
-        assert_health(vals, attempts=30)
+        assert_health(vals, attempts=30, require_no_invite=True)
     except Exception as exc:
         log(f"Deployment failed: {exc}. Attempting rollback of web only.")
         ensure_paused()
