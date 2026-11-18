@@ -1,0 +1,5 @@
+# Added on top of the EXISTING docker-compose.yml + compose.friends.yml.
+# Change ONLY the web image. Never run compose down -v here.
+services:
+  web:
+    image: ${FREESIZE_RELEASE_IMAGE:?Set immutable CI-published GHCR image}
