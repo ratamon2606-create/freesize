@@ -2,6 +2,7 @@ import importlib.util
 import pathlib
 import unittest
 from unittest.mock import patch
+from types import SimpleNamespace
 
 MOD = pathlib.Path(__file__).resolve().parents[1] / 'scripts' / 'freesize_local_deploy.py'
 spec = importlib.util.spec_from_file_location('agent', MOD)
@@ -9,6 +10,49 @@ agent = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(agent)
 
 class TestSafety(unittest.TestCase):
+    def test_separate_docker_disk_allows_8_gib_root_and_43_gib_docker(self):
+        def fake_stat(path):
+            return SimpleNamespace(st_dev=1 if str(path) == '/' else 2)
+        def fake_usage(path):
+            return SimpleNamespace(free=(8 if str(path) == '/' else 43) * 1024**3)
+        with patch.object(agent, 'run', return_value='/mnt/rosdata/docker'), \
+             patch.object(agent.os, 'stat', side_effect=fake_stat), \
+             patch.object(agent.shutil, 'disk_usage', side_effect=fake_usage):
+            agent.disk_check()
+
+    def test_separate_docker_disk_low_root_stops(self):
+        def fake_stat(path):
+            return SimpleNamespace(st_dev=1 if str(path) == '/' else 2)
+        def fake_usage(path):
+            return SimpleNamespace(free=(5 if str(path) == '/' else 43) * 1024**3)
+        with patch.object(agent, 'run', return_value='/mnt/rosdata/docker'), \
+             patch.object(agent.os, 'stat', side_effect=fake_stat), \
+             patch.object(agent.shutil, 'disk_usage', side_effect=fake_usage):
+            with self.assertRaisesRegex(agent.Stop, 'require >= 6 GiB'):
+                agent.disk_check()
+
+    def test_docker_on_root_still_requires_12_gib(self):
+        def fake_stat(path):
+            return SimpleNamespace(st_dev=1)
+        def fake_usage(path):
+            return SimpleNamespace(free=8 * 1024**3)
+        with patch.object(agent, 'run', return_value='/var/lib/docker'), \
+             patch.object(agent.os, 'stat', side_effect=fake_stat), \
+             patch.object(agent.shutil, 'disk_usage', side_effect=fake_usage):
+            with self.assertRaisesRegex(agent.Stop, 'require >= 12 GiB'):
+                agent.disk_check()
+
+    def test_separate_docker_disk_low_space_stops(self):
+        def fake_stat(path):
+            return SimpleNamespace(st_dev=1 if str(path) == '/' else 2)
+        def fake_usage(path):
+            return SimpleNamespace(free=(8 if str(path) == '/' else 10) * 1024**3)
+        with patch.object(agent, 'run', return_value='/mnt/rosdata/docker'), \
+             patch.object(agent.os, 'stat', side_effect=fake_stat), \
+             patch.object(agent.shutil, 'disk_usage', side_effect=fake_usage):
+            with self.assertRaisesRegex(agent.Stop, 'Insufficient Docker data-root disk'):
+                agent.disk_check()
+
     def test_choose_valid_release(self):
         good={'name':'Publish and deploy verified release','event':'workflow_run','head_branch':'main','head_sha':'a'*40,'status':'completed','conclusion':'success','id':5}
         self.assertEqual(agent.choose_published_release('a'*40,[good]),good)
