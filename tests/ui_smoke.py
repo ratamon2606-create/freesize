@@ -26,7 +26,7 @@ with sync_playwright() as p:
             assert card.locator(f'[data-action="{action}"]').count()==1, f'Missing {action}'
     page.locator('[data-action="openAdd"]').click()
     page.locator('#clothing-form').wait_for()
-    page.locator('[data-action="closeModal"]').click()
+    page.get_by_role('dialog').get_by_role('button', name='Close', exact=True).click()
 
     page.goto(base+'/ootd')
     page.locator('.topbar').wait_for()
@@ -44,7 +44,7 @@ with sync_playwright() as p:
             return css.position === 'relative' && css.overflow === 'hidden'
                 && (s.right <= p.left + 1 || s.bottom <= p.top + 1);
         }'''), 'OOTD modal preview overlaps the outfit details or lacks clipping'
-        page.locator('[data-action="closeModal"]').click()
+        page.get_by_role('dialog').get_by_role('button', name='Close', exact=True).click()
     page.locator('[data-action="newOOTD"]').first.click()
     page.locator('#editor-canvas').wait_for(timeout=20000)
     page.goto(base+'/friends')
