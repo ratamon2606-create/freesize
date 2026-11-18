@@ -1,0 +1,2 @@
+# Optional in-process local background removal (no HTTP microservice).
+rembg[cpu]==2.0.87

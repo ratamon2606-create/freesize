@@ -1,0 +1,72 @@
+# Self-hosted production containers. Reverse proxy to localhost:3000 with HTTPS.
+# Run in /opt/wardrobeshare: docker compose --env-file .env -f compose.production.yml up -d
+name: wardrobeshare-prod
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: wardrobeshare
+      POSTGRES_USER: wardrobe
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wardrobe -d wardrobeshare"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks: [private]
+
+  mongodb:
+    image: mongo:7
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:?Set MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:?Set MONGO_ROOT_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --username \"$$MONGO_INITDB_ROOT_USERNAME\" --password \"$$MONGO_INITDB_ROOT_PASSWORD\" --authenticationDatabase admin --eval 'db.adminCommand(\"ping\").ok' | grep -q 1"]
+      interval: 10s
+      timeout: 8s
+      retries: 20
+    networks: [private]
+
+  web:
+    image: ${WEB_IMAGE:?Set WEB_IMAGE}
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://wardrobe:${POSTGRES_PASSWORD}@postgres:5432/wardrobeshare
+      MONGO_URL: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017/?authSource=admin
+      U2NET_HOME: /app/models
+      REQUIRE_BACKGROUND_AI: ${REQUIRE_BACKGROUND_AI:-1}
+      DATA_DIR: /app/data
+      SEED_DEMO: '0'
+      COOKIE_SECURE: '1'
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:?Set PUBLIC_ORIGIN}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    ports:
+      - '127.0.0.1:3000:3000'
+    volumes:
+      - uploaded_media:/app/data
+      - ./models:/app/models:ro
+    healthcheck:
+      test: ['CMD', 'python', '-c', 'import urllib.request;urllib.request.urlopen("http://127.0.0.1:3000/api/ready",timeout=3).read()']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks: [private]
+
+networks:
+  private:
+    internal: false
+volumes:
+  pg_data:
+  mongo_data:
+  uploaded_media:

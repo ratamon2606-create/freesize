@@ -1,0 +1,21 @@
+digraph NoSQL {
+ graph [rankdir=LR, bgcolor="white", pad="0.4", nodesep="0.55", ranksep="0.7", label="WardrobeShare — MongoDB Document Schema & Cross-DB Flow", labelloc=t, fontsize=21, fontname="DejaVu Sans", fontcolor="#473528"];
+ node [shape=box, style="rounded,filled", fillcolor="#FCF7EF", color="#A38A71", fontname="DejaVu Sans", fontsize=12, margin="0.25,0.18"];
+ edge [color="#9D826B",fontsize=10,fontname="DejaVu Sans"];
+ slot [label="SQL outfit_slots\nPK id", fillcolor="#E0E9DA"];
+ user [label="SQL users\nPK id",fillcolor="#E0E9DA"];
+ borrow [label="SQL borrow_requests\nPK id",fillcolor="#E0E9DA"];
+ outbox [label="SQL outbox_events\nqueued / processed / retries",fillcolor="#E8DDD1"];
+ outfits [label="outfit_compositions\nslot_id · owner_id\nitems: [{item_id, owner_id, x,y,w,z}]",fillcolor="#F5DFCE"];
+ notify [label="notifications\nid · user_id · title · message\nread · created_at",fillcolor="#F5DFCE"];
+ activity [label="activity_logs\nid · user_id · action · message\nnote · created_at",fillcolor="#F5DFCE"];
+ log [label="borrow_status_logs\nid · user_id · request_id\naction · message · note",fillcolor="#F5DFCE"];
+ slot -> outfits [label="slot_id"];
+ user -> notify [label="user_id"];
+ user -> activity [label="user_id"];
+ borrow -> log [label="request_id"];
+ outbox -> outfits [style=dashed,label="upsert / delete"];
+ outbox -> notify [style=dashed,label="retries"];
+ outbox -> activity [style=dashed];
+ outbox -> log [style=dashed];
+}

@@ -1,0 +1,37 @@
+name: Manual production rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Why rollback is required (recorded in workflow history)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wardrobeshare-production
+  cancel-in-progress: false
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v6
+      - name: Restore previous verified release (application images only)
+        env:
+          PROD_HOST: ${{ secrets.PROD_SSH_HOST }}
+          PROD_USER: ${{ secrets.PROD_SSH_USER }}
+          PROD_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          PROD_HOST_KEYS: ${{ secrets.PROD_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$PROD_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$PROD_HOST_KEYS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes "$PROD_USER@$PROD_HOST" 'bash -s' < deploy/rollback-release.sh

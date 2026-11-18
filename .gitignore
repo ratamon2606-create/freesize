@@ -1,0 +1,41 @@
+# Local credentials and environment
+.env
+.env.*
+!.env.example
+!.env.production.example
+*.pem
+*.key
+id_ed25519*
+
+# Python and local development state
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+data/
+*.sqlite3
+*.db
+
+# OS, editors and test artifacts
+.DS_Store
+.vscode/
+.idea/
+playwright-report/
+test-results/
+*.log
+*.backup
+backups/
+state/
+
+# Keep local ONNX model weights offline / out of git
+models/
+
+# Local backup files
+*.bak
+*.bak.*
+*.backup

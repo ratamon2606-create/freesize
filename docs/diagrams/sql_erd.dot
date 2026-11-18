@@ -1,0 +1,24 @@
+digraph ER {
+ graph [rankdir=LR, bgcolor="white", pad="0.2", nodesep="0.36", ranksep="0.7", label="WardrobeShare — PostgreSQL Entity-Relationship Diagram", labelloc=t, fontsize=21, fontname="DejaVu Sans", fontcolor="#473528"];
+ node [shape=record, style="rounded,filled", fontname="DejaVu Sans",fontsize=11, color="#A58A6B", fillcolor="#FCF7EF",margin="0.15,0.1"];
+ edge [color="#9D826B",arrowsize=0.65,fontsize=9,fontname="DejaVu Sans"];
+ users [label="{users|id PK\lusername UK\lemail UK\lpassword_hash\l}",fillcolor="#F0DFCA"];
+ sessions [label="{sessions|id_hash PK\luser_id FK\lexpires_at\l}"];
+ clothing_items [label="{clothing_items|id PK\lowner_id FK\lcurrent_holder_id FK\lname / category / state\ldeleted_at\l}"];
+ clothing_upload_requests [label="{clothing_upload_requests|user_id FK (composite PK)\lrequest_token (composite PK)\lclothing_id FK\l}"];
+ friendships [label="{friendships|id PK\lrequester_id FK\laddressee_id FK\lstatus\l}"];
+ outfit_slots [label="{outfit_slots|id PK\lowner_id FK\ltitle\l}"];
+ borrow_requests [label="{borrow_requests|id PK\litem_id FK\lowner_id FK\lborrower_id FK\lstatus\l}"];
+ loans [label="{loans|id PK\lrequest_id FK UNIQUE\litem_id FK\llender_id FK\lborrower_id FK\lstatus\l}"];
+ outbox_events [label="{outbox_events|id PK\levent_type\lpayload_json\lprocessed_at\l}",fillcolor="#E6E8DC"];
+ users -> sessions [label="1:N"];
+ users -> clothing_items [label="owns 1:N"];
+ users -> friendships [label="1:N"];
+ users -> outfit_slots [label="1:N"];
+ users -> borrow_requests [label="1:N"];
+ clothing_items -> clothing_upload_requests [label="1:N"];
+ users -> clothing_upload_requests [label="1:N"];
+ clothing_items -> borrow_requests [label="1:N"];
+ borrow_requests -> loans [label="1:0..1"];
+ clothing_items -> loans [label="1:N"];
+}

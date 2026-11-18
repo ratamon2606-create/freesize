@@ -1,0 +1,699 @@
+/* WardrobeShare — vintage mocha (brown) */
+:root{--ink:#4f392e;--muted:#866d5d;--cocoa:#8e664a;--cocoa-dark:#775039;--soft:#e9d7c6;--cream:#fcf8f2;--paper:#fff9f0;--line:#e3d5c5;--sage:#e5e9db;--gingham-base:#eee1d1;--shadow:0 7px 22px #61452e1c}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:"Trebuchet MS",Arial,sans-serif;color:var(--ink)}
+body{background-color:#e7d9c8;background-image:linear-gradient(90deg,rgba(255,255,255,.48) 50%,transparent 50%),linear-gradient(rgba(255,255,255,.46) 50%,transparent 50%);background-size:40px 40px}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+button:disabled{opacity:.46;cursor:not-allowed}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+h1,h2,h3,h4,p{margin:0}
+h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif}
+h1{font-size:clamp(29px,3vw,43px);font-weight:600}
+h2{font-size:28px;font-weight:600}
+h3{font-size:19px;font-weight:600}
+small{font-size:12px}
+.muted{color:var(--muted)}
+.brand-script{font-family:"Brush Script MT","Segoe Script",Georgia,serif;font-weight:700;font-style:italic;font-size:28px;letter-spacing:-.5px}
+.boot{display:grid;place-content:center;min-height:100vh;text-align:center;gap:12px}
+.app-shell{max-width:1500px;margin:20px auto 45px;padding:0 18px}
+.topbar{background:linear-gradient(#fffaf2,#f9f0e5);border:1px solid #eadccc;border-radius:18px;box-shadow:var(--shadow);display:flex;align-items:center;gap:15px;padding:12px 24px;min-height:74px;position:sticky;z-index:30;top:12px}
+.topbar .logo{display:flex;align-items:center;gap:8px;white-space:nowrap;margin-right:20px}
+.brand-logo{font-size:26px}
+.brand-heart{color:var(--cocoa);font-size:22px}
+.nav{display:flex;justify-content:center;align-items:center;gap:10px;flex:1}
+.nav-link{display:flex;align-items:center;gap:7px;padding:10px 17px;border-radius:13px;font-size:14px;font-weight:600;white-space:nowrap}
+.nav-link:hover,.nav-link.active{background:#e6d3bf}
+.nav-link svg,.top-icon svg,.btn svg{width:17px;height:17px;flex-shrink:0}
+.top-right{display:flex;align-items:center;gap:13px;margin-left:auto}
+.top-icon{display:grid;place-items:center;width:38px;height:38px;position:relative}
+.top-icon .dot{position:absolute;right:5px;top:4px;background:#a07754;border:3px solid #fcf8f2;border-radius:50%;width:13px;height:13px}
+.avatar{display:grid;place-items:center;flex-shrink:0;background:linear-gradient(145deg,#dfc5a8,#e5e9db);color:#6a4d3b;border:2px solid white;border-radius:50%;font-family:Georgia,serif;font-size:18px;overflow:hidden}
+.avatar img{height:100%;width:100%;object-fit:cover}
+.avatar.small{width:38px;height:38px}
+.avatar.mid{width:54px;height:54px}
+.avatar.big{width:102px;height:102px;font-size:38px}
+.page{padding:26px 14px 40px}
+.panel{background:rgba(255,251,245,.95);border:1px solid rgba(237,217,207,.9);border-radius:20px;box-shadow:var(--shadow)}
+.paper{background:#fff9f0;border:1px solid #e1cfba;border-radius:17px;box-shadow:var(--shadow);position:relative}
+.paper::before{content:"";position:absolute;inset:5px;border:1px dashed #cbb9a6;border-radius:13px;pointer-events:none;opacity:.55}
+.tag-paper{display:inline-flex;align-items:center;gap:9px;background:#fbf3e6;border:1px solid #ddc5ae;padding:12px 22px;border-radius:7px 16px 9px 13px;box-shadow:3px 3px 0 #bfa08150;font-family:Georgia,serif}
+.tag-paper:after{content:"♡";font-size:18px;color:#9d7558}
+.heading-line{display:flex;align-items:center;gap:15px;margin-bottom:23px}
+.heading-line p{margin-top:8px;color:#897060;font-size:14px}
+.heading-right{margin-left:auto}
+.badge{display:inline-flex;gap:5px;align-items:center;padding:5px 11px;border-radius:30px;font-size:12px;font-weight:700;background:#eee2d4;color:#785d4a;white-space:nowrap}
+.badge.green{background:#e5ebda;color:#526741}
+.badge.amber{background:#f2e6c9;color:#87673e}
+.badge.blue{background:#e1e8eb;color:#526878}
+.badge.pink{background:#e9d7c4;color:#805b42}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;border-radius:12px;padding:11px 16px;font-weight:700;font-size:13px;border:1px solid transparent;transition:transform .15s,background .15s;white-space:nowrap}
+.btn:hover:not(:disabled){transform:translateY(-1px)}
+.btn.primary{background:var(--cocoa);color:white;box-shadow:0 4px 0 #62412f;border-color:#835c40}
+.btn.primary:hover{background:var(--cocoa-dark)}
+.btn.secondary{background:#fbf6ee;border-color:#ddc6ae}
+.btn.soft{background:#eee1d3;color:#77563f}
+.btn.sage{background:#e5ebd9;color:#526747}
+.btn.danger{background:#f8ece7;color:#a44f47;border-color:#e3c3ba}
+.btn.ghost{padding:8px 9px;color:#745848}
+.btn.small{padding:7px 10px;font-size:12px}
+.btn.tiny{padding:5px 8px;font-size:11px}
+.btn.big{padding:15px 24px;font-size:15px}
+.input,textarea,select{border:1px solid #d9c6b2;background:#fffaf4;outline:none;border-radius:12px;padding:12px 13px;min-width:0;max-width:100%;width:100%;font-size:14px}
+.input:focus,textarea:focus,select:focus{border-color:#977353;box-shadow:0 0 0 3px #b79a7736}
+.field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.field label{font-size:12px;font-weight:700;color:#735642}
+.field small{color:#8e7664}
+.layout-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.page-toolbar{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.page-toolbar .search{flex:1;min-width:180px;max-width:400px}
+.search{position:relative}
+.search .input{padding-left:38px}
+.search svg{position:absolute;top:50%;left:13px;transform:translateY(-50%);color:#937a65;width:18px;height:18px}
+.pill-tabs{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.pill{padding:10px 17px;border-radius:50px;border:1px solid #dec8b1;background:#fcf7ef;font-size:13px;font-weight:600}
+.pill.active{background:#997251;color:white;border-color:#77563e}
+.right-align{margin-left:auto}
+.divider{height:1px;background:#e5d7c7;margin:18px 0}
+.hero{position:relative;display:grid;grid-template-columns:1.4fr .9fr;gap:20px;background:linear-gradient(112deg,#fcf6ec 15%,#e9dac8);border:1px solid #e2d0bc;border-radius:22px;min-height:272px;padding:32px 38px;overflow:hidden}
+.hero .copy{position:relative;z-index:2}
+.hero small{display:block;margin-bottom:8px;color:#99775c;letter-spacing:2px;font-weight:700}
+.hero h1{line-height:1.08;font-size:clamp(36px,4.3vw,62px);margin-bottom:14px}
+.hero h1 em{font-weight:400;color:#926749}
+.hero p{max-width:460px;color:#836958;line-height:1.6;font-size:15px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:23px}
+.hero-collage{height:238px;position:relative}
+.hero-collage img{position:absolute;object-fit:contain;filter:drop-shadow(4px 7px 2px #76513924)}
+.hero-collage img:nth-child(1){width:48%;height:100%;left:4%;top:-4%;transform:rotate(-9deg)}
+.hero-collage img:nth-child(2){width:47%;height:92%;left:36%;top:17%;transform:rotate(11deg)}
+.hero-collage img:nth-child(3){width:35%;height:50%;left:63%;top:48%;transform:rotate(-13deg)}
+.hero-collage .doodle{position:absolute;right:12%;top:7%;font-size:39px;color:#a28362}
+.section{margin-top:27px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:0 4px 13px;gap:12px}
+.section-head a,.link{color:#876248;font-weight:700;font-size:13px;cursor:pointer}
+.section-head h2{font-size:27px}
+.subline{margin-top:4px;color:#8a7462;font-size:13px}
+.outfit-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.outfit-card{padding:12px;overflow:hidden}
+.outfit-card .preview{aspect-ratio:1/1.04;border-radius:13px;background:linear-gradient(#f5eee3,#fbf6ed);border:1px solid #e9dac8;position:relative;overflow:hidden}
+.outfit-card .preview img{pointer-events:none}
+.outfit-info{padding:12px 4px 0;display:flex;align-items:center;gap:10px}
+.outfit-info .name{font-size:17px;font-family:Georgia,serif}
+.outfit-info .date{font-size:11px;color:#88705d;margin-top:4px}
+.outfit-info .tools{margin-left:auto;display:flex;gap:3px}
+.outfit-card:hover{box-shadow:0 8px 26px #674a3432}
+.preview-cutout{position:absolute;object-fit:contain;filter:drop-shadow(1px 3px 1px #60433326)}
+.sticker-strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.sticker-mini{background:#fcf7ef;border:1px solid #e7d9c8;border-radius:15px;text-align:center;padding:8px;height:164px;display:flex;flex-direction:column;align-items:center;justify-content:end;gap:5px}
+.sticker-mini img{width:100%;height:119px;object-fit:contain;filter:drop-shadow(2px 3px 1px #644d3c19)}
+.sticker-mini span{font-size:12px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.closet-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.clothing-card{background:#fcf8f2;border:1px solid #e4d5c2;border-radius:16px;padding:13px 12px 11px;box-shadow:0 4px 11px #62472e12;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.clothing-card:hover{transform:translateY(-3px);box-shadow:0 9px 18px #73553b23}
+.clothing-card .photo{height:174px;display:block;overflow:hidden;background:#f7efe4;border-radius:12px;position:relative;isolation:isolate}
+.clothing-card .photo img{position:absolute;inset:8px;width:calc(100% - 16px);height:calc(100% - 16px);max-width:none;max-height:none;object-fit:contain;object-position:center;filter:drop-shadow(2px 3px 1px #795f4b20)}
+.clothing-card .photo .heart{position:absolute;z-index:2;right:7px;top:4px;color:#9e7553;font-family:Georgia;font-size:22px}
+.clothing-card .clothing-title{font-family:Georgia;font-size:16px;font-weight:600;margin:11px 2px 7px}
+.clothing-card .meta{display:flex;justify-content:space-between;gap:6px;align-items:center;margin:0 2px 9px;font-size:12px;color:#886e5d}
+.clothing-card .badge{font-size:11px;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.clothing-card .mini-actions{display:flex;gap:5px;margin-top:9px}
+.clothing-card .mini-actions .btn{flex:1}
+.upload-zone{border:2px dashed #c7ae95;border-radius:14px;background:#fcf7f0;min-height:169px;display:grid;place-content:center;text-align:center;gap:8px;padding:15px;cursor:pointer;color:#876950}
+.upload-zone svg{width:28px;height:28px;margin:auto}
+.upload-preview{height:180px;width:100%;object-fit:contain;background:#f7f0e7;border-radius:12px}
+.modal-layer{position:fixed;inset:0;z-index:90;background:#33261c73;display:grid;place-items:center;padding:18px;overflow:auto}
+.modal{background:#fcf8f2;border:1px solid #e3d0ba;border-radius:24px;box-shadow:0 22px 80px #271c1455;max-width:700px;width:100%;max-height:calc(100vh - 34px);overflow:auto;padding:25px;position:relative}
+.modal-title{font-family:Georgia,serif;font-size:28px;margin:0 0 20px}
+.modal-close{position:absolute;right:18px;top:13px;font-size:25px;line-height:1}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:21px}
+.note{background:#f7eee4;border:1px solid #e4d2c0;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;color:#795c45}
+.note.sage{background:#f0f2e7;border-color:#dfe4d4;color:#62734f}
+.empty{padding:50px 25px;border:1px dashed #d6beaa;border-radius:18px;text-align:center;color:#886c56;background:#fff9f0cc}
+.empty .bigemoji{font-size:40px;display:block;margin-bottom:10px}
+.gallery-head{margin-top:7px}
+.editor-layout{display:grid;grid-template-columns:245px minmax(340px,1fr) 240px;gap:14px;align-items:stretch}
+.editor-panel{background:#fcf8f2;border:1px solid #e5d7c5;border-radius:17px;padding:14px;min-height:560px}
+.editor-panel h3{margin-bottom:12px}
+.editor-library{max-height:600px;overflow:auto}
+.library-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.library-item{background:#f7f0e7;border:1px solid #e4d5c2;padding:7px;border-radius:12px;display:grid;place-items:center;gap:5px;min-height:122px;cursor:pointer}
+.library-item:hover{border-color:#ab8463}
+.library-item img{height:86px;object-fit:contain;filter:drop-shadow(1px 2px 2px #74523b24)}
+.library-item span{font-size:10px;text-align:center;color:#856b56}
+.editor-canvas-wrap{background:#fcf8f2;border:1px solid #e5d6c2;border-radius:17px;padding:13px;display:flex;flex-direction:column}
+.editor-canvas{position:relative;flex:1;min-height:600px;background:#faf4eb;background-image:radial-gradient(#e7d7c3 1px,transparent 1px);background-size:24px 24px;border:1px dashed #cbb59c;border-radius:13px;overflow:hidden;touch-action:none}
+.editor-object{position:absolute;user-select:none;touch-action:none;cursor:grab;filter:drop-shadow(1px 4px 1px #684b3420)}
+.editor-object.selected{outline:2px solid #9b704c;outline-offset:3px;border-radius:5px}
+.editor-object img{width:100%;height:auto;pointer-events:none}
+.editor-object .handle{position:absolute;right:-7px;bottom:-7px;background:#9d7455;border:3px solid white;border-radius:50%;width:15px;height:15px}
+.editor-caption{text-align:center;font-size:12px;color:#8b7160;padding-top:9px}
+.editor-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.inspector-img{max-height:130px;width:100%;object-fit:contain;margin:10px auto}
+.range{width:100%;accent-color:#9d7455}
+.inspector-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.inspector-buttons .btn{white-space:normal}
+.people-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.friend-card{padding:17px}
+.friend-card .intro{display:flex;gap:12px;align-items:center}
+.friend-card .preview-rail{display:flex;height:84px;justify-content:space-around;gap:6px;align-items:center;background:#f7f1e7;border-radius:12px;margin:13px 0}
+.friend-card .preview-rail img{height:72px;max-width:30%;object-fit:contain}
+.friend-card .actions{display:flex;gap:8px}
+.friend-card .actions button{flex:1}
+.friend-layout{display:grid;grid-template-columns:260px 1fr;gap:17px}
+.friend-profile{padding:22px;text-align:center;height:max-content}
+.friend-profile .avatar{margin:0 auto 12px}
+.friend-profile p{line-height:1.6;font-size:13px;color:#886e5b;margin-top:10px}
+.friend-body{min-width:0}
+.friend-closet-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.friend-closet-grid .clothing-card{padding:8px}
+.friend-closet-grid .clothing-card .photo{height:125px}
+.friend-closet-grid .clothing-title{font-size:14px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.request-list,.feed-list{display:flex;flex-direction:column;gap:10px}
+.request-row{display:flex;align-items:center;gap:13px;padding:13px 14px;background:#fcf8f2;border:1px solid #e5d6c5;border-radius:14px}
+.request-row>img{width:68px;height:70px;object-fit:contain;background:#f7eee2;border-radius:10px}
+.request-row .who{flex:1;min-width:0}
+.request-row .who strong{font-family:Georgia;font-size:17px}
+.request-row .who p{font-size:12px;color:#8c725d;margin-top:4px}
+.request-row .actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.feed-row{display:flex;align-items:center;gap:11px;background:#fcf8f2;padding:14px;border:1px solid #e7d9c7;border-radius:13px}
+.feed-row .content{flex:1}
+.feed-row .content strong{font-size:14px}
+.feed-row .content p{font-size:12px;color:#876e5d;line-height:1.5;margin-top:4px}
+.feed-row.unread{border-left:4px solid #a77b54}
+.feed-icon{background:#efe3d4;color:#866047;border-radius:50%;width:40px;height:40px;display:grid;place-items:center;flex-shrink:0}
+.profile-layout{display:grid;grid-template-columns:230px 1fr;gap:24px;max-width:750px;margin:auto;padding:30px}
+.profile-pic{display:flex;flex-direction:column;align-items:center;gap:10px}
+.profile-form{display:grid;gap:14px}
+.auth-wrap{min-height:100vh;display:grid;grid-template-columns:1.1fr .9fr;gap:0;padding:25px;max-width:1220px;margin:auto}
+.auth-art{border-radius:25px 0 0 25px;background:linear-gradient(145deg,#ead8c4,#f6ebdc);position:relative;overflow:hidden;padding:52px 45px;min-height:680px}
+.auth-art .scribble{font-family:Georgia,serif;font-size:clamp(40px,4vw,66px);line-height:1.08;margin-top:20px}
+.auth-art p{margin-top:19px;max-width:390px;color:#80644f;line-height:1.7}
+.auth-images{height:260px;position:relative;margin-top:35px}
+.auth-images img{position:absolute;width:44%;height:100%;object-fit:contain;filter:drop-shadow(3px 8px 4px #98765840)}
+.auth-images img:nth-child(1){left:1%;transform:rotate(-10deg)}
+.auth-images img:nth-child(2){left:32%;transform:rotate(9deg)}
+.auth-images img:nth-child(3){left:62%;width:31%;transform:rotate(-13deg)}
+.auth-box{background:#fcf8f2;border-radius:0 25px 25px 0;padding:55px clamp(25px,6vw,90px);display:flex;flex-direction:column;justify-content:center}
+.auth-box h1{font-size:37px}
+.auth-box form{display:grid;gap:15px;margin:23px 0}
+.auth-box .switch{font-size:13px;color:#846b58}
+.auth-box .switch button{font-weight:700;color:#885f44}
+.toast{position:fixed;bottom:22px;right:24px;background:#4f392e;color:white;padding:14px 19px;border-radius:13px;z-index:200;box-shadow:0 6px 22px #281c1555;max-width:390px;line-height:1.5;font-size:14px}
+.toast.error{background:#a54b44}
+.mobile-menu{display:none}
+.privacy-bar{border:1px solid #e1d2bf;color:#75553e;background:#f8efe4;padding:11px 15px;border-radius:11px;margin-bottom:15px;font-size:13px;line-height:1.5}
+.stat-chip{display:inline-flex;padding:7px 12px;border-radius:12px;background:#f7eee4;border:1px solid #e5d6c2;font-size:12px}
+.footer{padding:14px;text-align:center;color:#9a8371;font-size:12px}
+.opacity-subtle{opacity:.7}
+.original-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.original-pair>div{background:#f6ede2;border-radius:13px;padding:8px;text-align:center;font-size:12px}
+.original-pair img{height:140px;width:100%;object-fit:contain}
+.mobile-show{display:none}
+
+@media(max-width:1150px){.nav-link{padding:10px}
+.nav{gap:2px}
+.editor-layout{grid-template-columns:205px minmax(300px,1fr) 200px}
+.editor-panel{padding:10px}
+.people-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.topbar .logo{margin-right:0}
+.sticker-strip{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+
+@media(max-width:850px){.app-shell{margin-top:8px;padding:0 8px}
+.topbar{top:5px;padding:9px 13px;min-height:60px}
+.nav{display:none}
+.mobile-menu{display:grid}
+.topbar .logo{flex:1}
+.page{padding:19px 6px}
+.hero{grid-template-columns:1fr;padding:23px;min-height:300px}
+.hero-collage{display:none}
+.outfit-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.closet-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.friend-closet-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.editor-layout{grid-template-columns:1fr}
+.editor-library{max-height:235px}
+.editor-panel{min-height:unset}
+.library-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.editor-canvas{min-height:520px}
+.friend-layout{grid-template-columns:1fr}
+.friend-profile{display:flex;align-items:center;gap:20px;text-align:left}
+.friend-profile .avatar{margin:0}
+.mobile-show{display:block}
+}
+
+@media(max-width:540px){.topbar .brand-script{font-size:21px}
+.logo .brand-heart{display:none}
+.people-grid,.two-col{grid-template-columns:1fr}
+.outfit-grid{gap:10px}
+.closet-grid{gap:10px}
+.clothing-card .photo{height:137px}
+.clothing-card{padding:9px}
+.clothing-card .clothing-title{font-size:14px}
+.clothing-card .mini-actions{display:none}
+.sticker-strip{grid-template-columns:repeat(3,minmax(0,1fr))}
+.heading-line{align-items:flex-start;flex-wrap:wrap}
+.heading-right{width:100%}
+.heading-right .btn{width:100%}
+.auth-wrap{padding:9px;grid-template-columns:1fr}
+.auth-art{min-height:215px;border-radius:25px 25px 0 0;padding:26px}
+.auth-art .scribble{font-size:33px}
+.auth-art p,.auth-images{display:none}
+.auth-box{border-radius:0 0 25px 25px;padding:30px 22px}
+.modal-grid{grid-template-columns:1fr}
+.modal{padding:23px 17px}
+.request-row{flex-wrap:wrap}
+.request-row .actions{width:100%;justify-content:flex-start}
+.library-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.editor-canvas{min-height:400px}
+.hero h1{font-size:33px}
+}
+
+
+
+/* ===== WardrobeShare | Vintage Mocha theme =====
+   Soft brown gingham, linen paper and espresso accents.
+   Edit these six values to adjust the look globally. */
+:root {
+  --ink: #4f392e;
+  --muted: #866d5d;
+  --cocoa: #8e664a;
+  --cocoa-dark: #775039;
+  --soft: #e9d7c6;
+  --cream: #fcf8f2;
+  --paper: #fff9f0;
+  --line: #e3d5c5;
+  --gingham-base: #e7d9c8;
+  --shadow: 0 7px 22px #61452e1c;
+}
+
+body {
+  background-color: var(--gingham-base);
+  background-image:
+    linear-gradient(90deg, rgba(255,250,242,.40) 50%, transparent 50%),
+    linear-gradient(rgba(255,250,242,.40) 50%, transparent 50%);
+  background-size: 42px 42px;
+}
+
+/* Paper surfaces remain restful against the patterned background. */
+.topbar { background: linear-gradient(180deg,#fffaf3,#f7efe4); border-color:#e6d7c6; }
+
+.nav-link:hover, .nav-link.active { background:#e7d3be; }
+
+.clothing-card .photo, .sticker-mini, .outfit-card .preview { background-color:#f7efe4; }
+
+.btn.primary { background:#8e664a; border-color:#835c40; box-shadow:0 4px 0 #62412f; }
+
+.btn.primary:hover:not(:disabled) { background:#775039; }
+
+.btn.soft { background:#e9d7c6; color:#654a38; }
+
+.pill.active { background:#916b4d; border-color:#775039; }
+
+.editor-object.selected { outline-color:#a27c5b; }
+
+.editor-object .handle { background:#8e664a; }
+
+.input:focus, textarea:focus, select:focus { border-color:#8e664a; box-shadow:0 0 0 3px #c7ae9536; }
+
+:focus-visible { outline:2px solid #98704f; outline-offset:2px; }
+
+/* Keep uploaded clothing cutouts inside their cards (previous image-overflow fix). */
+.clothing-card .photo { overflow:hidden; position:relative; isolation:isolate; }
+
+.clothing-card .photo img { position:absolute; inset:8px; width:calc(100% - 16px); height:calc(100% - 16px); object-fit:contain; object-position:center; max-width:none; max-height:none; }
+
+
+/* ================================================================
+   WardrobeShare 1.2 — Textiles & Tailoring
+   Warm neutrals, worn cloth, stitched details and real-material
+   imagery. Deliberately avoids bows, hearts and candy-pink UI.
+   ================================================================ */
+:root {
+  --ink: #44362e;
+  --muted: #78695d;
+  --cocoa: #70503d;
+  --cocoa-dark: #50392c;
+  --soft: #e7dbcc;
+  --cream: #f9f5ee;
+  --paper: #fffaf4;
+  --line: #d8c9b7;
+  --gingham-base: #eadfce;
+  --shadow: 0 7px 24px rgba(65,46,32,.10);
+}
+body {
+  background-color: #e8ddcd;
+  background-image: url('/assets/textiles/brown-linen-gingham.jpg');
+  background-position: top center;
+  background-size: 320px 320px;
+  background-attachment: fixed;
+}
+.brand-script {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  letter-spacing: -.7px;
+  font-size: 25px;
+  font-weight: 700;
+}
+.brand-atelier {
+  display: inline-block;
+  border-left: 1px solid #c9b09b;
+  padding: 3px 0 2px 12px;
+  letter-spacing: .16em;
+  font-size: 9px;
+  line-height: 1.25;
+  font-weight: 800;
+  color: #997760;
+  white-space: normal;
+  max-width: 90px;
+}
+.topbar {
+  border-radius: 13px;
+  background: #fcf9f3;
+  border: 1px solid #d8c7b2;
+  box-shadow: 0 3px 0 rgba(96,62,41,.07),0 9px 19px rgba(76,51,37,.10);
+}
+.topbar .logo::before {
+  content:"";
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  background: url('/assets/textiles/walnut-button.png') center/contain no-repeat;
+  filter:drop-shadow(1px 2px 1px #4d332447);
+}
+.nav-link { border-radius:8px; color:#5e493c; }
+.nav-link:hover, .nav-link.active { background:#e9dac9; }
+.nav-link.active { box-shadow:inset 0 -2px 0 #9e7961; }
+.page {padding-top:34px}
+.tag-paper {
+  position:relative;
+  border-radius: 6px 4px 6px 5px;
+  padding: 15px 22px 15px 26px;
+  border:1px solid #cab7a1;
+  background:linear-gradient(130deg,#eee1cd,#f8eee0 60%,#e9d7c1);
+  outline:1px dashed rgba(124,94,68,.39);
+  outline-offset:-7px;
+  box-shadow:2px 3px 0 rgba(99,68,48,.16);
+}
+.tag-paper::before {
+  content:"";
+  pointer-events:none;
+  position:absolute;
+  width:66px;
+  height:34px;
+  left:-21px;
+  top:-23px;
+  background:url('/assets/textiles/indigo-denim-patch.png') center/contain no-repeat;
+  transform:rotate(-11deg);
+  z-index:-1;
+}
+.tag-paper::after {
+  content:"";
+  display:block;
+  width:26px;
+  height:26px;
+  background:url('/assets/textiles/shell-button.png') center/contain no-repeat;
+  margin-left:4px;
+  flex-shrink:0;
+  filter:drop-shadow(0 1px 1px #7758443f);
+}
+.heading-line p {color:#7b6353}
+.hero {
+  background:linear-gradient(105deg,rgba(252,247,237,.96),rgba(232,216,196,.91));
+  border-color:#d2bda6;
+  border-radius:12px;
+  box-shadow:var(--shadow);
+  isolation:isolate;
+}
+.hero::before {
+  content:"";
+  background:url('/assets/textiles/caramel-gingham-patch.png') center/contain no-repeat;
+  position:absolute;
+  width:150px;
+  height:68px;
+  left:-24px;
+  top:-22px;
+  transform:rotate(-13deg);
+  z-index:0;
+  pointer-events:none;
+}
+.hero::after {
+  content:"";
+  background:url('/assets/textiles/shell-button.png') center/contain no-repeat;
+  position:absolute;
+  width:44px;
+  height:44px;
+  right:17px;
+  bottom:14px;
+  pointer-events:none;
+  filter:drop-shadow(0 2px 2px #70523a40);
+}
+.hero h1 em {color:#785440}
+.hero small {color:#907254}
+.hero .fabric-tab {
+  position:absolute;
+  top:4px;
+  right:0;
+  width:82px;
+  height:42px;
+  background:url('/assets/textiles/indigo-denim-patch.png') center/contain no-repeat;
+  transform:rotate(10deg);
+  opacity:.93;
+}
+.section-head h2 {color:#563e30;position:relative;display:inline-block}
+.section-head h2::after {
+  content:"";
+  display:inline-block;
+  vertical-align:middle;
+  width:40px;
+  height:20px;
+  margin-left:12px;
+  background:url('/assets/textiles/natural-linen-patch.png') center/contain no-repeat;
+  transform:rotate(-8deg);
+}
+.paper,.panel,.editor-panel,.editor-canvas-wrap,.request-row,.feed-row,.modal {
+  border-color:#d9c6b1;
+  background-color:#fdf9f2;
+}
+.paper::before {border-color:rgba(122,91,66,.34)}
+.outfit-card {border-radius:11px}
+.outfit-card .preview {background:linear-gradient(145deg,#f1e8da,#fdf8f0);border-radius:8px}
+.outfit-card::after {
+  content:"";
+  width:54px;
+  height:24px;
+  position:absolute;
+  top:-8px;
+  left:calc(50% - 27px);
+  background:url('/assets/textiles/natural-linen-patch.png') center/contain no-repeat;
+  transform:rotate(4deg);
+  pointer-events:none;
+}
+.sticker-mini {border-radius:8px;background:#f7efe4}
+.clothing-card {
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #dbcbb7;
+  background:#fffbf5;
+  min-width:0;
+  min-height:346px;
+  cursor:default;
+}
+.clothing-card:hover {box-shadow:0 10px 22px rgba(83,59,42,.16)}
+.clothing-card .photo {
+  height:185px;
+  flex:none;
+  border-radius:8px;
+  background:#f3eae0;
+  overflow:hidden;
+  position:relative;
+  cursor:pointer;
+}
+.clothing-card .photo::before {
+  content:"";
+  position:absolute;
+  z-index:1;
+  left:-15px;
+  top:-15px;
+  width:78px;
+  height:45px;
+  pointer-events:none;
+  transform:rotate(-12deg);
+  background:url('/assets/textiles/caramel-gingham-patch.png') center/contain no-repeat;
+  opacity:.78;
+}
+.clothing-card .photo img {
+  position:absolute;
+  inset:8px;
+  width:calc(100% - 16px);
+  height:calc(100% - 16px);
+  object-fit:contain;
+  object-position:center;
+  max-width:none;
+  max-height:none;
+}
+.clothing-card .card-button {
+  position:absolute;
+  z-index:3;
+  width:26px;
+  height:26px;
+  top:7px;
+  right:7px;
+  background:url('/assets/textiles/walnut-button.png') center/contain no-repeat;
+  filter:drop-shadow(1px 2px 1px #47312443);
+  pointer-events:none;
+}
+.clothing-card:nth-child(3n) .card-button {background-image:url('/assets/textiles/shell-button.png')}
+.clothing-card .clothing-title {
+  font-family:Georgia,serif;
+  font-size:16px;
+  line-height:1.24;
+  font-weight:600;
+  min-height:20px;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  margin:12px 2px 6px;
+  cursor:pointer;
+}
+.clothing-card .meta {margin:0 2px 9px;color:#826b5c;min-height:16px}
+.clothing-card .badge {max-width:100%;align-self:flex-start;margin-left:2px;white-space:nowrap}
+.clothing-card .mini-actions {
+  display:flex!important;
+  gap:5px;
+  flex-wrap:wrap;
+  margin-top:auto;
+  padding-top:12px;
+  width:100%;
+}
+.clothing-card .mini-actions .btn {
+  flex:1 1 auto;
+  display:inline-flex;
+  min-width:65px;
+  min-height:34px;
+  border-radius:7px;
+  padding:7px 8px;
+  line-height:1.15;
+  font-size:11px;
+  cursor:pointer;
+  box-shadow:none;
+}
+.clothing-card .mini-actions .btn svg {width:14px;height:14px}
+.clothing-card .mini-actions .btn:last-child {color:#794d3e}
+.clothing-card .mini-actions .btn:focus-visible {outline:2px solid #6d5040;outline-offset:2px}
+.clothing-card .badge.green {background:#e0e7d5;color:#51643d}
+.clothing-card .badge.pink,.badge.pink {background:#e7d8c7;color:#735344}
+.btn.primary {background:#70503d;border-color:#70503d;box-shadow:0 3px 0 #4a3327}
+.btn.primary:hover:not(:disabled) {background:#50392c}
+.btn.soft {background:#e8d8c4;color:#654631}
+.btn.secondary {background:#fbf5ec;border-color:#d8c1a9}
+.pill.active {background:#70503d;border-color:#5d4231}
+.modal {border-radius:13px;background:#fcf8f0}
+.modal-title {color:#4f392d}
+.modal::before {
+  content:"";
+  width:95px;height:42px;
+  position:absolute;
+  top:-13px;left:35px;
+  background:url('/assets/textiles/caramel-gingham-patch.png') center/contain no-repeat;
+  transform:rotate(-5deg);
+  pointer-events:none;
+}
+.modal-actions button[disabled] {filter:grayscale(.2)}
+.editor-canvas {background-color:#fbf7ef;background-image:radial-gradient(#e9ded2 1px,transparent 1px)}
+.editor-object.selected {outline-color:#84634e}
+.editor-object .handle {background:#8b654a}
+.range {accent-color:#76553f}
+.empty .empty-button {
+  width:50px;height:50px;
+  display:block;
+  margin:0 auto 15px;
+  background:url('/assets/textiles/shell-button.png') center/contain no-repeat;
+}
+.auth-art {background:linear-gradient(145deg,#e6d5c0,#f6eee3)}
+.auth-box {background:#fcf8f1}
+
+@media(max-width:1100px) {
+  .brand-atelier{display:none}
+  .clothing-card .mini-actions .btn {flex:1 1 32%}
+}
+@media(max-width:850px) {
+  .topbar .logo::before{width:23px;height:23px}
+  .clothing-card {min-height:340px}
+  .clothing-card .photo {height:170px}
+}
+@media(max-width:540px) {
+  .page {padding-top:21px}
+  .closet-grid,.friend-closet-grid {gap:11px}
+  .clothing-card {min-height:318px;padding:8px}
+  .clothing-card .photo {height:138px}
+  .clothing-card .mini-actions {display:flex!important;gap:5px;flex-wrap:wrap}
+  .clothing-card .mini-actions .btn {min-width:calc(50% - 4px);padding:6px 5px;min-height:33px;font-size:10px}
+  .clothing-card .meta {font-size:11px;gap:4px;flex-wrap:wrap}
+  .clothing-card .clothing-title {font-size:14px}
+  .brand-script {font-size:20px}
+  .hero::after {display:none}
+}
+
+
+/* OOTD detail modal: preview cutouts must be positioned inside their own canvas.
+   Gallery previews have .outfit-card .preview, but the detail modal does not.
+   Without this positioning context, absolute-positioned clothing overlays the
+   title and the Outfit Pieces panel. */
+.outfit-detail-modal {
+  max-width: 810px;
+}
+.outfit-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+.outfit-detail-preview,
+.outfit-detail-pieces {
+  min-width: 0;
+}
+.outfit-detail-preview .preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.4;
+  overflow: hidden;
+  isolation: isolate;
+  background: #f5eee3;
+  border: 1px solid #dfcbb6;
+  border-radius: 12px;
+}
+.outfit-detail-preview .preview-cutout {
+  position: absolute;
+  display: block;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+}
+.outfit-detail-pieces .feed-row {
+  width: 100%;
+  min-width: 0;
+}
+.outfit-detail-pieces .feed-row .content {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 650px) {
+  .outfit-detail-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .outfit-detail-preview {
+    max-width: 340px;
+    width: 100%;
+    margin-inline: auto;
+  }
+}

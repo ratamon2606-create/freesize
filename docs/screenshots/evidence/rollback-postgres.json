@@ -1,0 +1,15 @@
+{
+  "engine": "PostgreSQL",
+  "database_mode": "real PostgreSQL + MongoDB",
+  "step": "forced failure after UPDATE clothing_items + INSERT loans",
+  "before": {
+    "state": "reserved",
+    "current_holder_id": null
+  },
+  "after": {
+    "state": "reserved",
+    "current_holder_id": null
+  },
+  "loan_after_failure": null,
+  "rollback_verified": true
+}

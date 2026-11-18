@@ -1,0 +1,6 @@
+# On the Ubuntu VM running Caddy as the public HTTPS reverse proxy.
+# Replace with YOUR domain, set PUBLIC_ORIGIN accordingly and point DNS to this VM.
+wardrobe.example.com {
+    encode zstd gzip
+    reverse_proxy 127.0.0.1:3000
+}

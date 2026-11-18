@@ -1,0 +1,14 @@
+digraph Architecture {
+  graph [rankdir=LR, bgcolor="white", pad="0.4", nodesep="0.6", ranksep="0.75", label="WardrobeShare — Self-contained Hybrid Web Application", labelloc=t, fontsize=21, fontname="DejaVu Sans", fontcolor="#473528"];
+  node [shape=box, style="rounded,filled", fillcolor="#FBF5EC", color="#A38A71", fontname="DejaVu Sans", fontsize=12, margin="0.23,0.16"];
+  edge [color="#87664B", fontname="DejaVu Sans", fontsize=10, arrowsize=0.8];
+  browser [label="User's browser\nHTML · CSS · JavaScript\nOOTD canvas + CRUD screens", fillcolor="#F3E2C9"];
+  web [label="Monolithic FastAPI app\nAuthentication · CRUD · Borrowing SQL transactions\nBackground removal (in-process / offline model)\nTransactional outbox worker", fillcolor="#DDD1C0"];
+  pg [label="Self-hosted PostgreSQL\n9 relational tables\nPK / FK / SQL rollback", fillcolor="#E0E9DA"];
+  mongo [label="Self-hosted MongoDB\n4 document collections\nOutbox delivery + retry", fillcolor="#E0E9DA"];
+  files [label="Local filesystem\nUser-uploaded photos\nOffline u2netp.onnx model",fillcolor="#F2E6D1"];
+  browser -> web [label="Same-origin HTTP / HTTPS via proxy"];
+  web -> pg [label="ACID transactions"];
+  web -> mongo [label="NoSQL CRUD + outbox delivery"];
+  web -> files [label="Local file writes"];
+}

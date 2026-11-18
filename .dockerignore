@@ -1,0 +1,12 @@
+.git
+__pycache__
+*.pyc
+.venv
+.pytest_cache
+tests
+extract_assets.py
+data
+*.sqlite3
+.env
+
+models/

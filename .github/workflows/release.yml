@@ -1,0 +1,99 @@
+name: Publish and deploy verified release
+
+on:
+  workflow_run:
+    workflows: [CI]
+    branches: [main]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wardrobeshare-production
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish immutable GHCR images
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      web_image: ${{ steps.images.outputs.web_image }}
+      commit: ${{ steps.meta.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: true
+      - name: Skip superseded runs
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          SHA='${{ github.event.workflow_run.head_sha }}'
+          CURRENT=$(git ls-remote origin refs/heads/main | cut -f1)
+          if [[ "$SHA" != "$CURRENT" ]]; then
+            echo 'This CI run is not the current main. Refusing to publish/deploy stale commit.'
+            exit 1
+          fi
+          BASE="ghcr.io/${GITHUB_REPOSITORY,,}"
+          echo "commit=$SHA" >> "$GITHUB_OUTPUT"
+          echo "web_repo=${BASE}-web" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish web image
+        id: web
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.web_repo }}:sha-${{ steps.meta.outputs.commit }}
+      - name: Capture immutable digests
+        id: images
+        run: |
+          echo "web_image=${{ steps.meta.outputs.web_repo }}@${{ steps.web.outputs.digest }}" >> "$GITHUB_OUTPUT"
+
+  production:
+    name: Production approval and deployment
+    needs: publish
+    # OFF by default. Explicitly set Repository Variable DEPLOY_ENABLED=true
+    # after resolving production security/requirements blockers.
+    if: vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.publish.outputs.commit }}
+          persist-credentials: false
+      - name: Deploy over SSH with health-check and automatic image rollback
+        env:
+          PROD_HOST: ${{ secrets.PROD_SSH_HOST }}
+          PROD_USER: ${{ secrets.PROD_SSH_USER }}
+          PROD_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          PROD_HOST_KEYS: ${{ secrets.PROD_SSH_KNOWN_HOSTS }}
+          WEB_IMAGE: ${{ needs.publish.outputs.web_image }}
+          SOURCE_SHA: ${{ needs.publish.outputs.commit }}
+        run: |
+          set -euo pipefail
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$PROD_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$PROD_HOST_KEYS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          test -n "$PROD_HOST" && test -n "$PROD_USER"
+          # The server configuration must have been bootstrapped once.
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes "$PROD_USER@$PROD_HOST" \
+            "bash -s -- '$WEB_IMAGE' '$SOURCE_SHA'" < deploy/deploy-release.sh

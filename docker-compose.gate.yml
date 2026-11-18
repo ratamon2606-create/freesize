@@ -1,0 +1,45 @@
+# Disposable two-database pre-push verification only. Never point to production.
+name: wardrobeshare-prepush
+services:
+  pg:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: wardrobeshare_gate
+      POSTGRES_USER: gate
+      POSTGRES_PASSWORD: temporary_gate_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gate -d wardrobeshare_gate"]
+      interval: 3s
+      timeout: 4s
+      retries: 25
+  mongo:
+    image: mongo:7
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 25
+  gate:
+    image: python:3.11-slim
+    depends_on:
+      pg:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    working_dir: /src
+    volumes:
+      - ./:/src:ro
+      - ./docs/screenshots/evidence:/artifacts
+    environment:
+      DATABASE_URL: postgresql://gate:temporary_gate_password@pg:5432/wardrobeshare_gate
+      MONGO_URL: mongodb://mongo:27017/
+      SEED_DEMO: '0'
+      WARDROBE_TEST_HYBRID: '1'
+      EVIDENCE_OUTPUT_DIR: /artifacts
+      DATA_DIR: /tmp/wardrobe-hybrid-gate
+    command: >-
+      bash -ec "pip install --no-cache-dir -r requirements.txt pytest &&
+      env -u DATABASE_URL -u MONGO_URL -u WARDROBE_TEST_HYBRID
+      DATA_DIR=/tmp/wardrobe-preview-gate SEED_DEMO=1
+      python -m pytest tests/test_integration.py -q &&
+      python -m pytest tests/test_hybrid_integration.py -q"
