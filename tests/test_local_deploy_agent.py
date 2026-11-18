@@ -102,16 +102,8 @@ class TestSafety(unittest.TestCase):
             pause.assert_called_once()
             self.assertEqual(save.call_args.args[0]['blocked_sha'],sha)
 
-    def test_review_zero_still_requires_ci(self):
-        fake = {'enforcement':'active','conditions':{'ref_name':{'include':['~DEFAULT_BRANCH']}},'rules':[
-            {'type':'required_signatures'},
-            {'type':'pull_request','parameters':{'required_approving_review_count':0}},
-            {'type':'required_status_checks','parameters':{'required_status_checks':[]}}]}
-        with patch.object(agent, 'api_json', return_value=fake):
-            with self.assertRaisesRegex(agent.Stop,'Missing one or more of 5 required CI checks'):
-                agent.verify_merge_policy()
-
-    def test_zero_review_with_required_ci_is_allowed(self):
+    @staticmethod
+    def _review_policy(approvals=1, include_all_checks=True, active=True):
         required = [
             "Unit and API (preview)",
             "Browser UI smoke",
@@ -119,24 +111,46 @@ class TestSafety(unittest.TestCase):
             "Build container images",
             "Dependency vulnerability audit",
         ]
-        fake = {
-            "enforcement": "active",
-            "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"]}},
+        if not include_all_checks:
+            required.pop()
+        return {
+            "id": 27581106,
+            "target": "branch",
+            "enforcement": "active" if active else "disabled",
+            "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"], "exclude": []}},
             "rules": [
-                {"type": "required_signatures"},
-                {"type": "pull_request", "parameters": {
-                    "required_approving_review_count": 0
-                }},
+                {"type": "pull_request", "parameters": {"required_approving_review_count": approvals}},
                 {"type": "required_status_checks", "parameters": {
-                    "required_status_checks": [
-                        {"context": name} for name in required
-                    ]
+                    "strict_required_status_checks_policy": True,
+                    "required_status_checks": [{"context": c} for c in required],
                 }},
             ],
         }
-        with patch.object(agent, "api_json", return_value=fake), \
-             patch.object(agent, "log"):
+
+    def _verify_with_policy(self, policy):
+        def fake_api(path):
+            if path == "/rulesets?per_page=100":
+                return [{"id": 27581106, "target": "branch", "enforcement": "active"}]
+            if path == "/rulesets/27581106":
+                return policy
+            raise AssertionError("Unexpected GitHub API path: " + path)
+        with patch.object(agent, "api_json", side_effect=fake_api):
             agent.verify_merge_policy()
+
+    def test_active_review_ruleset_without_signatures_is_allowed(self):
+        self._verify_with_policy(self._review_policy(approvals=1))
+
+    def test_zero_approvals_is_rejected(self):
+        with self.assertRaisesRegex(agent.Stop, "No active main branch ruleset"):
+            self._verify_with_policy(self._review_policy(approvals=0))
+
+    def test_missing_ci_check_is_rejected(self):
+        with self.assertRaisesRegex(agent.Stop, "No active main branch ruleset"):
+            self._verify_with_policy(self._review_policy(include_all_checks=False))
+
+    def test_inactive_rule_is_rejected(self):
+        with self.assertRaisesRegex(agent.Stop, "No active main branch ruleset"):
+            self._verify_with_policy(self._review_policy(active=False))
 
     def test_connection_reset_is_retryable(self):
         with patch.object(
