@@ -907,4 +907,4 @@ def seed_demo_if_empty():
                 else:itemid=owned[user_idx][item_idx]
                 refs.append({'item_id':itemid,'owner_id':users[user_idx],'x':positions[k][0],'y':positions[k][1],'w':positions[k][2],'z':positions[k][3]})
             event(t,'outfit_upsert',slot_id=slot,owner_id=users[1],items=refs)
-        event(t,'notification',user_id=users[0],title='Welcome to WardrobeShare',message='Your little closet is ready. Create your first OOTD!')
+        event(t,'notification',user_id=users[0],title='Welcome to freesize',message='Your little closet is ready. Create your first OOTD!')
