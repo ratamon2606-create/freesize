@@ -23,13 +23,13 @@
 - จัดการเฉพาะ Compose project `freesize-friends`, service `web`, port `3100`. ไม่รัน `docker compose down -v` ไม่ Build ใหม่ ไม่ prune Images/Volumes ไม่ยุ่งกับ `wardrobeshare`, `wardrobeshare-evidence`, `source-db`, KU Tech, AXIS.
 - ระบบเริ่มต้น PAUSED แม้ตั้ง systemd timer สำเร็จ; จะ Deploy **หลังสั่ง `resume` ด้วยตัวเองเท่านั้น**.
 - ต้องเหลือ Root filesystem และ Docker data-root อย่างน้อย **12 GiB** ก่อน `resume` และก่อนดึง/เปลี่ยน Web Image. ณ 18 พ.ย. เครื่องผู้ใช้เหลือ **5.7 GB**; ยังเปิดอัตโนมัติไม่ได้.
-- `.env.friends` ต้องมี `SEED_DEMO=0`, `WEB_PORT=3100`, `COOKIE_SECURE=1`, `PUBLIC_ORIGIN=https://<เครื่อง>.<tailnet>.ts.net`, invite code ยาว >=48 hex; `compose.friends.yml` ต้องส่ง `PUBLIC_ORIGIN` เข้า Web Container.
+- `.env.friends` ต้องมี `SEED_DEMO=0`, `WEB_PORT=3100`, `COOKIE_SECURE=1`, `PUBLIC_ORIGIN=https://<เครื่อง>.<tailnet>.ts.net`, `compose.friends.yml` ต้องส่ง `PUBLIC_ORIGIN` เข้า Web Container.
 - `REQUIRE_BACKGROUND_AI=1` เมื่อโมเดล `u2netp.onnx` พร้อม; ระบบจะบังคับตรวจว่า AI พร้อมด้วย. หากยังเป็น 0 จะมีแค่ Backend + DB check (AI ยังไม่ถือว่าพร้อม).
 - ไม่มี HTTPS/Tailscale Serve/Backend Healthy = **ไม่ Deploy**.
 - เมื่อ Release Image ใช้งานแล้วจะเก็บ Image ก่อนหน้าไว้เป็น Tag; หาก Auto Rollback เกิด Agent หยุด Deploy จนกว่าจะตรวจสอบสาเหตุแล้ว `resume`.
-- GHCR package ต้อง Public หรือ Ubuntu Docker ต้อง `docker login ghcr.io` ด้วยสิทธิ์ `read:packages` (ไม่เก็บ Token ใน repo). ห้ามส่ง Token/Key/Invite Code ในแชต.
+- GHCR package ต้อง Public หรือ Ubuntu Docker ต้อง `docker login ghcr.io` ด้วยสิทธิ์ `read:packages` (ไม่เก็บ Token ใน repo). ห้ามส่ง Token/Key ในแชต.
 - หาก `git main` เปลี่ยนกลางการ Pull Image, Agent จะหยุดรอรอบต่อไป.
-- **Branch Ruleset** ต้องบังคับ Review อย่างน้อย 1 คน (ตอนตรวจยังเป็น 0) + Signed Commits + Required CI 5 Jobs; agent จะปฏิเสธ `resume` หากยังไม่ปรับ. แก้ที่ `https://github.com/ratamon2606-create/freesize/rules/27541146`.
+- **Branch Ruleset** ต้องบังคับ Review อย่างน้อย 1 คน + Required CI 5 Jobs; ไม่บังคับ Signed Commits. Agent ค้นหา Active Ruleset ที่ครอบคลุม main อัตโนมัติ.
 - GitHub release workflow ต้องทำงานสำเร็จ + งาน `Publish immutable GHCR images` สำเร็จด้วย ไม่ Deploy แค่เพราะ PR ผ่าน.
 
 ## ขั้นตอนติดตั้ง (ไม่แตะ DB เดิม)

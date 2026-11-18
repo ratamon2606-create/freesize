@@ -28,17 +28,12 @@ _ai_session = None
 _ai_lock = threading.Lock()
 COOKIE_NAME='ws_session'
 IS_PROD=os.getenv('COOKIE_SECURE','0')=='1'
-# Closed beta. The invitation code is never sent to the browser; users enter it
-# during registration. An empty code keeps the local classroom preview usable.
-INVITE_CODE = os.getenv('REGISTRATION_INVITE_CODE', '').strip()
 MAX_BETA_USERS = int(os.getenv('MAX_BETA_USERS','0') or '0')
 if IS_PROD:
     if not SQL_URL or not MONGO_URL:
         raise RuntimeError('Production requires both PostgreSQL and MongoDB; preview storage is forbidden')
     if os.getenv('SEED_DEMO', '1') != '0':
         raise RuntimeError('Production requires SEED_DEMO=0')
-    if not re.fullmatch(r'[a-fA-F0-9]{48,}', INVITE_CODE):
-        raise RuntimeError('Production requires REGISTRATION_INVITE_CODE as random hex (48+ chars)')
 
 # Single-Uvicorn-worker limits for closed beta. For horizontal scaling use a
 # shared limiter in SQL/Redis or at the proxy; never claim distributed limits.
@@ -353,9 +348,6 @@ def profile_with_counts(u,viewer):
 async def register(req:Request,response:Response):
     rate_limit('register-ip:'+source_key(req), 12, 3600)
     d=await req.json();name=str(d.get('username','')).lower().strip();email=str(d.get('email','')).lower().strip();pw=str(d.get('password',''))
-    if INVITE_CODE:
-        supplied=str(d.get('invite_code','')).strip()
-        require(hmac.compare_digest(supplied, INVITE_CODE),'A valid invitation code is required',403)
     require(len(pw) <= 256, 'Password is too long')
     require(bool(re.fullmatch(r'[a-z0-9_.]{3,24}',name)),'Username must be 3–24 letters, numbers, underscore or period')
     require(bool(re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',email)),'Invalid email')
@@ -832,7 +824,7 @@ async def annotate_borrow_log(ident:str,req:Request,user=Depends(current)):
     return {'ok':True}
 
 @app.get('/api/health')
-def health():return {'ok':True,'sql':'PostgreSQL' if sql.pg else 'SQLite preview','nosql':'MongoDB' if MONGO_URL else 'JSON preview','background_ai_enabled':MODEL_FILE.is_file(),'demo_enabled':os.getenv('SEED_DEMO','1')=='1' and not IS_PROD, 'invite_required':bool(INVITE_CODE)}
+def health():return {'ok':True,'sql':'PostgreSQL' if sql.pg else 'SQLite preview','nosql':'MongoDB' if MONGO_URL else 'JSON preview','background_ai_enabled':MODEL_FILE.is_file(),'demo_enabled':os.getenv('SEED_DEMO','1')=='1' and not IS_PROD, 'invite_required':False}
 
 @app.get('/api/ready')
 def readiness():
