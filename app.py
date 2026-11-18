@@ -28,6 +28,40 @@ _ai_session = None
 _ai_lock = threading.Lock()
 COOKIE_NAME='ws_session'
 IS_PROD=os.getenv('COOKIE_SECURE','0')=='1'
+# Closed beta. The invitation code is never sent to the browser; users enter it
+# during registration. An empty code keeps the local classroom preview usable.
+INVITE_CODE = os.getenv('REGISTRATION_INVITE_CODE', '').strip()
+MAX_BETA_USERS = int(os.getenv('MAX_BETA_USERS','0') or '0')
+if IS_PROD:
+    if not SQL_URL or not MONGO_URL:
+        raise RuntimeError('Production requires both PostgreSQL and MongoDB; preview storage is forbidden')
+    if os.getenv('SEED_DEMO', '1') != '0':
+        raise RuntimeError('Production requires SEED_DEMO=0')
+    if not re.fullmatch(r'[a-fA-F0-9]{48,}', INVITE_CODE):
+        raise RuntimeError('Production requires REGISTRATION_INVITE_CODE as random hex (48+ chars)')
+
+# Single-Uvicorn-worker limits for closed beta. For horizontal scaling use a
+# shared limiter in SQL/Redis or at the proxy; never claim distributed limits.
+_rate_lock = threading.Lock()
+_rate_events: dict[str, list[float]] = {}
+def rate_limit(key: str, max_events: int, window_seconds: int):
+    now = time.monotonic()
+    with _rate_lock:
+        if len(_rate_events) > 10000:
+            for k, times in list(_rate_events.items()):
+                remaining = [t for t in times if now-t < 3600]
+                if remaining: _rate_events[k] = remaining
+                else: _rate_events.pop(k, None)
+        events = [t for t in _rate_events.get(key, []) if now-t < window_seconds]
+        if len(events) >= max_events:
+            raise HTTPException(status_code=429, detail='Too many attempts. Please try again later.', headers={'Retry-After': str(window_seconds)})
+        events.append(now)
+        _rate_events[key] = events
+
+def source_key(req:Request):
+    # We never trust X-Forwarded-For supplied by an arbitrary client.
+    return str(req.client.host if req.client else 'unknown')
+
 STAMP=lambda: datetime.now(timezone.utc).isoformat()
 UID=lambda: uuid.uuid4().hex
 
@@ -202,7 +236,26 @@ async def verify_mutation_origin(req: Request, call_next):
                 origin = parts.scheme + '://' + parts.netloc
         if origin != PUBLIC_ORIGIN:
             return JSONResponse({'error': 'Same-origin request required'}, status_code=403)
-    return await call_next(req)
+    if IS_PROD and req.method in ('POST', 'PUT', 'PATCH'):
+        length = req.headers.get('content-length')
+        if length and length.isdigit() and int(length) > 12 * 1024 * 1024:
+            return JSONResponse({'error': 'Request body is too large'}, status_code=413)
+    result = await call_next(req)
+    if IS_PROD:
+        result.headers['X-Content-Type-Options'] = 'nosniff'
+        result.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+        result.headers['X-Frame-Options'] = 'DENY'
+        result.headers['Permissions-Policy'] = 'camera=(self), microphone=(), geolocation=()'
+        result.headers['Cross-Origin-Resource-Policy'] = 'same-origin'
+        result.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+        result.headers['Content-Security-Policy'] = (
+            "default-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; "
+            "frame-ancestors 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data: blob:; connect-src 'self'; upgrade-insecure-requests"
+        )
+        if req.url.path.startswith(('/api/', '/media/')):
+            result.headers['Cache-Control'] = 'private, no-store'
+    return result
 app.mount('/assets',StaticFiles(directory=str(ROOT/'static/assets')),name='assets')
 app.mount('/css',StaticFiles(directory=str(ROOT/'static/css')),name='css')
 app.mount('/js',StaticFiles(directory=str(ROOT/'static/js')),name='js')
@@ -298,11 +351,22 @@ def profile_with_counts(u,viewer):
 
 @app.post('/api/auth/register')
 async def register(req:Request,response:Response):
+    rate_limit('register-ip:'+source_key(req), 12, 3600)
     d=await req.json();name=str(d.get('username','')).lower().strip();email=str(d.get('email','')).lower().strip();pw=str(d.get('password',''))
+    if INVITE_CODE:
+        supplied=str(d.get('invite_code','')).strip()
+        require(hmac.compare_digest(supplied, INVITE_CODE),'A valid invitation code is required',403)
+    require(len(pw) <= 256, 'Password is too long')
     require(bool(re.fullmatch(r'[a-z0-9_.]{3,24}',name)),'Username must be 3–24 letters, numbers, underscore or period')
     require(bool(re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+',email)),'Invalid email')
     require(len(pw)>=8,'Password must be at least 8 characters')
     with sql.tx() as t:
+        if MAX_BETA_USERS:
+            # Registration count is checked under the process lock. This initial
+            # beta uses one Uvicorn worker; deploy multiple replicas only after
+            # introducing a database-enforced user quota.
+            count=t.one('SELECT COUNT(*) AS n FROM users WHERE password_hash != ?',('!deleted!',))['n']
+            require(count < MAX_BETA_USERS,'This closed beta has reached its member limit',403)
         if t.one('SELECT id FROM users WHERE username=? OR email=?',(name,email)):fail('Username or email already taken',409)
         ident=UID();t.insert('users',{'id':ident,'username':name,'email':email,'password_hash':hash_pw(pw),'display_name':str(d.get('display_name') or name)[:60],'created_at':STAMP()})
     session_cookie(response,ident)
@@ -310,9 +374,13 @@ async def register(req:Request,response:Response):
 
 @app.post('/api/auth/login')
 async def login(req:Request,response:Response):
-    d=await req.json();q=str(d.get('username','')).lower().strip()
+    d=await req.json();q=str(d.get('username','')).lower().strip()[:254]
+    rate_limit('login-ip:'+source_key(req), 90, 600)
+    rate_limit('login-account:'+hashlib.sha256(q.encode()).hexdigest(), 12, 600)
+    supplied_password=str(d.get('password',''))
+    if len(supplied_password)>256: fail('Incorrect username or password',401)
     with sql.tx() as t:u=t.one('SELECT * FROM users WHERE username=? OR email=?',(q,q))
-    if not u or u['password_hash']=='!deleted!' or not check_pw(str(d.get('password','')),u['password_hash']):fail('Incorrect username or password',401)
+    if not u or u['password_hash']=='!deleted!' or not check_pw(supplied_password,u['password_hash']):fail('Incorrect username or password',401)
     session_cookie(response,u['id']);return {'ok':True}
 
 @app.post('/api/auth/logout')
@@ -353,10 +421,11 @@ async def update_profile(req:Request,user=Depends(current)):
     return {'ok':True}
 
 async def save_image(file:UploadFile,background=False):
-    content=await file.read()
-    require(0<len(content)<=8*1024*1024,'Image must be 8 MB or less')
+    content=await file.read(8*1024*1024+1)
+    require(0<len(content)<=8*1024*1024,'Image must be 8 MB or less',413)
     try:
         source=Image.open(io.BytesIO(content))
+        require(source.format in ('JPEG','PNG','WEBP'),'Only JPEG, PNG, or WEBP images are accepted',415)
         require(source.width*source.height<=18_000_000,'Image dimensions too large',413)
         im=ImageOps.exif_transpose(source).convert('RGBA')
         im.thumbnail((1500,1500))
@@ -412,7 +481,8 @@ def close_account(req:Request,response:Response,user=Depends(current)):
     return {'ok':True}
 
 @app.post('/api/me/avatar')
-async def upload_avatar(file:UploadFile=File(...),user=Depends(current)):
+async def upload_avatar(req:Request,file:UploadFile=File(...),user=Depends(current)):
+    rate_limit('avatar-user:'+user['id'], 12, 3600)
     path,_,_=await save_image(file)
     with sql.tx() as t:t.execute('UPDATE users SET avatar_path=? WHERE id=?',(path,user['id']))
     return {'avatar_path':path}
@@ -425,7 +495,8 @@ def wardrobe(owner:str='me',user=Depends(current)):
     return {'items':[owner_cloth(i) for i in items]}
 
 @app.post('/api/wardrobe')
-async def add_clothing(name:str=Form(...),category:str=Form(...),color:str=Form(''),details:str=Form(''),file:UploadFile=File(...),request_token:str=Form(''),user=Depends(current)):
+async def add_clothing(req:Request,name:str=Form(...),category:str=Form(...),color:str=Form(''),details:str=Form(''),file:UploadFile=File(...),request_token:str=Form(''),user=Depends(current)):
+    rate_limit('clothing-upload:'+user['id'], 40, 3600)
     require(1<=len(name.strip())<=100,'Clothing name must be 1-100 characters')
     require(len(request_token)<=100,'Invalid upload request token')
     if request_token:
@@ -761,7 +832,7 @@ async def annotate_borrow_log(ident:str,req:Request,user=Depends(current)):
     return {'ok':True}
 
 @app.get('/api/health')
-def health():return {'ok':True,'sql':'PostgreSQL' if sql.pg else 'SQLite preview','nosql':'MongoDB' if MONGO_URL else 'JSON preview','background_ai_enabled':MODEL_FILE.is_file(),'demo_enabled':os.getenv('SEED_DEMO','1')=='1' and not IS_PROD}
+def health():return {'ok':True,'sql':'PostgreSQL' if sql.pg else 'SQLite preview','nosql':'MongoDB' if MONGO_URL else 'JSON preview','background_ai_enabled':MODEL_FILE.is_file(),'demo_enabled':os.getenv('SEED_DEMO','1')=='1' and not IS_PROD, 'invite_required':bool(INVITE_CODE)}
 
 @app.get('/api/ready')
 def readiness():
@@ -783,8 +854,20 @@ def readiness():
             docs.read('notifications')
     except Exception as e:
         problems.append('NoSQL unavailable: ' + type(e).__name__)
-    if REQUIRE_BACKGROUND_AI and not MODEL_FILE.is_file():
-        problems.append('Required local u2netp.onnx model missing')
+    if REQUIRE_BACKGROUND_AI:
+        if not MODEL_FILE.is_file():
+            problems.append('Required local u2netp.onnx model missing')
+        else:
+            try:
+                # Validate the ONNX runtime and load the model once, not merely
+                # the existence of the file. Uploads reuse this cached session.
+                global _ai_session
+                with _ai_lock:
+                    if _ai_session is None:
+                        from rembg import new_session
+                        _ai_session = new_session('u2netp')
+            except Exception as exc:
+                problems.append('Local AI could not load: ' + type(exc).__name__)
     status = 503 if problems else 200
     return JSONResponse({'ready': not problems, **checks, 'problems': problems}, status_code=status)
 

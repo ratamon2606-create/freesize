@@ -1,0 +1,19 @@
+# SITE_DOMAIN is injected by the Caddy container from the private server .env.
+# Public HTTPS terminates here; only the Caddy container publishes 80/443.
+{$SITE_DOMAIN} {
+    encode zstd gzip
+    request_body {
+        max_size 12MB
+    }
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        X-Frame-Options DENY
+        -Server
+    }
+    reverse_proxy web:3000 {
+        health_uri /api/ready
+        health_interval 15s
+        health_timeout 5s
+    }
+}

@@ -1,0 +1,8 @@
+[Unit]
+Description=Daily WardrobeShare production backup
+[Timer]
+OnCalendar=*-*-* 02:30:00
+Persistent=true
+RandomizedDelaySec=10min
+[Install]
+WantedBy=timers.target

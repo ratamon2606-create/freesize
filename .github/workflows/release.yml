@@ -86,6 +86,7 @@ jobs:
           PROD_HOST_KEYS: ${{ secrets.PROD_SSH_KNOWN_HOSTS }}
           WEB_IMAGE: ${{ needs.publish.outputs.web_image }}
           SOURCE_SHA: ${{ needs.publish.outputs.commit }}
+          PUBLIC_URL: ${{ vars.PROD_PUBLIC_ORIGIN }}
         run: |
           set -euo pipefail
           install -d -m 700 ~/.ssh
@@ -95,5 +96,18 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           test -n "$PROD_HOST" && test -n "$PROD_USER"
           # The server configuration must have been bootstrapped once.
+          test -n "$PUBLIC_URL" && [[ "$PUBLIC_URL" == https://* ]] || { echo 'Set PROD_PUBLIC_ORIGIN to your https:// domain'; exit 2; }
           ssh -o BatchMode=yes -o StrictHostKeyChecking=yes "$PROD_USER@$PROD_HOST" \
             "bash -s -- '$WEB_IMAGE' '$SOURCE_SHA'" < deploy/deploy-release.sh
+          # Test real public reachability from the GitHub runner. If it fails,
+          # immediately run the manual rollback script against the previous image.
+          if ! curl --fail --silent --show-error --location --retry 4 \
+              --retry-all-errors --retry-delay 3 --max-time 12 \
+              "$PUBLIC_URL/api/ready" | python3 -c \
+                'import json,sys; d=json.load(sys.stdin); assert d["ready"] and d["sql"]=="PostgreSQL" and d["nosql"]=="MongoDB"'; then
+            echo 'Public smoke failed; attempting remote rollback' >&2
+            ssh -o BatchMode=yes -o StrictHostKeyChecking=yes "$PROD_USER@$PROD_HOST" \
+              'bash /opt/wardrobeshare/rollback-release.sh' || true
+            exit 1
+          fi
+          echo "Public release verified: $PUBLIC_URL"

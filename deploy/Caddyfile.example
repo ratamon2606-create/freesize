@@ -1,6 +1,3 @@
-# On the Ubuntu VM running Caddy as the public HTTPS reverse proxy.
-# Replace with YOUR domain, set PUBLIC_ORIGIN accordingly and point DNS to this VM.
-wardrobe.example.com {
-    encode zstd gzip
-    reverse_proxy 127.0.0.1:3000
-}
+# Retained for compatibility: the production file is now deploy/Caddyfile.
+# The production Caddy runs in Docker, not as a host service.
+# Set SITE_DOMAIN in deploy/.env and open TCP 80/443 and UDP 443 on the VPS.
