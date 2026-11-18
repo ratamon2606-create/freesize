@@ -41,5 +41,5 @@ services:
       bash -ec "pip install --no-cache-dir -r requirements.txt pytest &&
       env -u DATABASE_URL -u MONGO_URL -u WARDROBE_TEST_HYBRID
       DATA_DIR=/tmp/wardrobe-preview-gate SEED_DEMO=1
-      python -m pytest tests/test_integration.py -q &&
+      python -m pytest tests/test_integration.py tests/test_production_safety.py tests/test_ootd_preview_layout.py -q &&
       python -m pytest tests/test_hybrid_integration.py -q"
