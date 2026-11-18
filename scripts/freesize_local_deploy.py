@@ -35,6 +35,7 @@ OVERRIDE = ROOT / "compose.autodeploy.yml"
 CONTAINER = "freesize-friends-web-1"
 BACKUP_TAG = "freesize-local-rollback:previous"
 MIN_FREE_GIB = 12
+MIN_ROOT_FREE_GIB_WHEN_DOCKER_SEPARATE = 6
 
 
 class Stop(Exception):
@@ -108,18 +109,32 @@ def env_values() -> dict[str, str]:
 
 
 def disk_check() -> None:
-    # The default Docker data-root is usually on /. Refuse updates when root is tight.
-    if shutil.disk_usage("/").free < MIN_FREE_GIB * (1024 ** 3):
-        free = shutil.disk_usage("/").free / (1024**3)
-        raise Stop(f"Insufficient root disk: {free:.1f} GiB free, require >= {MIN_FREE_GIB} GiB; no images or volumes removed.")
-    docker_root = run("docker", "info", "--format", "{{.DockerRootDir}}", capture=True)
-    if docker_root and Path(docker_root).exists():
-        try:
-            free = shutil.disk_usage(docker_root).free / (1024**3)
-            if free < MIN_FREE_GIB:
-                raise Stop(f"Insufficient Docker data-root free space: {free:.1f} GiB.")
-        except PermissionError:
-            log("Docker data-root not stat-accessible; root partition checked.")
+    """Require headroom on both filesystems, not 12 GiB on an unrelated /.
+
+    If Docker uses the root filesystem, keep the original 12 GiB floor.
+    If Docker lives on a separate mounted filesystem (e.g. /mnt/rosdata),
+    require 12 GiB on Docker's filesystem and 6 GiB on / for OS and logs.
+    Fail closed if Docker storage location cannot be verified.
+    """
+    raw = run("docker", "info", "--format", "{{.DockerRootDir}}", capture=True).strip()
+    docker_root = Path(raw)
+    if not raw or not docker_root.is_absolute():
+        raise Stop("Docker data-root path is missing or not absolute; refusing deploy.")
+    try:
+        root_stat = os.stat("/")
+        docker_stat = os.stat(docker_root)
+        root_free = shutil.disk_usage("/").free / (1024**3)
+        docker_free = shutil.disk_usage(docker_root).free / (1024**3)
+    except OSError as exc:
+        raise Stop(f"Cannot verify root and Docker storage: {type(exc).__name__}; refusing deploy.") from exc
+    separate = root_stat.st_dev != docker_stat.st_dev
+    root_required = MIN_ROOT_FREE_GIB_WHEN_DOCKER_SEPARATE if separate else MIN_FREE_GIB
+    if root_free < root_required:
+        raise Stop(f"Insufficient root disk: {root_free:.1f} GiB free, require >= {root_required} GiB; no images or volumes removed.")
+    if separate and docker_free < MIN_FREE_GIB:
+        raise Stop(f"Insufficient Docker data-root disk: {docker_free:.1f} GiB free, require >= {MIN_FREE_GIB} GiB; no images or volumes removed.")
+    log(f"Disk check OK: root {root_free:.1f} GiB; Docker {docker_free:.1f} GiB "
+        f"({'separate' if separate else 'same'} filesystem).")
 
 
 def get_json(url: str, timeout: int = 6) -> dict[str, Any]:
