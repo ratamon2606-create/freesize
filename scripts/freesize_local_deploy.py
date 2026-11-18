@@ -182,25 +182,54 @@ def choose_published_release(main_sha: str, runs: list[dict[str, Any]]) -> dict[
 
 
 def verify_merge_policy() -> None:
-    # This agent updates an actively used shared site. Prevent unattended
-    # deployment if the repo stops requiring review or its critical CI gates.
-    policy = api_json("/rulesets/27541146")
-    if policy.get("enforcement") != "active" or "~DEFAULT_BRANCH" not in policy.get("conditions", {}).get("ref_name", {}).get("include", []):
-        raise Stop("Branch protection ruleset not active on main; refusing unattended deployment.")
-    rules = policy.get("rules", [])
-    types = {r.get("type") for r in rules}
-    if not {"pull_request", "required_signatures", "required_status_checks"}.issubset(types):
-        raise Stop("Required PR, signed commits or CI checks disabled; refusing unattended deployment.")
-    review = next(x for x in rules if x.get("type") == "pull_request")
-    approvals = review.get("parameters", {}).get("required_approving_review_count", 0)
-    if approvals < 1:
-        log("PILOT MODE: no required reviewer; signed commits and all 5 CI checks remain mandatory.")
-    checks = next(x for x in rules if x.get("type") == "required_status_checks")
-    names = {x.get("context") for x in checks.get("parameters", {}).get("required_status_checks", [])}
-    expected = {"Unit and API (preview)", "Browser UI smoke", "Hybrid DB (PostgreSQL + MongoDB)",
-                "Build container images", "Dependency vulnerability audit"}
-    if not expected.issubset(names):
-        raise Stop("Missing one or more of 5 required CI checks; refusing unattended deployment.")
+    """Require an active PR rule with >=1 approval and five current CI checks.
+
+    Resolve repository rulesets dynamically: GitHub assigns a new ID every time
+    a ruleset is recreated. Signed commits are optional by team choice.
+    """
+    expected = {
+        "Unit and API (preview)",
+        "Browser UI smoke",
+        "Hybrid DB (PostgreSQL + MongoDB)",
+        "Build container images",
+        "Dependency vulnerability audit",
+    }
+    summaries = api_json("/rulesets?per_page=100")
+    if not isinstance(summaries, list):
+        raise Stop("GitHub ruleset list was invalid; refusing deployment.")
+    for info in summaries:
+        if not isinstance(info, dict):
+            continue
+        if info.get("target") != "branch" or info.get("enforcement") != "active":
+            continue
+        rule_id = info.get("id")
+        if not isinstance(rule_id, int) or rule_id < 1:
+            continue
+        policy = api_json(f"/rulesets/{rule_id}")
+        if policy.get("enforcement") != "active" or policy.get("target") != "branch":
+            continue
+        refs = policy.get("conditions", {}).get("ref_name", {})
+        included = refs.get("include", [])
+        excluded = refs.get("exclude", [])
+        matches_main = any(x in included for x in ("~DEFAULT_BRANCH", "refs/heads/main", "main"))
+        excludes_main = any(x in excluded for x in ("~DEFAULT_BRANCH", "refs/heads/main", "main"))
+        if not matches_main or excludes_main:
+            continue
+        rules = {r.get("type"): r for r in policy.get("rules", []) if isinstance(r, dict)}
+        if not {"pull_request", "required_status_checks"}.issubset(rules):
+            continue
+        approvals = rules["pull_request"].get("parameters", {}).get("required_approving_review_count", 0)
+        if not isinstance(approvals, int) or approvals < 1:
+            continue
+        checks = rules["required_status_checks"].get("parameters", {})
+        names = {c.get("context") for c in checks.get("required_status_checks", []) if isinstance(c, dict)}
+        if not expected.issubset(names):
+            continue
+        if checks.get("strict_required_status_checks_policy") is not True:
+            continue
+        log(f"GitHub PR protection verified: ruleset {rule_id}, approvals {approvals}, five CI checks; signatures optional.")
+        return
+    raise Stop("No active main branch ruleset requiring 1 review, current-branch checks, and all five CI jobs; refusing deployment.")
 
 
 def published_sha() -> str | None:
