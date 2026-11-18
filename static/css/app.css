@@ -726,3 +726,12 @@ body {
 .request-row.needs-me{border-color:#e2ad7f;border-left:6px solid #c0712f;background:#fff4e8}
 .request-row .who p.borrow-msg{font-size:14px;color:#5a3f2e;margin-top:6px;line-height:1.45}
 .your-turn{display:inline-block;vertical-align:middle;margin-left:6px;padding:2px 9px;border-radius:20px;background:#c0712f;color:#fff;font-size:11px;font-weight:700;letter-spacing:.3px}
+
+
+/* ===== Notifications: same clear style as Borrowing ===== */
+.top-icon .bell-count{position:absolute;right:-2px;top:-1px;min-width:19px;height:19px;padding:0 5px;display:grid;place-items:center;border-radius:20px;background:#c0712f;color:#fff;font-size:11px;font-weight:700;line-height:1;border:2px solid #fcf8f2}
+.feed-row.unread{border-color:#e2ad7f;border-left:6px solid #c0712f;background:#fff4e8}
+.feed-row .content p.notify-msg{font-size:14px;color:#5a3f2e;margin-top:5px}
+.feed-row .feed-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.feed-row.unread .feed-icon{background:#c0712f;color:#fff}
+@media(max-width:620px){.feed-row{flex-wrap:wrap}.feed-row .feed-actions{width:100%;justify-content:flex-start}}
