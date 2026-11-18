@@ -141,7 +141,7 @@ def get_json(url: str, timeout: int = 6) -> dict[str, Any]:
     try:
         with urllib.request.urlopen(url, timeout=timeout) as response:
             return json.load(response)
-    except (urllib.error.URLError, ValueError, TimeoutError) as exc:
+    except (urllib.error.URLError, ValueError, OSError) as exc:
         raise Stop(f"Health endpoint failed at {url}: {type(exc).__name__}") from exc
 
 
