@@ -990,3 +990,47 @@ html.scrolled .topbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 14px 34px
   .dash-card{padding:16px}
 }
 @media (prefers-reduced-motion:reduce){.stat-tile:hover,.stat-tile:active,.where-row:active{transform:none}}
+
+
+/* ================================================================
+   freesize 2.1 — Borrowing timeline
+   ================================================================ */
+.avatar.tiny{width:26px;height:26px;font-size:12px;border-width:1px}
+/* ---------- Borrowing timeline ---------- */
+.loan-list{display:flex;flex-direction:column;gap:12px}
+.loan-card{display:flex;gap:16px;padding:16px;border-radius:16px;background:#fdf9f2;border:1px solid #dccab6;box-shadow:0 3px 12px rgba(83,59,42,.06)}
+.loan-card.needs-me{background:#fff6ec;border-color:#e2ad7f;box-shadow:inset 5px 0 0 #c0712f,0 3px 12px rgba(83,59,42,.06)}
+.loan-img{width:96px;height:110px;flex:none;object-fit:contain;background:#f5ece0;border-radius:12px}
+.loan-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.loan-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.loan-title strong{font-family:Georgia,serif;font-size:19px}
+.loan-who{display:flex;align-items:center;gap:8px;font-size:13px;color:#7b6353}
+.loan-card .borrow-msg{font-size:14px;color:#5a3f2e;line-height:1.45;margin:0}
+.loan-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:2px}
+.loan-foot .muted{font-size:12px}
+.loan-foot .actions{display:flex;gap:7px;flex-wrap:wrap}
+.steps{list-style:none;display:flex;margin:4px 0 2px;padding:0;counter-reset:s}
+.steps li{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:600;color:#a08b7a;text-align:center;min-width:0}
+.steps li::before{content:"";position:absolute;top:6px;right:50%;width:100%;height:2px;background:#e3d5c5;z-index:0}
+.steps li:first-child::before{display:none}
+.steps li span{position:relative;z-index:1;width:14px;height:14px;border-radius:50%;background:#fdf9f2;border:2px solid #d6c3ae}
+.steps li.done{color:#55663f}
+.steps li.done::before,.steps li.current::before{background:#8fa173}
+.steps li.done span{background:#7a8f5f;border-color:#7a8f5f}
+.steps li.current{color:#70503d}
+.steps li.current span{background:#70503d;border-color:#70503d;box-shadow:0 0 0 4px rgba(112,80,61,.18)}
+.loan-card.needs-me .steps li.current span{background:#c0712f;border-color:#c0712f;box-shadow:0 0 0 4px rgba(192,113,47,.2)}
+.steps.ended{max-width:260px}
+.steps.ended li.stop{color:#a44f47}
+.steps.ended li.stop span{background:#a44f47;border-color:#a44f47}
+.steps.ended li.stop::before{background:#e3c3ba}
+.how-it-works{margin-top:20px;padding:12px 16px;border-radius:12px;background:#f0f2e7;border:1px solid #dfe4d4;color:#62734f;font-size:13px;line-height:1.55}
+.how-it-works summary{cursor:pointer;font-weight:700;display:flex;align-items:center;gap:8px;list-style:none}
+.how-it-works summary::-webkit-details-marker{display:none}
+.how-it-works summary svg{width:15px;height:15px}
+.how-it-works p{margin-top:8px}
+@media(max-width:540px){
+  .loan-card{flex-direction:column;gap:12px}
+  .loan-img{width:100%;height:150px}
+  .steps li{font-size:10px}
+}
