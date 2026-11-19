@@ -735,3 +735,198 @@ body {
 .feed-row .feed-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
 .feed-row.unread .feed-icon{background:#c0712f;color:#fff}
 @media(max-width:620px){.feed-row{flex-wrap:wrap}.feed-row .feed-actions{width:100%;justify-content:flex-start}}
+
+
+/* ================================================================
+   freesize 2.0 — Fluid layer
+   Keeps the vintage mocha palette, paper cards and textile details.
+   Adds: instant press feedback, spring motion, frosted chrome,
+   a mobile tab bar, bottom sheets, and accessibility fallbacks.
+   ================================================================ */
+:root{
+  --ease-spring:cubic-bezier(.2,.8,.2,1);          /* damping 1.0, response .35s */
+  --ease-bounce:cubic-bezier(.3,1.2,.4,1);         /* damping .8 - only after momentum */
+  --ease-out:cubic-bezier(.25,1,.5,1);
+  --glass:rgba(252,248,240,.74);
+  --glass-edge:rgba(216,199,178,.72);
+  --tabbar-h:62px;
+  --ring:0 0 0 3px rgba(142,102,74,.26);
+}
+@supports (transition-timing-function:linear(0, 1)){
+  :root{
+    --ease-spring:linear(0,0.051,0.162,0.293,0.421,0.536,0.634,0.715,0.781,0.833,0.873,0.905,0.929,0.947,0.960,0.971,0.978,0.984,0.988,0.991,0.994,0.995,0.997,0.998,1);
+    --ease-bounce:linear(0,0.047,0.158,0.295,0.436,0.568,0.682,0.776,0.851,0.907,0.948,0.976,0.995,1.006,1.012,1.015,1.015,1.014,1.012,1.010,1.008,1.006,1.004,1.003,1);
+  }
+}
+
+/* ---------- Typography: system UI body, serif display, size-aware tracking ---------- */
+html{scrollbar-gutter:stable;-webkit-text-size-adjust:100%}
+html,body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Leelawadee UI","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{line-height:1.45}
+h1,h2,h3,.modal-title{letter-spacing:-.015em;line-height:1.15}
+.hero h1{letter-spacing:-.028em;line-height:1.02}
+.auth-art .scribble{letter-spacing:-.025em}
+.heading-line p,.subline{line-height:1.5}
+.badge,.field label,.hero small{letter-spacing:.02em}
+html:has(.modal-layer:not(.is-leaving)){overflow:hidden}
+
+/* ---------- Frosted top bar: content scrolls underneath ---------- */
+.topbar{
+  background:var(--glass);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);
+  border:1px solid var(--glass-edge);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 6px 18px rgba(76,51,37,.07);
+  transition:box-shadow .35s var(--ease-out);
+}
+html.scrolled .topbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 14px 34px rgba(76,51,37,.15)}
+.nav-link{transition:background-color .2s,color .2s,box-shadow .2s,transform .4s var(--ease-spring)}
+.nav-link:hover{background:rgba(112,80,61,.08)}
+.nav-link.active{background:rgba(112,80,61,.13);color:#4a3428}
+.top-icon{width:44px;height:44px;border-radius:50%;transition:background-color .2s,transform .4s var(--ease-spring)}
+.top-icon:hover{background:rgba(112,80,61,.08)}
+
+/* ---------- Press feedback: on pointer-down, instant ---------- */
+.btn,.pill,.nav-link,.top-icon,.tab,.library-item,.upload-zone,.sticker-mini,.modal-close,.link-btn,.clothing-card,.outfit-card,.friend-card{-webkit-tap-highlight-color:transparent}
+.btn,.pill,.library-item,.upload-zone,.sticker-mini{transition:transform .4s var(--ease-spring),background-color .2s,border-color .2s,box-shadow .2s,color .2s}
+.btn:hover:not(:disabled){transform:none;filter:brightness(1.02)}
+.btn:active:not(:disabled),.pill:active,.nav-link:active,.top-icon:active,.library-item:active,.upload-zone:active,.sticker-mini:active,.modal-close:active{transform:scale(.96);transition-duration:.08s}
+.btn.primary{transition:transform .4s var(--ease-spring),box-shadow .12s,background-color .2s}
+.btn.primary:active:not(:disabled){transform:translateY(2px) scale(.985);box-shadow:0 1px 0 #4a3327}
+.btn[aria-busy="true"]{position:relative;color:transparent!important}
+.btn[aria-busy="true"]::after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.45);border-top-color:#fff;animation:spin .7s linear infinite}
+.btn.secondary[aria-busy="true"]::after{border-color:rgba(112,80,61,.25);border-top-color:#70503d}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Cards lift on hover, settle on press */
+.clothing-card,.outfit-card,.friend-card{transition:transform .45s var(--ease-spring),box-shadow .3s var(--ease-out)}
+.outfit-card:hover,.friend-card:hover{transform:translateY(-2px)}
+.clothing-card:active,.outfit-card:active{transform:scale(.985);transition-duration:.1s}
+
+/* Pills: calmer segmented style */
+.pill{min-height:40px}
+.pill:hover:not(.active){background:#f6ecdf}
+.pill.active{box-shadow:0 2px 6px rgba(80,57,44,.22)}
+
+/* Inputs: soft focus ring that eases in */
+.input,textarea,select{transition:border-color .2s,box-shadow .25s var(--ease-out),background-color .2s}
+.input:focus,textarea:focus,select:focus{box-shadow:var(--ring);background:#fffdf9}
+.search .input{border-radius:999px}
+
+/* Empty states */
+.empty{padding:56px 24px;background:rgba(255,250,244,.72);border-color:#d3bca6}
+.empty h3{font-size:22px}
+.empty p{max-width:38ch;margin-inline:auto;line-height:1.6}
+
+/* ---------- Page arrival (route change only) ---------- */
+.page-enter{animation:page-in .48s var(--ease-spring) backwards}
+@keyframes page-in{from{opacity:0;transform:translateY(10px)}}
+
+/* ---------- Modals: grow from the trigger, leave the same way ---------- */
+.modal-layer{background:rgba(51,38,28,calc(.4 * var(--sheet-progress,1)));-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+.modal{box-shadow:0 30px 80px rgba(39,28,20,.28),inset 0 1px 0 rgba(255,255,255,.7);outline:none;overscroll-behavior:contain}
+.modal-close{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;right:14px;top:14px;z-index:4;background:rgba(112,80,61,.08);color:#5e493c;font-size:22px;transition:background-color .2s,transform .4s var(--ease-spring)}
+.modal-close:hover{background:rgba(112,80,61,.16)}
+.sheet-grabber{display:none}
+.modal-layer.is-entering{animation:layer-in .3s var(--ease-out) both}
+.modal-layer.is-entering .modal{animation:modal-in .48s var(--ease-spring) both}
+.modal-layer.is-leaving{animation:layer-out .26s var(--ease-out) forwards;pointer-events:none}
+.modal-layer.is-leaving .modal{animation:modal-out .22s var(--ease-out) forwards}
+@keyframes layer-in{from{background-color:rgba(51,38,28,0);-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0)}}
+@keyframes layer-out{to{background-color:rgba(51,38,28,0);-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0)}}
+@keyframes modal-in{from{opacity:0;transform:scale(.88)}}
+@keyframes modal-out{to{opacity:0;transform:scale(.92)}}
+
+/* ---------- Toast: pill at the bottom, tap to dismiss ---------- */
+.toast{left:50%;right:auto;bottom:24px;transform:translateX(-50%);border-radius:999px;padding:12px 22px;max-width:min(92vw,460px);width:max-content;text-align:center;background:rgba(68,54,46,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 12px 32px rgba(40,28,21,.3);cursor:pointer;animation:toast-in .48s var(--ease-spring) both}
+.toast.error{background:rgba(165,75,68,.96)}
+.toast.is-leaving{animation:toast-out .26s var(--ease-out) forwards}
+@keyframes toast-in{from{opacity:0;transform:translate(-50%,18px) scale(.96)}}
+@keyframes toast-out{to{opacity:0;transform:translate(-50%,10px) scale(.97)}}
+
+/* ---------- OOTD Studio ---------- */
+.editor-canvas{box-shadow:inset 0 2px 10px rgba(96,68,48,.06)}
+.editor-object{transition:filter .25s var(--ease-out),scale .4s var(--ease-spring)}
+.editor-object.lifting{scale:1.035;filter:drop-shadow(5px 16px 12px rgba(74,51,36,.28));cursor:grabbing;z-index:999!important}
+.editor-object .handle{width:20px;height:20px;transition:transform .3s var(--ease-spring)}
+.editor-object .handle::after{content:"";position:absolute;inset:-10px} /* bigger touch target */
+.editor-object .handle:active{transform:scale(1.25)}
+.editor-object .handle.nw{left:-10px;top:-10px}.editor-object .handle.ne{right:-10px;top:-10px}
+.editor-object .handle.sw{left:-10px;bottom:-10px}.editor-object .handle.se{right:-10px;bottom:-10px}
+.library-item:hover{border-color:#ab8463;background:#fbf4ea}
+@media(min-width:851px){
+  .editor-layout{align-items:start}
+  .editor-layout>.editor-panel{position:sticky;top:110px}
+}
+
+/* ---------- Mobile tab bar ---------- */
+.tabbar{display:none}
+@media(max-width:850px){
+  .tabbar{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;z-index:40;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));height:var(--tabbar-h);padding:6px;border-radius:22px;background:var(--glass);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);border:1px solid var(--glass-edge);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 12px 30px rgba(60,40,28,.18)}
+  .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:16px;font-size:11px;font-weight:600;letter-spacing:.01em;color:#7a6252;transition:transform .4s var(--ease-spring),background-color .2s,color .2s}
+  .tab svg{width:22px;height:22px}
+  .tab.active{color:#4a3428;background:rgba(112,80,61,.13)}
+  .tab:active{transform:scale(.9);transition-duration:.08s}
+  .app-shell{padding-bottom:calc(var(--tabbar-h) + 20px + env(safe-area-inset-bottom))}
+  .mobile-menu{display:none!important}
+  .toast{bottom:calc(var(--tabbar-h) + 22px + env(safe-area-inset-bottom))}
+  /* Studio: canvas first, library as a swipeable strip */
+  .editor-layout{grid-template-columns:minmax(0,1fr)}
+  .editor-layout>*{min-width:0}
+  .editor-canvas-wrap{order:-1}
+  .editor-canvas{min-height:min(68vh,520px)}
+  .editor-library{max-height:none;overflow:visible}
+  .library-grid{display:flex;overflow-x:auto;gap:8px;scroll-snap-type:x proximity;padding:2px 10px 8px;margin:0 -10px;scrollbar-width:none;overscroll-behavior-x:contain}
+  .library-grid::-webkit-scrollbar{display:none}
+  .library-item{flex:0 0 96px;min-height:112px;scroll-snap-align:start}
+}
+
+/* ---------- Phones: modals become bottom sheets ---------- */
+@media(max-width:640px){
+  .input,textarea,select{font-size:16px} /* prevents iOS zoom-on-focus */
+  .modal-layer{place-items:end stretch;padding:0;overflow:hidden}
+  .modal{max-width:none;width:100%;max-height:calc(100dvh - 28px);border-radius:22px 22px 0 0;border-bottom:0;padding:0 18px calc(24px + env(safe-area-inset-bottom))}
+  .modal::before{display:none}
+  .sheet-grabber{display:block;position:sticky;top:0;z-index:3;height:30px;margin:0 -18px 2px;background:linear-gradient(#fcf8f0 70%,rgba(252,248,240,0));touch-action:none;cursor:grab}
+  .sheet-grabber::after{content:"";position:absolute;left:50%;top:10px;width:40px;height:5px;margin-left:-20px;border-radius:5px;background:#cbb6a0}
+  .modal-title{touch-action:none;-webkit-user-select:none;user-select:none;padding-right:44px;font-size:24px}
+  .modal-close{top:22px;right:14px;position:absolute}
+  .modal.dragging{animation:none!important}
+  .modal-layer.is-entering .modal{animation:sheet-in .5s var(--ease-spring) both}
+  .modal-layer.is-leaving .modal{animation:sheet-out .3s var(--ease-out) forwards}
+  .modal-actions{flex-wrap:wrap}
+  .modal-actions .btn{flex:1 1 auto;min-height:46px}
+}
+@keyframes sheet-in{from{transform:translateY(100%)}}
+@keyframes sheet-out{to{transform:translateY(105%)}}
+
+/* ---------- Accessibility: gentler, not absent ---------- */
+@keyframes fade-in{from{opacity:0}}
+@keyframes fade-out{to{opacity:0}}
+@media (prefers-reduced-motion:reduce){
+  .page-enter{animation:fade-in .2s ease backwards}
+  .modal-layer.is-entering .modal{animation:fade-in .2s ease both}
+  .modal-layer.is-leaving .modal{animation:fade-out .18s ease forwards}
+  .toast{animation:fade-in .2s ease both}
+  .toast.is-leaving{animation:fade-out .18s ease forwards}
+  .btn:active:not(:disabled),.pill:active,.nav-link:active,.top-icon:active,.tab:active,.library-item:active,.upload-zone:active,.sticker-mini:active,.clothing-card:active,.outfit-card:active,.clothing-card:hover,.outfit-card:hover,.friend-card:hover{transform:none}
+  .editor-object.lifting{scale:1}
+}
+@media (prefers-reduced-transparency:reduce){
+  .topbar,.tabbar{background:#fcf9f3;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .modal-layer{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(51,38,28,.55)}
+  .toast{background:#44362e;-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+@media (prefers-contrast:more){
+  .topbar,.tabbar{background:#fffaf4;border-color:#7d5f4c}
+  .tab,.nav-link{color:#3a2a20}
+  .btn.secondary,.pill,.input,textarea,select{border-color:#7d5f4c}
+}
+
+/* Small phones: keep textile patches off the text */
+@media(max-width:540px){
+  .hero::before{width:92px;height:42px;left:-16px;top:-15px}
+  .hero small{margin-top:12px}
+  .section-head{align-items:flex-end}
+  .section-head h2{font-size:24px}
+  .section-head a{white-space:nowrap;flex-shrink:0}
+}
