@@ -930,3 +930,63 @@ html.scrolled .topbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 14px 34px
   .section-head h2{font-size:24px}
   .section-head a{white-space:nowrap;flex-shrink:0}
 }
+
+
+/* ================================================================
+   freesize 2.1 — Home dashboard
+   ================================================================ */
+/* ---------- Home dashboard ---------- */
+.dash-hero{position:relative;display:grid;grid-template-columns:1.3fr .9fr;gap:20px;align-items:center;padding:30px 36px;min-height:230px;border-radius:14px;border:1px solid #d2bda6;background:linear-gradient(105deg,rgba(252,247,237,.97),rgba(232,216,196,.92));box-shadow:var(--shadow);overflow:hidden;isolation:isolate}
+.dash-hero::before{content:"";position:absolute;width:130px;height:60px;left:-22px;top:-20px;transform:rotate(-13deg);background:url('/assets/textiles/caramel-gingham-patch.png') center/contain no-repeat;pointer-events:none}
+.dash-hero .copy{position:relative;z-index:1}
+.dash-hero small{display:block;margin:6px 0 6px;color:#907254;letter-spacing:.14em;font-weight:700;font-size:12px}
+.dash-hero h1{font-size:clamp(34px,4vw,54px);letter-spacing:-.028em;line-height:1.02;color:#44362e}
+.dash-hero p{margin-top:10px;color:#7b6353;font-size:15px;line-height:1.55;max-width:44ch}
+.dash-hero .hero-collage{height:190px}
+.stat-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
+.stat-tile{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;padding:14px 16px;border-radius:14px;background:#fdf9f2;border:1px solid #dccab6;box-shadow:0 3px 10px rgba(83,59,42,.06);transition:transform .4s var(--ease-spring),box-shadow .3s}
+.stat-tile:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(83,59,42,.12)}
+.stat-tile:active{transform:scale(.97);transition-duration:.08s}
+.stat-icon{grid-row:span 2;display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:#efe3d4;color:#70503d}
+.stat-tile strong{font-family:Georgia,serif;font-size:26px;line-height:1;color:#44362e;font-variant-numeric:tabular-nums}
+.stat-tile>span:last-child{font-size:12px;color:#7b6353;font-weight:600}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.dash-card{background:#fdf9f2;border:1px solid #d9c6b1;border-radius:16px;padding:18px;box-shadow:var(--shadow);min-width:0}
+.dash-card-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.dash-card-head h2{font-size:22px}
+.dash-card-head .link{margin-left:auto}
+.todo-list,.where-list{display:flex;flex-direction:column;gap:8px}
+.todo-row,.where-row{display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;background:#f7efe4;border:1px solid #e6d7c5;min-width:0}
+.where-row{cursor:pointer;transition:transform .4s var(--ease-spring),background-color .2s}
+.where-row:hover{background:#f3e8da}
+.where-row:active{transform:scale(.98);transition-duration:.08s}
+.todo-row img,.where-row img{width:48px;height:48px;object-fit:contain;flex:none;background:#fffaf4;border-radius:10px}
+.todo-icon{display:grid;place-items:center;width:48px;height:48px;flex:none;border-radius:10px;background:#efe3d4;color:#70503d}
+.todo-text,.where-row>div{flex:1;min-width:0}
+.todo-text strong,.where-row strong{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.todo-text p,.where-row p{margin-top:3px;font-size:12.5px;color:#7b6353;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.calm-state{display:flex;gap:12px;align-items:center;padding:16px;border-radius:12px;background:#f0f2e7;border:1px solid #dfe4d4;color:#55663f}
+.calm-state p{font-size:13px;margin-top:2px;color:#6b7a58}
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,260px);gap:14px;overflow-x:auto;padding:10px 4px 14px;margin:0 -4px;scroll-snap-type:x proximity;scrollbar-width:thin;overscroll-behavior-x:contain}
+.rail>*{scroll-snap-align:start}
+.rail-new{display:grid;place-content:center;justify-items:center;gap:10px;min-height:260px;cursor:pointer;color:#70503d;text-align:center}
+.rail-new span{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:#efe3d4}
+.sticker-mini{cursor:pointer;font:inherit;color:inherit}
+.dash-card-head{flex-wrap:wrap;row-gap:4px}
+@media(max-width:850px){
+  .dash-hero{grid-template-columns:1fr;padding:24px}
+  .dash-hero .hero-collage{display:none}
+  .stat-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dash-grid{grid-template-columns:1fr}
+}
+@media(max-width:540px){
+  .dash-hero::before{width:90px;height:42px;left:-16px;top:-15px}
+  .dash-hero small{margin-top:12px}
+  .dash-hero .hero-actions .btn{flex:1 1 auto}
+  .stat-tile{padding:12px}
+  .stat-icon{width:36px;height:36px}
+  .rail{grid-auto-columns:76%}
+  .dash-card-head h2{font-size:20px}
+  .dash-card{padding:16px}
+}
+@media (prefers-reduced-motion:reduce){.stat-tile:hover,.stat-tile:active,.where-row:active{transform:none}}
