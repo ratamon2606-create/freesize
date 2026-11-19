@@ -16,7 +16,17 @@ async function api(path,{method='GET',body=null,form=false}={}){
  if(!response.ok){let err=new Error(d.error||'Request failed');err.status=response.status;throw err}
  return d;
 }
-function toast(msg,bad=false){document.querySelector('.toast')?.remove();const d=document.createElement('div');d.className='toast'+(bad?' error':'');d.textContent=msg;document.body.append(d);setTimeout(()=>d.remove(),4300)}
+function toast(msg,bad=false){document.querySelectorAll('.toast:not(.is-leaving)').forEach(hideToast);const d=document.createElement('div');d.className='toast'+(bad?' error':'');d.setAttribute('role',bad?'alert':'status');d.textContent=msg;d.addEventListener('click',()=>hideToast(d));document.body.append(d);setTimeout(()=>hideToast(d),4300)}
+function hideToast(d){if(d.classList.contains('is-leaving'))return;d.classList.add('is-leaving');setTimeout(()=>d.remove(),320)}
+// ---- Fluid motion helpers (springs, rubber-banding, momentum projection) ----
+const HAS_LINEAR=globalThis.CSS?.supports?.('transition-timing-function','linear(0, 1)');
+const SPRING=HAS_LINEAR?'linear(0,0.051,0.162,0.293,0.421,0.536,0.634,0.715,0.781,0.833,0.873,0.905,0.929,0.947,0.960,0.971,0.978,0.984,0.988,0.991,0.994,0.995,0.997,0.998,1)':'cubic-bezier(.2,.8,.2,1)';
+const SPRING_BOUNCE=HAS_LINEAR?'linear(0,0.047,0.158,0.295,0.436,0.568,0.682,0.776,0.851,0.907,0.948,0.976,0.995,1.006,1.012,1.015,1.015,1.014,1.012,1.010,1.008,1.006,1.004,1.003,1)':'cubic-bezier(.3,1.2,.4,1)';
+const reduceMotion=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isSheet=()=>matchMedia('(max-width: 640px)').matches;
+const rubber=(over,dim,c=.55)=>(over*dim*c)/(dim+c*Math.abs(over));
+const project=(v,d=.998)=>(v/1000)*d/(1-d); // Apple's momentum projection, v in px/s
+let lastPress=null,_prev={page:null,id:null,modal:null};
 async function run(fn){try{await fn()}catch(err){toast(err.message||String(err),true);console.error(err)}}
 function navigate(path){history.pushState({},'',path);route()}
 function getRoute(){const p=location.pathname.split('/').filter(Boolean);return {page:p[0]||'home',id:p[1]||null}}
@@ -43,7 +53,20 @@ async function route(){const r=getRoute();S.page=r.page;S.friendId=r.id;S.modal=
   render();window.scrollTo(0,0);
  }catch(err){if(err.status===401){S.me=null;render()}else{toast(err.message,true);render()}}
 }
-function render(){if(!S.me){ROOT.innerHTML=renderAuth();return}ROOT.innerHTML=`<div class="app-shell">${topbar()}<main class="page">${renderPage()}</main><footer class="footer">Pieces, patterns, and shared wardrobes · freesize</footer></div>${S.modal?renderModal():''}`}
+function render(){const oldLayer=ROOT.querySelector('.modal-layer');const page=S.me?S.page:'auth';const enterPage=_prev.page!==page||_prev.id!==S.friendId;
+ const opening=!!S.modal&&!_prev.modal,closing=!S.modal&&!!_prev.modal&&!!oldLayer;
+ if(!S.me){ROOT.innerHTML=renderAuth()}
+ else ROOT.innerHTML=`<div class="app-shell">${topbar()}<main class="page${enterPage?' page-enter':''}">${renderPage()}</main><footer class="footer">Pieces, patterns, and shared wardrobes · freesize</footer></div>${tabbar()}${S.modal?renderModal():''}`;
+ _prev={page,id:S.friendId,modal:S.me?S.modal:null};
+ if(opening)openModalFx();if(closing)closeModalFx(oldLayer)}
+const activeNav=()=>S.page==='studio'?'ootd':S.page==='friend'?'friends':S.page;
+function tabbar(){const tabs=[['home','Home','home'],['wardrobe','Wardrobe','shirt'],['ootd','OOTD','hanger'],['friends','Friends','users'],['borrowing','Borrow','box']];const a=activeNav();return `<nav class="tabbar" aria-label="Main">${tabs.map(([id,l,i])=>`<a href="/${id}" data-link class="tab ${a===id?'active':''}" ${a===id?'aria-current="page"':''}>${ico(i,22)}<span>${l}</span></a>`).join('')}</nav>`}
+// Modals grow out of the control that opened them, and leave the same way.
+function openModalFx(){const layer=ROOT.querySelector('.modal-layer'),m=layer?.querySelector('.modal');if(!m)return;
+ if(lastPress&&!isSheet()){const r=m.getBoundingClientRect();const cx=Math.min(r.width*1.4,Math.max(-r.width*.4,lastPress.x-r.left)),cy=Math.min(r.height*1.4,Math.max(-r.height*.4,lastPress.y-r.top));m.style.transformOrigin=`${cx}px ${cy}px`}
+ layer.classList.add('is-entering');m.addEventListener('animationend',()=>layer.classList.remove('is-entering'),{once:true});m.focus({preventScroll:true})}
+function closeModalFx(old){old.inert=true;old.classList.remove('is-entering');old.querySelector('.modal')?.classList.remove('dragging');old.classList.add('is-leaving');document.body.append(old);
+ const done=()=>old.remove();old.querySelector('.modal')?.addEventListener('animationend',done,{once:true});setTimeout(done,500)}
 function topbar(){const nav=[['home','Home','home'],['wardrobe','My Wardrobe','shirt'],['ootd','OOTD','hanger'],['friends','Friends','users'],['borrowing','Borrowing','box']];let active=S.page==='studio'?'ootd':S.page==='friend'?'friends':S.page;const unread=(S.notifications||[]).filter(n=>!n.read).length;
  return `<header class="topbar"><a href="/home" data-link class="logo"><span class="brand-script">freesize</span><span class="brand-atelier">เพราะผมใส่ได้ทุกตัว</span></a><nav class="nav">${nav.map(([id,label,i])=>`<a href="/${id}" data-link class="nav-link ${active===id?'active':''}">${ico(i)}${label}</a>`).join('')}</nav><div class="top-right"><button class="top-icon mobile-menu" data-action="mobileMenu" aria-label="Menu">☰</button><button class="top-icon" data-action="goNotifications" aria-label="Notifications">${ico('bell',23)}${unread?`<span class="bell-count">${unread>9?'9+':unread}</span>`:''}</button><button class="top-icon" data-action="goProfile" aria-label="Profile">${avatar(S.me,'small')}</button></div></header>`}
 function renderPage(){return ({home:pageHome,wardrobe:pageWardrobe,ootd:pageOOTD,studio:pageStudio,friends:pageFriends,friend:pageFriend,borrowing:pageBorrowing,notifications:pageNotifications,profile:pageProfile}[S.page]||pageHome)()}
@@ -84,7 +107,7 @@ function renderModal(){const m=S.modal;let inside='';if(m==='add'){inside=`<h2 c
  if(m==='journal'||m==='log'){inside=`<h2 class="modal-title">${m==='journal'?'Edit Journal Note':'Add a note to this loan event'}</h2><form id="note-form"><textarea class="input" name="note" rows="4" maxlength="300" required>${esc(S.noteValue||'')}</textarea><div class="modal-actions">${btn('Cancel','closeModal')}<button type="submit" class="btn primary">Save Note</button></div></form>`}
  if(m==='outfit'){let o=S.outfitDetail;let it=o.items[S.outfitItemIndex]||null;inside=`<h2 class="modal-title">${esc(o.title)}</h2><p class="muted" style="font-size:13px;margin:-10px 0 15px">Select a piece in this outfit to see its name and original owner.</p><div class="outfit-detail-grid"><div class="outfit-detail-preview" aria-label="Outfit preview">${outfitPreview(o,true)}</div><div class="outfit-detail-pieces"><h3>Outfit Pieces</h3><p class="muted" style="font-size:13px;margin:7px 0 14px">${o.items.length} clothing stickers</p><div class="feed-list" style="max-height:300px;overflow:auto">${o.items.map((i,k)=>`<button class="feed-row" data-action="selectOutfitItem" data-id="${k}" style="text-align:left;cursor:pointer;${k===S.outfitItemIndex?'border-color:#9b7758':''}"><img src="${esc(i.image_path)}" style="width:45px;height:54px;object-fit:contain"><div class="content"><strong>${esc(i.name||'Unavailable')}</strong><p>Original owner: ${esc(i.owner_name||'Unavailable')}</p></div></button>`).join('')}</div><div class="divider"></div>${it?`<div class="note">Selected: <strong>${esc(it.name||'Unavailable')}</strong><br>Owned by ${esc(it.owner_name||'Unavailable')} (${esc(it.owner_username||'')})</div>`:''}<p class="muted" style="font-size:12px;margin:12px 0">This outfit is for planning. Clothing ownership stays with its original owner.</p>${!S.outfitIsFriend?btn(ico('edit')+' Open in Editor','editOOTD',o.id,'primary'):''}</div></div>`}
  if(m==='menu'){inside=`<h2 class="modal-title">Navigate</h2><div style="display:grid;gap:10px">${[['home','Home'],['wardrobe','My Wardrobe'],['ootd','OOTD Gallery'],['friends','Friends'],['borrowing','Borrowing'],['notifications','Notifications & Activity'],['profile','My Profile']].map(([p,n])=>`<a data-link href="/${p}" class="btn secondary">${n}</a>`).join('')}</div>`}
- return `<div class="modal-layer" data-action="backdrop"><div class="modal ${m==='outfit'?'outfit-detail-modal':''}" role="dialog" aria-modal="true"><button class="modal-close" aria-label="Close" data-action="closeModal">×</button>${inside}</div></div>`}
+ return `<div class="modal-layer" data-action="backdrop"><div class="modal ${m==='outfit'?'outfit-detail-modal':''}" role="dialog" aria-modal="true" tabindex="-1"><div class="sheet-grabber" aria-hidden="true"></div><button class="modal-close" aria-label="Close" data-action="closeModal">×</button>${inside}</div></div>`}
 function addCanvasItem(i){if(!S.editor)S.editor={id:null,title:'',items:[],selected:-1};const k=S.editor.items.length;S.editor.items.push({item_id:i.id,owner_id:i.owner_id,image_path:i.image_path,name:i.name,owner_name:i.owner,x:.14+(k%4)*.15,y:.12+(k%3)*.16,w:.36,z:k+1});S.editor.selected=k}
 function pickItem(id){return [...(S.wardrobe||[]),...(S.friendCloset?.items||[]),...(S.studioFriendItems||[])].find(i=>i.id===id)}
 async function doAction(a,id){switch(a){
@@ -104,7 +127,7 @@ async function doAction(a,id){switch(a){
  case'showOutfit':case'showFriendOutfit':{let friend=a==='showFriendOutfit';let o=friend?S.friendCloset?.ootds?.find(v=>v.id===id):S.outfits.find(v=>v.id===id);if(o){S.outfitDetail=o;S.outfitItemIndex=0;S.outfitIsFriend=friend;S.modal='outfit';render()}break}
  case'selectOutfitItem':S.outfitItemIndex=Number(id);render();break;
  case'deleteOOTD':if(confirm('Delete this saved OOTD?')){await api(`/ootds/${id}`,{method:'DELETE'});S.outfits=(await api('/ootds')).ootds;render();toast('OOTD deleted')}break;
- case'putItem':{let i=pickItem(id);if(i){addCanvasItem(i);render()}break}
+ case'putItem':{let i=pickItem(id);if(i){addCanvasItem(i);render();popIn(S.editor.items.length-1)}break}
  case'studioMine':S.studioTab='mine';S.filter='All';S.search='';render();break;
  case'studioFriends':S.studioTab='friends';S.filter='All';S.search='';render();break;
  case'layerForward':if(S.editor?.selected>=0){S.editor.items[S.editor.selected].z++;render()}break;
@@ -136,7 +159,7 @@ async function doAction(a,id){switch(a){
  case'changeAvatar':document.querySelector('#avatar-input')?.click();break;
  default:break;
 }}
-document.addEventListener('click',event=>{let link=event.target.closest('[data-link]');if(link){event.preventDefault();navigate(new URL(link.href).pathname);return}let b=event.target.closest('[data-action]');if(b){const a=b.dataset.action;if(a==='backdrop'&&!event.target.classList.contains('modal-layer'))return;event.preventDefault();run(()=>doAction(a,b.dataset.id||''))}});
+document.addEventListener('click',event=>{let link=event.target.closest('[data-link]');if(link){event.preventDefault();navigate(new URL(link.href).pathname);return}let b=event.target.closest('[data-action]');if(b){const a=b.dataset.action;if(a==='backdrop'&&!event.target.classList.contains('modal-layer'))return;event.preventDefault();{const r=b.getBoundingClientRect();lastPress=a==='backdrop'?null:{x:r.left+r.width/2,y:r.top+r.height/2}}run(()=>doAction(a,b.dataset.id||''))}});
 document.addEventListener('submit',event=>{let f=event.target;event.preventDefault();
  if(f.dataset.submitting==='true')return;
  f.dataset.submitting='true';
@@ -194,7 +217,7 @@ document.addEventListener('pointerdown',e=>{
  const rect=document.querySelector('#editor-canvas').getBoundingClientRect();const index=Number(el.dataset.index);const item=S.editor.items[index];if(!item)return;
  const handle=e.target.closest('.handle');
  if(handle){const corner=handle.dataset.corner||'se';resizing={index,corner,rect,x:e.clientX,startX:item.x,startY:item.y,startW:item.w,ratio:el.offsetHeight/Math.max(1,el.offsetWidth)};handle.setPointerCapture?.(e.pointerId);e.preventDefault();e.stopPropagation();return}
- S.editor.selected=index;el.classList.add('selected');dragging={index,el,rect,x:e.clientX,y:e.clientY,startX:item.x,startY:item.y};el.setPointerCapture?.(e.pointerId);e.preventDefault();
+ S.editor.selected=index;el.classList.add('selected','lifting');const hf=el.offsetHeight/Math.max(1,rect.height);dragging={index,el,rect,x:e.clientX,y:e.clientY,startX:item.x,startY:item.y,lim:{x0:-item.w*.7,x1:1-item.w*.3,y0:-hf*.7,y1:1-hf*.3}};el.setPointerCapture?.(e.pointerId);e.preventDefault();
 });
 document.addEventListener('pointermove',e=>{
  if(resizing){const r=resizing,item=S.editor.items[r.index];if(!item)return;const dx=(e.clientX-r.x)/r.rect.width;const left=r.corner.includes('w'),top=r.corner.includes('n');
@@ -203,8 +226,35 @@ document.addEventListener('pointermove',e=>{
   if(left)item.x=r.startX+(r.startW-w);
   if(top)item.y=r.startY+(r.startW-w)*r.ratio*r.rect.width/r.rect.height;
   applyItemSize(r.index,item);return}
- if(!dragging)return;const d=dragging,item=S.editor.items[d.index];item.x=Math.min(1.3,Math.max(-.35,d.startX+(e.clientX-d.x)/d.rect.width));item.y=Math.min(1.3,Math.max(-.35,d.startY+(e.clientY-d.y)/d.rect.height));d.el.style.left=(item.x*100)+'%';d.el.style.top=(item.y*100)+'%';
+ if(!dragging)return;const d=dragging,item=S.editor.items[d.index];
+ // follow the finger 1:1 inside the limits, then resist progressively past them (rubber-band)
+ const L=d.lim;item.x=softClamp(d.startX+(e.clientX-d.x)/d.rect.width,L.x0,L.x1);item.y=softClamp(d.startY+(e.clientY-d.y)/d.rect.height,L.y0,L.y1);d.el.style.left=(item.x*100)+'%';d.el.style.top=(item.y*100)+'%';
 });
-document.addEventListener('pointerup',()=>{if(dragging||resizing){dragging=null;resizing=null;render()}});
+// keeps at least 30% of a piece on the canvas; past that it resists, then springs back
+const softClamp=(v,min,max)=>v<min?min-rubber(min-v,.18):v>max?max+rubber(v-max,.18):v;
+function endEditorGesture(){if(!dragging&&!resizing)return;const d=dragging;dragging=null;resizing=null;
+ let from=null;if(d){const item=S.editor.items[d.index];if(item){const L=d.lim;from={x:item.x,y:item.y};item.x=Math.min(L.x1,Math.max(L.x0,item.x));item.y=Math.min(L.y1,Math.max(L.y0,item.y));if(from.x===item.x&&from.y===item.y)from=null}}
+ render();
+ // spring back from the rubber-banded position to the nearest allowed spot
+ if(d&&from&&!reduceMotion()){const el=document.querySelector(`.editor-object[data-index="${d.index}"]`);el?.animate([{left:from.x*100+'%',top:from.y*100+'%'},{left:el.style.left,top:el.style.top}],{duration:480,easing:SPRING})}}
+document.addEventListener('pointerup',endEditorGesture);document.addEventListener('pointercancel',endEditorGesture);
+// New pieces fly in from the tile you tapped, so you can see where they landed.
+function popIn(index){const el=document.querySelector(`.editor-object[data-index="${index}"]`);if(!el||reduceMotion())return;const r=el.getBoundingClientRect();let dx=0,dy=0;if(lastPress){dx=lastPress.x-(r.left+r.width/2);dy=lastPress.y-(r.top+r.height/2)}
+ el.animate([{transform:`translate(${dx}px,${dy}px) scale(.3)`,opacity:.3},{transform:'none',opacity:1}],{duration:520,easing:SPRING_BOUNCE})}
+// ---- Bottom sheet: drag the grabber/title down to dismiss (phones) ----
+let sheet=null;
+document.addEventListener('pointerdown',e=>{const m=e.target.closest('.modal');if(!m||!isSheet()||!e.target.closest('.sheet-grabber,.modal-title'))return;
+ e.preventDefault();sheet={m,layer:m.parentElement,y0:e.clientY,dy:0,h:m.offsetHeight,hist:[{y:e.clientY,t:e.timeStamp}]};m.setPointerCapture?.(e.pointerId);m.classList.add('dragging');m.parentElement.classList.remove('is-entering');m.style.transition='none'});
+document.addEventListener('pointermove',e=>{if(!sheet)return;const s=sheet;let dy=e.clientY-s.y0;if(dy<0)dy=-rubber(-dy,s.h,.3);s.dy=dy;s.m.style.transform=`translateY(${dy}px)`;s.layer.style.setProperty('--sheet-progress',Math.max(0,1-dy/s.h));s.hist.push({y:e.clientY,t:e.timeStamp});if(s.hist.length>6)s.hist.shift()});
+function releaseVelocity(hist,now){const recent=hist.filter(p=>now-p.t<100);if(recent.length<2)return 0; // paused before release = no fling
+ const a=recent[0],b=recent[recent.length-1];return (b.y-a.y)/Math.max(32,b.t-a.t)*1000}
+function endSheet(e){if(!sheet)return;const s=sheet;sheet=null;const v=releaseVelocity(s.hist,e?.timeStamp??performance.now());
+ const landing=s.dy+project(v);s.m.style.transition='';
+ if(s.dy>4&&landing>s.h*.4){navigator.vibrate?.(8);run(()=>doAction('closeModal'));return}
+ s.m.classList.remove('dragging');s.layer.style.removeProperty('--sheet-progress');s.m.animate([{transform:s.m.style.transform||'none'},{transform:'none'}],{duration:450,easing:v<-200?SPRING_BOUNCE:SPRING});s.m.style.transform=''}
+document.addEventListener('pointerup',endSheet);document.addEventListener('pointercancel',endSheet);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.modal){e.preventDefault();run(()=>doAction('closeModal'))}});
+document.addEventListener('touchstart',()=>{},{passive:true}); // enables :active press states on iOS
+addEventListener('scroll',()=>document.documentElement.classList.toggle('scrolled',scrollY>4),{passive:true});
 window.addEventListener('popstate',route);
 (async()=>{try{{const flags=await api('/health');S.allowDemo=!!flags.demo_enabled}}catch{}try{S.me=await api('/me')}catch{S.me=null}if(S.me){await route()}else{render()}})();
