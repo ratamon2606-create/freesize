@@ -1076,3 +1076,36 @@ html.scrolled .topbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 14px 34px
   .profile-bio,.profile-stats{padding-left:16px;padding-right:16px}
   .profile-stats{gap:18px}
 }
+
+
+/* ================================================================
+   freesize 2.1 — Add Clothing
+   ================================================================ */
+/* ---------- Add Clothing: photo first, chips, optional details ---------- */
+.add-modal{max-width:540px}
+.add-flow{display:grid;gap:14px}
+.add-photo{position:relative;display:grid;place-items:center;width:100%;min-height:210px;padding:0;border-radius:16px;border:2px dashed #c7ae95;background:#fcf7f0;color:#876950;cursor:pointer;overflow:hidden;transition:transform .4s var(--ease-spring),border-color .2s,background-color .2s}
+.add-photo:hover{border-color:#a8876a;background:#faf2e7}
+.add-photo:active{transform:scale(.985);transition-duration:.08s}
+.add-photo-empty{display:grid;justify-items:center;gap:6px;text-align:center;padding:20px}
+.add-photo-empty strong{font-size:16px;color:#70503d}
+.add-photo-empty>span{font-size:12.5px}
+.add-photo .upload-preview{width:100%;height:260px;object-fit:contain;background:#f7f0e7;border-radius:0}
+.add-photo.has-photo{border-style:solid;border-color:#d8c1a9}
+.add-photo.has-photo .add-photo-empty{display:none}
+.add-photo-change{display:none;position:absolute;right:10px;bottom:10px;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;background:rgba(68,54,46,.82);color:#fff;font-size:12px;font-weight:700;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.add-photo.has-photo .add-photo-change{display:inline-flex}
+.add-hint{font-size:12px;color:#8a7462;margin-top:-6px}
+.chip-group{display:flex;flex-wrap:wrap;gap:7px}
+.chip{position:relative;cursor:pointer}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:inline-flex;align-items:center;min-height:36px;padding:7px 14px;border-radius:999px;border:1px solid #d8c1a9;background:#fcf7ef;font-size:13px;font-weight:600;transition:background-color .2s,color .2s,border-color .2s,transform .4s var(--ease-spring)}
+.chip:hover span{background:#f6ecdf}
+.chip:active span{transform:scale(.95);transition-duration:.08s}
+.chip input:checked+span{background:#70503d;border-color:#5d4231;color:#fff;box-shadow:0 2px 6px rgba(80,57,44,.22)}
+.chip input:focus-visible+span{outline:2px solid #98704f;outline-offset:2px}
+.more-details{border-top:1px solid #e3d5c5;padding-top:10px}
+.more-details summary{cursor:pointer;font-weight:700;font-size:13px;color:#70503d;padding:4px 0}
+.more-grid{display:grid;gap:11px;margin-top:10px}
+@media(max-width:540px){.add-photo{min-height:180px}}
+@media (prefers-reduced-motion:reduce){.add-photo:active,.chip:active span{transform:none}}
