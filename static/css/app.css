@@ -1034,3 +1034,45 @@ html.scrolled .topbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 14px 34px
   .loan-img{width:100%;height:150px}
   .steps li{font-size:10px}
 }
+
+
+/* ================================================================
+   freesize 2.1 — Friend profile
+   ================================================================ */
+/* ---------- Friend profile ---------- */
+.page-toolbar .btn.ghost{padding-left:4px}
+.profile-hero{padding:0 0 18px;overflow:hidden;margin-bottom:6px}
+.profile-hero::before{display:none}
+.profile-cover{height:120px;background:#d9c3a9 url('/assets/textiles/brown-linen-gingham.jpg') center/260px repeat;border-bottom:1px solid #d2bda6;box-shadow:inset 0 -30px 40px -20px rgba(68,54,46,.25)}
+.profile-id{display:flex;align-items:flex-end;gap:16px;padding:0 24px;margin-top:-46px}
+.profile-id .avatar.big{width:104px;height:104px;border:4px solid #fdf9f2;box-shadow:0 6px 18px rgba(68,54,46,.18)}
+.profile-name{flex:1;min-width:0;padding-bottom:6px}
+.profile-name h1{font-size:clamp(26px,3vw,34px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.profile-name p{color:#7b6353;font-size:14px;margin-top:2px}
+.profile-cta{padding-bottom:8px}
+.profile-bio{padding:12px 24px 0;color:#5e493c;line-height:1.6;max-width:70ch}
+.profile-stats{display:flex;gap:28px;padding:14px 24px 0}
+.profile-stats div{display:flex;align-items:baseline;gap:6px}
+.profile-stats strong{font-family:Georgia,serif;font-size:22px;color:#44362e;font-variant-numeric:tabular-nums}
+.profile-stats span{font-size:13px;color:#7b6353}
+.profile-tabs{display:flex;gap:6px;border-bottom:1px solid #d9c6b1;margin:18px 0 18px}
+.profile-tabs button{display:flex;align-items:center;gap:7px;padding:12px 16px;font-weight:700;font-size:14px;color:#7b6353;border-bottom:3px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .25s var(--ease-out)}
+.profile-tabs button svg{width:17px;height:17px}
+.profile-tabs button span{font-size:12px;padding:1px 8px;border-radius:20px;background:#efe3d4}
+.profile-tabs button.active{color:#44362e;border-bottom-color:#70503d}
+.profile-tabs button:active{opacity:.7}
+.privacy-line{display:flex;align-items:center;gap:8px;font-size:13px;color:#7b6353;margin:-4px 0 14px}
+.privacy-line svg{width:15px;height:15px;flex:none}
+.friend-closet-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.friend-closet-grid .clothing-card{min-height:0}
+.friend-closet-grid .clothing-card .mini-actions{margin-top:12px}
+@media(max-width:850px){.friend-closet-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){
+  .profile-cover{height:96px}
+  .profile-id{flex-wrap:wrap;padding:0 16px;margin-top:-40px}
+  .profile-id .avatar.big{width:84px;height:84px}
+  .profile-cta{width:100%;padding:0}
+  .profile-cta .btn{width:100%}
+  .profile-bio,.profile-stats{padding-left:16px;padding-right:16px}
+  .profile-stats{gap:18px}
+}
