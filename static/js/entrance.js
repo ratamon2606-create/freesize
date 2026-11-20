@@ -19,7 +19,7 @@ if(entrance&&['/','/home','/home/'].includes(location.pathname)){
     entrance.classList.add('is-opening');
     trigger.disabled=true;
     // Fade all doors and lettering out while revealing the already-loaded app.
-    completeTimer=setTimeout(complete,matchMedia('(prefers-reduced-motion: reduce)').matches?100:3000);
+    completeTimer=setTimeout(complete,matchMedia('(prefers-reduced-motion: reduce)').matches?100:2050);
   }
   trigger.addEventListener('click',enter);
   const keydown=e=>{
