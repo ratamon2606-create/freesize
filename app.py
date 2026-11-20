@@ -288,7 +288,10 @@ def check_pw(pw,stored):
 def session_cookie(r:Response,user_id):
     secret=secrets.token_urlsafe(32);token_hash=hashlib.sha256(secret.encode()).hexdigest()
     expiration=(datetime.now(timezone.utc)+timedelta(days=14)).isoformat()
-    with sql.tx() as t:t.insert('sessions',{'id_hash':token_hash,'user_id':user_id,'expires_at':expiration})
+    with sql.tx() as t:
+        # Housekeeping: expired sessions can never authenticate again.
+        t.execute('DELETE FROM sessions WHERE expires_at<=?',(STAMP(),))
+        t.insert('sessions',{'id_hash':token_hash,'user_id':user_id,'expires_at':expiration})
     r.set_cookie(COOKIE_NAME,secret,httponly=True,secure=IS_PROD,samesite='lax',max_age=14*86400,path='/')
 def current(req:Request):
     token=req.cookies.get(COOKIE_NAME)
@@ -410,7 +413,12 @@ async def update_profile(req:Request,user=Depends(current)):
             if t.one('SELECT id FROM users WHERE username=? AND id<>?',(name,user['id'])):fail('Username already used',409)
         updates['username']=name
     if updates:
-        with sql.tx() as t:t.execute('UPDATE users SET '+','.join(f'{k}=?' for k in updates)+' WHERE id=?',(*updates.values(),user['id']))
+        with sql.tx() as t:
+            t.execute('UPDATE users SET '+','.join(f'{k}=?' for k in updates)+' WHERE id=?',(*updates.values(),user['id']))
+            if 'password_hash' in updates:
+                # Sign out every other device; keep the session that changed it.
+                token=req.cookies.get(COOKIE_NAME,'')
+                t.execute('DELETE FROM sessions WHERE user_id=? AND id_hash<>?',(user['id'],hashlib.sha256(token.encode()).hexdigest()))
     return {'ok':True}
 
 async def save_image(file:UploadFile,background=False):
@@ -588,14 +596,20 @@ def friends(user=Depends(current)):
 async def add_friend(req:Request,user=Depends(current)):
     username=str((await req.json()).get('username','')).lower().strip()
     with sql.tx() as t:
-        other=t.one('SELECT * FROM users WHERE username=?',(username,))
+        other=t.one('SELECT * FROM users WHERE username=? AND password_hash!=?',(username,'!deleted!'))
         require(other is not None,'Username not found',404);require(other['id']!=user['id'],'Cannot friend yourself')
         existing=friend_record(user['id'],other['id'],t)
-        if existing and existing['status'] in ('accepted','pending'):fail('Friendship/request already exists',409)
-        if existing:t.execute('DELETE FROM friendships WHERE id=?',(existing['id'],))
-        t.insert('friendships',{'id':UID(),'requester_id':user['id'],'addressee_id':other['id'],'status':'pending','created_at':STAMP(),'updated_at':STAMP()})
-        event(t,'notification',user_id=other['id'],title='New friend request',message=f'{user["display_name"]} wants to be friends')
-    process_outbox();return {'ok':True}
+        accepted=bool(existing and existing['status']=='pending' and existing['requester_id']==other['id'])
+        if accepted:
+            # They already asked us: adding them back accepts their request.
+            t.execute("UPDATE friendships SET status='accepted',updated_at=? WHERE id=?",(STAMP(),existing['id']))
+            event(t,'notification',user_id=other['id'],title='Friend request accepted',message=f'{user["display_name"]} is now your friend')
+        else:
+            if existing and existing['status'] in ('accepted','pending'):fail('Friendship/request already exists',409)
+            if existing:t.execute('DELETE FROM friendships WHERE id=?',(existing['id'],))
+            t.insert('friendships',{'id':UID(),'requester_id':user['id'],'addressee_id':other['id'],'status':'pending','created_at':STAMP(),'updated_at':STAMP()})
+            event(t,'notification',user_id=other['id'],title='New friend request',message=f'{user["display_name"]} wants to be friends')
+    process_outbox();return {'ok':True,'accepted':accepted}
 
 @app.patch('/api/friends/{ident}')
 async def friend_decision(ident:str,req:Request,user=Depends(current)):
