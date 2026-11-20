@@ -381,3 +381,28 @@ def test_unfriend_cancels_open_requests_but_keeps_borrowed_loan():
         assert borrower.patch('/api/borrowing/'+borrowed,json={'action':'request_return'}).status_code==200
         assert owner.patch('/api/borrowing/'+borrowed,json={'action':'confirm_return'}).status_code==200
     work.cleanup()
+
+def test_user_search_treats_underscore_and_percent_literally():
+    work,server=fresh_app()
+    with TestClient(server.app) as c:
+        for name in ('a_b','axb'):
+            assert c.post('/api/auth/register',json={'username':name,'email':name+'@example.local','password':'password123'}).status_code==200
+        signin(c,'taa')
+        search=lambda q:[u['username'] for u in c.get('/api/users/search',params={'q':q}).json()['users']]
+        assert search('a_b')==['a_b']
+        assert search('%')==[]
+        assert search('_')==['a_b']
+    work.cleanup()
+
+def test_saving_clothing_unchanged_writes_no_activity():
+    work,server=fresh_app()
+    with TestClient(server.app) as c:
+        signin(c,'taa')
+        item=c.get('/api/wardrobe').json()['items'][0]
+        edits=lambda:sum(a['action']=='edit_clothing' for a in c.get('/api/activity').json()['activity'])
+        same={k:item[k] for k in ('name','category','color','details')}
+        assert c.patch('/api/wardrobe/'+item['id'],json=same).status_code==200
+        assert edits()==0
+        assert c.patch('/api/wardrobe/'+item['id'],json={**same,'color':'Green'}).status_code==200
+        assert edits()==1
+    work.cleanup()
