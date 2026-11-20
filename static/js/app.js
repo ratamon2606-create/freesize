@@ -46,6 +46,9 @@ function navigate(path){history.pushState({},'',path);route()}
 function getRoute(){const p=location.pathname.split('/').filter(Boolean);return {page:p[0]||'home',id:p[1]||null}}
 async function route(){const r=getRoute();S.page=r.page;S.friendId=r.id;S.modal=null;S.search='';S.filter='All';
  if(!S.me){render();return}
+ // Show a skeleton only if loading takes longer than ~150ms, so fast loads don't flicker
+ const seq=++routeSeq;clearTimeout(skeletonTimer);S.loading=false;
+ if(SKELETON_PAGES.includes(r.page))skeletonTimer=setTimeout(()=>{if(seq===routeSeq){S.loading=true;render()}},150);
  try{
   if(r.page==='home'){const [w,o,n,x4]=await Promise.all([api('/wardrobe'),api('/ootds'),api('/notifications'),api('/borrowing').catch(()=>({requests:[]}))]);S.wardrobe=w.items;S.outfits=o.ootds;S.notifications=n.notifications;S.borrow=x4.requests}
   if(r.page==='wardrobe')S.wardrobe=(await api('/wardrobe')).items;
@@ -64,9 +67,29 @@ async function route(){const r=getRoute();S.page=r.page;S.friendId=r.id;S.modal=
   if(r.page==='notifications'){const [n,a]=await Promise.all([api('/notifications'),api('/activity')]);S.notifications=n.notifications;S.activity=a}
   if(r.page!=='notifications'){try{S.notifications=(await api('/notifications')).notifications}catch{}}
   if(r.page==='profile')S.me=await api('/me');
+  if(seq!==routeSeq)return; // a newer navigation already started
+  clearTimeout(skeletonTimer);S.loading=false;
   render();window.scrollTo(0,0);
- }catch(err){if(err.status===401){S.me=null;render()}else{toast(err.message,true);render()}}
+ }catch(err){if(seq!==routeSeq)return;clearTimeout(skeletonTimer);S.loading=false;if(err.status===401){S.me=null;render()}else{toast(err.message,true);render()}}
 }
+// Skeleton loading placeholders (shimmering boxes shown while a page's data loads)
+let routeSeq=0,skeletonTimer=null;
+const SKELETON_PAGES=['home','wardrobe','ootd','friends','friend','borrowing','notifications'];
+const sk=(cls='',style='')=>`<span class="sk ${cls}" style="${style}"></span>`;
+const skHead=(title)=>`<div class="heading-line"><div><h1 class="tag-paper">${title}</h1>${sk('sk-line','width:180px;margin-top:10px')}</div></div>`;
+const skClothes=n=>`<div class="closet-grid">${Array.from({length:n},()=>`<div class="clothing-card sk-card">${sk('sk-photo')}${sk('sk-line','width:70%')}${sk('sk-line sk-thin','width:45%')}</div>`).join('')}</div>`;
+const skRows=n=>`<div class="feed-list">${Array.from({length:n},()=>`<div class="feed-row sk-row">${sk('sk-circle')}<div style="flex:1;display:grid;gap:8px">${sk('sk-line','width:40%')}${sk('sk-line sk-thin','width:70%')}</div></div>`).join('')}</div>`;
+function pageSkeleton(){const toolbar=`<div class="page-toolbar">${sk('sk-pill','width:min(420px,100%)')}</div>`;
+ const wrap=html=>`<div class="skeleton" aria-busy="true" aria-label="Loading">${html}</div>`;
+ switch(S.page){
+  case'home':return wrap(`<div class="dash-hero sk-hero">${sk('sk-line sk-thin','width:110px')}${sk('sk-line sk-big','width:180px')}${sk('sk-line','width:260px')}</div><div class="stat-row">${Array.from({length:4},()=>`<div class="stat-tile">${sk('sk-circle')}<div style="display:grid;gap:7px;flex:1">${sk('sk-line','width:40px')}${sk('sk-line sk-thin','width:60px')}</div></div>`).join('')}</div><div class="dash-grid">${Array.from({length:2},()=>`<div class="dash-card">${sk('sk-line','width:45%;margin-bottom:16px')}${sk('sk-block')}</div>`).join('')}</div>`);
+  case'wardrobe':return wrap(skHead('My Wardrobe')+toolbar+skClothes(8));
+  case'friend':return wrap(skHead('Closet')+skClothes(8));
+  case'ootd':return wrap(skHead('My OOTD')+toolbar+`<div class="outfit-grid">${Array.from({length:4},()=>`<div class="outfit-card paper sk-card">${sk('sk-photo sk-tall')}${sk('sk-line','width:60%')}</div>`).join('')}</div>`);
+  case'friends':return wrap(skHead('Friends')+toolbar+`<div class="people-grid">${Array.from({length:3},()=>`<div class="friend-card paper"><div style="display:flex;gap:10px;align-items:center">${sk('sk-circle')}${sk('sk-line','width:40%')}</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0">${sk('sk-photo')}${sk('sk-photo')}${sk('sk-photo')}</div>${sk('sk-pill','width:100%')}</div>`).join('')}</div>`);
+  case'borrowing':return wrap(skHead('Borrowing &amp; Tracking')+skRows(3));
+  case'notifications':return wrap(skHead('Notifications &amp; Activity')+skRows(4));
+ }}
 function render(){const oldLayer=ROOT.querySelector('.modal-layer');const page=S.me?S.page:'auth';const enterPage=_prev.page!==page||_prev.id!==S.friendId;
  const opening=!!S.modal&&!_prev.modal,closing=!S.modal&&!!_prev.modal&&!!oldLayer;
  if(!S.me){ROOT.innerHTML=renderAuth()}
@@ -83,7 +106,7 @@ function closeModalFx(old){old.inert=true;old.classList.remove('is-entering');ol
  const done=()=>old.remove();old.querySelector('.modal')?.addEventListener('animationend',done,{once:true});setTimeout(done,500)}
 function topbar(){const nav=[['home','Home','home'],['wardrobe','My Wardrobe','shirt'],['ootd','OOTD','hanger'],['friends','Friends','users'],['borrowing','Borrowing','box']];let active=S.page==='studio'?'ootd':S.page==='friend'?'friends':S.page;const unread=(S.notifications||[]).filter(n=>!n.read).length;
  return `<header class="topbar"><a href="/home" data-link class="logo"><span class="brand-script">freesize</span><span class="brand-atelier">เพราะผมใส่ได้ทุกตัว</span></a><nav class="nav">${nav.map(([id,label,i])=>`<a href="/${id}" data-link class="nav-link ${active===id?'active':''}">${ico(i)}${label}</a>`).join('')}</nav><div class="top-right"><button class="top-icon mobile-menu" data-action="mobileMenu" aria-label="Menu">☰</button>${themeToggle()}<button class="top-icon" data-action="goNotifications" aria-label="Notifications">${ico('bell',23)}${unread?`<span class="bell-count">${unread>9?'9+':unread}</span>`:''}</button><button class="top-icon" data-action="goProfile" aria-label="Profile">${avatar(S.me,'small')}</button></div></header>`}
-function renderPage(){return ({home:pageHome,wardrobe:pageWardrobe,ootd:pageOOTD,studio:pageStudio,friends:pageFriends,friend:pageFriend,borrowing:pageBorrowing,notifications:pageNotifications,profile:pageProfile}[S.page]||pageHome)()}
+function renderPage(){if(S.loading&&SKELETON_PAGES.includes(S.page))return pageSkeleton();return ({home:pageHome,wardrobe:pageWardrobe,ootd:pageOOTD,studio:pageStudio,friends:pageFriends,friend:pageFriend,borrowing:pageBorrowing,notifications:pageNotifications,profile:pageProfile}[S.page]||pageHome)()}
 function renderAuth(){const registering=S.authMode==='register';return `<div class="auth-wrap"><div class="auth-art"><div class="brand-script">freesize</div><div class="scribble">A little closet,<br>a lot of <em>possibilities.</em></div><p>Collect pieces you love, build your looks like a scrapbook, and share your closet with your favorite people.</p><div class="auth-images"><img src="/assets/cream-cardigan.png"><img src="/assets/brown-skirt.png"><img src="/assets/mary-janes.png"></div></div><div class="auth-box">${themeToggle('auth-theme')}<span class="badge pink" style="width:max-content;margin-bottom:16px">♡ your social wardrobe</span><h1>${registering?'Join the closet':'Welcome back'}</h1><p class="muted" style="margin-top:9px">${registering?'Create an account to start styling together.':'Sign in to see your clothes, friends and OOTDs.'}</p><form id="auth-form" novalidate>${registering?'<div class="field"><label>Display name</label><input class="input" name="display_name" placeholder="Your name" required></div>':''}<div class="field"><label>${registering?'Username':'Username or email'}</label><input class="input" name="username" placeholder="@username" required></div>${registering?'<div class="field"><label>Email</label><input class="input" type="email" name="email" placeholder="you@example.com" required></div>':''}<div class="field"><label>Password</label><div class="pw-wrap"><input class="input" name="password" type="password" minlength="8" placeholder="At least 8 characters" autocomplete="${registering?'new-password':'current-password'}" required><button type="button" class="pw-toggle" aria-label="Show password" aria-pressed="false">${ico('eye')}</button></div></div><button class="btn primary big" type="submit" style="width:100%">${registering?'Create Account':'Log In'} ${ico('arrow')}</button></form><p class="switch">${registering?'Already have an account?':'New to freesize?'} <button data-action="authSwitch">${registering?'Log in':'Sign up'}</button></p><div class="divider"></div>${S.allowDemo?`<div class="note sage"><strong>Try the demo:</strong> username <code>taa</code> · password <code>demo12345</code><br>Demo accounts May and June use the same password. Data persists locally.</div>${btn('Enter Demo as Taa','demoLogin','','secondary','big')}`:''}<p class="muted" style="font-size:11px;margin-top:15px">Self-hosted · Photos stay on your server · No third-party login</p></div></div>`}
 // ---- Home: a dashboard that answers "what needs me, and where are my clothes?" ----
 function pageHome(){const w=S.wardrobe||[],outfits=S.outfits||[],borrow=S.borrow||[];
