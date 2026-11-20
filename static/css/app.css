@@ -717,8 +717,9 @@ body {
 .borrow-alert strong{font-size:15px}
 .borrow-alert p{margin:4px 0 0;font-size:13px}
 .borrow-alert-icon{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;background:#c0712f;color:#fff;font-weight:700;font-size:18px}
-.borrow-alert.calm{background:#f0f2e7;border-color:#dfe4d4;border-left-color:#7a8f5f;color:#55663f}
-.borrow-alert.calm .borrow-alert-icon{background:#7a8f5f}
+.borrow-alert.calm{background:var(--paper);border-color:var(--line);border-left-color:var(--cocoa);color:var(--ink)}
+.borrow-alert.calm p{color:var(--muted)}
+.borrow-alert.calm .borrow-alert-icon{background:var(--cocoa)}
 .link-btn{background:none;border:0;padding:0;font:inherit;font-weight:700;color:inherit;text-decoration:underline;cursor:pointer}
 .pill-count{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;margin-left:5px;border-radius:20px;font-size:11px;font-weight:700;background:#e7d8c7;color:#6d4f3b}
 .pill.active .pill-count{background:#ffffff38;color:#fff}
@@ -1142,7 +1143,8 @@ html[data-theme="dark"] .tag-paper{background:linear-gradient(130deg,#3b2d24,#46
 html[data-theme="dark"] :is(.feed-icon,.stat-icon,.todo-icon,.rail-new span,.profile-tabs button span,.pill-count){background:#41322a;color:#e2bf9c}
 html[data-theme="dark"] :is(.request-row.needs-me,.feed-row.unread,.loan-card.needs-me){background:#3a2a1e}
 html[data-theme="dark"] .borrow-alert{background:#3d2b1d;color:#f0cfa9;border-color:#6b4a2f;border-left-color:#c0712f}
-html[data-theme="dark"] :is(.borrow-alert.calm,.calm-state,.how-it-works,.note.sage){background:#2a3024;color:#c3d1aa;border-color:#3e4a33}
+html[data-theme="dark"] :is(.calm-state,.how-it-works,.note.sage){background:#2a3024;color:#c3d1aa;border-color:#3e4a33}
+html[data-theme="dark"] .borrow-alert.calm{background:var(--paper);color:var(--ink);border-color:var(--line);border-left-color:var(--cocoa)}
 html[data-theme="dark"] .calm-state p{color:#9fae8a}
 html[data-theme="dark"] .divider{background:#43352c}
 html[data-theme="dark"] .sheet-grabber{background:linear-gradient(#2b211c 70%,rgba(43,33,28,0))}
