@@ -57,6 +57,7 @@ def source_key(req:Request):
     # We never trust X-Forwarded-For supplied by an arbitrary client.
     return str(req.client.host if req.client else 'unknown')
 
+CATEGORIES=('Tops','Bottoms','Dresses','Outerwear','Shoes','Bags','Accessories','Other')
 STAMP=lambda: datetime.now(timezone.utc).isoformat()
 UID=lambda: uuid.uuid4().hex
 
@@ -493,6 +494,7 @@ def wardrobe(owner:str='me',user=Depends(current)):
 async def add_clothing(req:Request,name:str=Form(...),category:str=Form(...),color:str=Form(''),details:str=Form(''),file:UploadFile=File(...),request_token:str=Form(''),user=Depends(current)):
     rate_limit('clothing-upload:'+user['id'], 40, 3600)
     require(1<=len(name.strip())<=100,'Clothing name must be 1-100 characters')
+    require(category in CATEGORIES,'Invalid category',400)
     require(len(request_token)<=100,'Invalid upload request token')
     if request_token:
         # A retry with the same form token must return the original clothing item.
@@ -530,6 +532,10 @@ async def add_clothing(req:Request,name:str=Form(...),category:str=Form(...),col
 @app.patch('/api/wardrobe/{ident}')
 async def edit_clothing(ident:str,req:Request,user=Depends(current)):
     d=await req.json()
+    if 'name' in d:
+        d['name']=str(d['name']).strip()
+        require(1<=len(d['name'])<=100,'Clothing name must be 1-100 characters',400)
+    if 'category' in d:require(d['category'] in CATEGORIES,'Invalid category',400)
     with sql.tx() as t:
         old=t.one('SELECT * FROM clothing_items WHERE id=? AND deleted_at IS NULL',(ident,))
         require(old is not None,'Clothing not found',404);require(old['owner_id']==user['id'])
@@ -607,7 +613,19 @@ def remove_friend(ident:str,user=Depends(current)):
         r=t.one('SELECT * FROM friendships WHERE id=?',(ident,))
         require(r is not None and r['status']=='accepted' and user['id'] in (r['requester_id'],r['addressee_id']),'Friendship not found',404)
         t.execute('DELETE FROM friendships WHERE id=?',(ident,))
-    return {'ok':True}
+        # Requests not yet handed over end with the friendship. Borrowed items
+        # keep their request so the return flow can still finish.
+        a,b=r['requester_id'],r['addressee_id']
+        stale=t.all("SELECT * FROM borrow_requests WHERE ((owner_id=? AND borrower_id=?) OR (owner_id=? AND borrower_id=?)) AND status IN ('pending','approved')",(a,b,b,a))
+        for s in stale:
+            item=t.one('SELECT name FROM clothing_items WHERE id=?',(s['item_id'],))
+            if s['status']=='approved':t.execute("UPDATE clothing_items SET state='available' WHERE id=? AND state='reserved'",(s['item_id'],))
+            t.execute("UPDATE borrow_requests SET status='cancelled',updated_at=? WHERE id=?",(STAMP(),s['id']))
+            for party in (s['owner_id'],s['borrower_id']):
+                event(t,'borrow_log',user_id=party,request_id=s['id'],item_id=s['item_id'],action='cancelled',message=f'{item["name"]}: cancelled after friendship ended')
+            other=s['owner_id'] if s['borrower_id']==user['id'] else s['borrower_id']
+            event(t,'notification',user_id=other,title='Borrow request cancelled',message=f'The request for {item["name"]} was cancelled because the friendship ended')
+    process_outbox();return {'ok':True}
 
 @app.get('/api/friends/{ident}/closet')
 def friend_closet(ident:str,user=Depends(current)):
@@ -730,15 +748,21 @@ async def borrow_action(ident:str,req:Request,user=Depends(current)):
                 event(t,'notification',user_id=other['borrower_id'],title='Borrow request unavailable',message=f'{item["name"]} has been reserved for another borrower')
                 event(t,'borrow_log',user_id=other['borrower_id'],request_id=other['id'],item_id=item['id'],action='rejected',message=f'{item["name"]}: request closed after another reservation')
             event(t,'notification',user_id=r['borrower_id'],title='Borrow request approved',message=f'{item["name"]} is ready for handover')
-        elif action=='reject':require(owner and state=='pending');nextstate='rejected'
-        elif action=='cancel':require(borrower and state in ('pending','approved'));nextstate='cancelled';
+        elif action=='reject':
+            require(owner and state=='pending');nextstate='rejected'
+            event(t,'notification',user_id=r['borrower_id'],title='Borrow request declined',message=f'{user["display_name"]} declined your request for {item["name"]}')
+        elif action=='cancel':
+            require(borrower and state in ('pending','approved'));nextstate='cancelled'
+            event(t,'notification',user_id=r['owner_id'],title='Borrow request cancelled',message=f'{user["display_name"]} cancelled the request for {item["name"]}')
         elif action=='handover':
             require(owner and state=='approved','Handover requires owner confirmation',409)
             require(item['state']=='reserved','Item is no longer reserved',409)
             nextstate='borrowed';t.execute("UPDATE clothing_items SET state='borrowed',current_holder_id=? WHERE id=?",(r['borrower_id'],item['id']))
             t.insert('loans',{'id':UID(),'request_id':r['id'],'item_id':item['id'],'lender_id':r['owner_id'],'borrower_id':r['borrower_id'],'status':'active','started_at':STAMP()})
             event(t,'notification',user_id=r['borrower_id'],title='Item handed over',message=f'{item["name"]} is now with you')
-        elif action=='request_return':require(borrower and state=='borrowed');nextstate='return_requested'
+        elif action=='request_return':
+            require(borrower and state=='borrowed');nextstate='return_requested'
+            event(t,'notification',user_id=r['owner_id'],title='Return requested',message=f'{user["display_name"]} is returning {item["name"]}. Confirm once you have it back')
         elif action=='confirm_return':
             require(owner and state=='return_requested');nextstate='returned'
             t.execute("UPDATE clothing_items SET state='available',current_holder_id=NULL WHERE id=?",(item['id'],))
