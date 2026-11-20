@@ -76,6 +76,31 @@ def test_permissions_and_journal_crud():
         assert c.get('/media/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png').status_code in (403,404)
     work.cleanup()
 
+def test_adding_someone_who_already_asked_accepts_their_request():
+    work,server=fresh_app()
+    with TestClient(server.app) as leo, TestClient(server.app) as may:
+        signin(leo,'leo');signin(may,'may')
+        assert leo.post('/api/friends',json={'username':'may'}).status_code==200
+        r=may.post('/api/friends',json={'username':'leo'})
+        assert r.status_code==200 and r.json()['accepted'] is True,r.text
+        assert 'may' in [f['username'] for f in leo.get('/api/friends').json()['friends']]
+        assert not may.get('/api/friends').json()['incoming']
+        assert 'Friend request accepted' in [n['title'] for n in leo.get('/api/notifications').json()['notifications']]
+        # Asking twice in the same direction is still a duplicate.
+        assert leo.post('/api/friends',json={'username':'june'}).status_code==200
+        assert leo.post('/api/friends',json={'username':'june'}).status_code==409
+    work.cleanup()
+
+def test_cannot_send_friend_request_to_closed_account():
+    work,server=fresh_app()
+    with TestClient(server.app) as gone, TestClient(server.app) as c:
+        assert gone.post('/api/auth/register',json={'username':'leaving','email':'leaving@example.local','password':'password123'}).status_code==200
+        closed=gone.get('/api/me').json()
+        assert gone.delete('/api/me').status_code==200
+        signin(c,'leo')
+        assert c.post('/api/friends',json={'username':'closed_'+closed['id'][:16]}).status_code==404
+    work.cleanup()
+
 def test_reserved_item_cannot_be_approved_twice_and_rolls_back():
     work,server=fresh_app()
     with TestClient(server.app) as taa_client, TestClient(server.app) as june_client, TestClient(server.app) as may_client:
@@ -95,7 +120,11 @@ def test_reserved_item_cannot_be_approved_twice_and_rolls_back():
         active=may_client.get('/api/wardrobe').json()['items'][0]
         assert active['state']=='reserved' and active['current_holder_id'] is None
         reqs=may_client.get('/api/borrowing').json()['requests']
-        assert next(x for x in reqs if x['id']==r2.json()['id'])['status']=='pending'
+        assert next(x for x in reqs if x['id']==r1.json()['id'])['status']=='approved'
+        assert next(x for x in reqs if x['id']==r2.json()['id'])['status']=='rejected'
+        # The second borrower should be told why their request is no longer pending.
+        updates=june_client.get('/api/notifications').json()['notifications']
+        assert any('reserved for another borrower' in n['message'] for n in updates)
     work.cleanup()
 
 
@@ -277,4 +306,103 @@ def test_profile_email_password_crud_and_permission_checks():
         assert c.post('/api/auth/logout').status_code==200
         assert c.post('/api/auth/login',json={'username':'taa','password':'demo12345'}).status_code==401
         assert c.post('/api/auth/login',json={'username':'newtaa@example.test','password':'newsecret123'}).status_code==200
+    work.cleanup()
+
+def test_password_change_signs_out_other_devices_only():
+    work,server=fresh_app()
+    with TestClient(server.app) as laptop, TestClient(server.app) as phone:
+        signin(laptop,'taa');signin(phone,'taa')
+        assert laptop.patch('/api/me',json={'current_password':'demo12345','new_password':'newsecret123'}).status_code==200
+        assert laptop.get('/api/me').status_code==200
+        assert phone.get('/api/me').status_code==401
+    work.cleanup()
+
+def test_login_removes_expired_sessions():
+    work,server=fresh_app()
+    with TestClient(server.app) as c:
+        taa=signin(c,'taa')
+        with server.sql.tx() as t:
+            t.insert('sessions',{'id_hash':'stale','user_id':taa['id'],'expires_at':'2000-01-01T00:00:00+00:00'})
+        signin(c,'may')
+        with server.sql.tx() as t:
+            assert t.one("SELECT id_hash FROM sessions WHERE id_hash='stale'") is None
+            assert t.one('SELECT COUNT(*) AS n FROM sessions')['n']==2
+    work.cleanup()
+
+def test_borrow_reject_cancel_and_return_notify_the_other_party():
+    work,server=fresh_app()
+    with TestClient(server.app) as borrower, TestClient(server.app) as owner:
+        signin(borrower,'taa');signin(owner,'may')
+        items=owner.get('/api/wardrobe').json()['items']
+        titles=lambda c:[n['title'] for n in c.get('/api/notifications').json()['notifications']]
+        rid=borrower.post('/api/borrowing',json={'item_id':items[0]['id']}).json()['id']
+        assert owner.patch('/api/borrowing/'+rid,json={'action':'reject'}).status_code==200
+        assert 'Borrow request declined' in titles(borrower)
+        rid=borrower.post('/api/borrowing',json={'item_id':items[1]['id']}).json()['id']
+        assert borrower.patch('/api/borrowing/'+rid,json={'action':'cancel'}).status_code==200
+        assert 'Borrow request cancelled' in titles(owner)
+        rid=borrower.post('/api/borrowing',json={'item_id':items[2]['id']}).json()['id']
+        for who,action in ((owner,'approve'),(owner,'handover'),(borrower,'request_return')):
+            assert who.patch('/api/borrowing/'+rid,json={'action':action}).status_code==200
+        assert 'Return requested' in titles(owner)
+    work.cleanup()
+
+def test_edit_clothing_rejects_blank_name_and_unknown_category():
+    work,server=fresh_app()
+    with TestClient(server.app) as c:
+        signin(c,'taa')
+        item=c.get('/api/wardrobe').json()['items'][0]
+        assert c.patch('/api/wardrobe/'+item['id'],json={'name':'   '}).status_code==400
+        assert c.patch('/api/wardrobe/'+item['id'],json={'category':'Spaceship'}).status_code==400
+        assert c.patch('/api/wardrobe/'+item['id'],json={'name':'  Renamed  ','category':'Other'}).status_code==200
+        after=next(i for i in c.get('/api/wardrobe').json()['items'] if i['id']==item['id'])
+        assert after['name']=='Renamed' and after['category']=='Other'
+    work.cleanup()
+
+def test_unfriend_cancels_open_requests_but_keeps_borrowed_loan():
+    work,server=fresh_app()
+    with TestClient(server.app) as borrower, TestClient(server.app) as owner:
+        signin(borrower,'taa');signin(owner,'may')
+        items=owner.get('/api/wardrobe').json()['items']
+        pending=borrower.post('/api/borrowing',json={'item_id':items[0]['id']}).json()['id']
+        approved=borrower.post('/api/borrowing',json={'item_id':items[1]['id']}).json()['id']
+        borrowed=borrower.post('/api/borrowing',json={'item_id':items[2]['id']}).json()['id']
+        assert owner.patch('/api/borrowing/'+approved,json={'action':'approve'}).status_code==200
+        for action in ('approve','handover'):
+            assert owner.patch('/api/borrowing/'+borrowed,json={'action':action}).status_code==200
+        friendship=next(f for f in borrower.get('/api/friends').json()['friends'] if f['username']=='may')['friendship_id']
+        assert borrower.delete('/api/friends/'+friendship).status_code==200
+        status={r['id']:r['status'] for r in owner.get('/api/borrowing').json()['requests']}
+        assert status[pending]=='cancelled' and status[approved]=='cancelled' and status[borrowed]=='borrowed'
+        states={i['id']:i['state'] for i in owner.get('/api/wardrobe').json()['items']}
+        assert states[items[1]['id']]=='available' and states[items[2]['id']]=='borrowed'
+        assert 'Borrow request cancelled' in [n['title'] for n in owner.get('/api/notifications').json()['notifications']]
+        # The physical return can still be completed after unfriending.
+        assert borrower.patch('/api/borrowing/'+borrowed,json={'action':'request_return'}).status_code==200
+        assert owner.patch('/api/borrowing/'+borrowed,json={'action':'confirm_return'}).status_code==200
+    work.cleanup()
+
+def test_user_search_treats_underscore_and_percent_literally():
+    work,server=fresh_app()
+    with TestClient(server.app) as c:
+        for name in ('a_b','axb'):
+            assert c.post('/api/auth/register',json={'username':name,'email':name+'@example.local','password':'password123'}).status_code==200
+        signin(c,'taa')
+        search=lambda q:[u['username'] for u in c.get('/api/users/search',params={'q':q}).json()['users']]
+        assert search('a_b')==['a_b']
+        assert search('%')==[]
+        assert search('_')==['a_b']
+    work.cleanup()
+
+def test_saving_clothing_unchanged_writes_no_activity():
+    work,server=fresh_app()
+    with TestClient(server.app) as c:
+        signin(c,'taa')
+        item=c.get('/api/wardrobe').json()['items'][0]
+        edits=lambda:sum(a['action']=='edit_clothing' for a in c.get('/api/activity').json()['activity'])
+        same={k:item[k] for k in ('name','category','color','details')}
+        assert c.patch('/api/wardrobe/'+item['id'],json=same).status_code==200
+        assert edits()==0
+        assert c.patch('/api/wardrobe/'+item['id'],json={**same,'color':'Green'}).status_code==200
+        assert edits()==1
     work.cleanup()

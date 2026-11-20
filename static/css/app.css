@@ -1,5 +1,5 @@
 /* WardrobeShare — vintage mocha (brown) */
-:root{--ink:#4f392e;--muted:#866d5d;--cocoa:#8e664a;--cocoa-dark:#775039;--soft:#e9d7c6;--cream:#fcf8f2;--paper:#fff9f0;--line:#e3d5c5;--sage:#e5e9db;--gingham-base:#eee1d1;--shadow:0 7px 22px #61452e1c}
+:root{--ink:#4f392e;--muted:#866d5d;--cocoa:#8e664a;--cocoa-dark:#775039;--soft:#e9d7c6;--cream:#fcf8f2;--paper:#fff9f0;--line:#e3d5c5;--sage:#f6e4d1;--gingham-base:#eee1d1;--shadow:0 7px 22px #61452e1c}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;font-family:"Trebuchet MS",Arial,sans-serif;color:var(--ink)}
 body{background-color:#e7d9c8;background-image:linear-gradient(90deg,rgba(255,255,255,.48) 50%,transparent 50%),linear-gradient(rgba(255,255,255,.46) 50%,transparent 50%);background-size:40px 40px}
@@ -29,7 +29,7 @@ small{font-size:12px}
 .top-right{display:flex;align-items:center;gap:13px;margin-left:auto}
 .top-icon{display:grid;place-items:center;width:38px;height:38px;position:relative}
 .top-icon .dot{position:absolute;right:5px;top:4px;background:#a07754;border:3px solid #fcf8f2;border-radius:50%;width:13px;height:13px}
-.avatar{display:grid;place-items:center;flex-shrink:0;background:linear-gradient(145deg,#dfc5a8,#e5e9db);color:#6a4d3b;border:2px solid white;border-radius:50%;font-family:Georgia,serif;font-size:18px;overflow:hidden}
+.avatar{display:grid;place-items:center;flex-shrink:0;background:linear-gradient(145deg,#dfc5a8,#f4dfc7);color:#6a4d3b;border:2px solid white;border-radius:50%;font-family:Georgia,serif;font-size:18px;overflow:hidden}
 .avatar img{height:100%;width:100%;object-fit:cover}
 .avatar.small{width:38px;height:38px}
 .avatar.mid{width:54px;height:54px}
@@ -44,7 +44,7 @@ small{font-size:12px}
 .heading-line p{margin-top:8px;color:#897060;font-size:14px}
 .heading-right{margin-left:auto}
 .badge{display:inline-flex;gap:5px;align-items:center;padding:5px 11px;border-radius:30px;font-size:12px;font-weight:700;background:#eee2d4;color:#785d4a;white-space:nowrap}
-.badge.green{background:#e5ebda;color:#526741}
+.badge.green{background:#f8dfc3;color:#985021}
 .badge.amber{background:#f2e6c9;color:#87673e}
 .badge.blue{background:#e1e8eb;color:#526878}
 .badge.pink{background:#e9d7c4;color:#805b42}
@@ -54,7 +54,8 @@ small{font-size:12px}
 .btn.primary:hover{background:var(--cocoa-dark)}
 .btn.secondary{background:#fbf6ee;border-color:#ddc6ae}
 .btn.soft{background:#eee1d3;color:#77563f}
-.btn.sage{background:#e5ebd9;color:#526747}
+.btn.sage{background:#c47b3d;color:#fff9f1;border-color:#a95f2d}
+.btn.sage:hover:not(:disabled){background:#ac632f}
 .btn.danger{background:#f8ece7;color:#a44f47;border-color:#e3c3ba}
 .btn.ghost{padding:8px 9px;color:#745848}
 .btn.small{padding:7px 10px;font-size:12px}
@@ -129,7 +130,7 @@ small{font-size:12px}
 .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:21px}
 .note{background:#f7eee4;border:1px solid #e4d2c0;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;color:#795c45}
-.note.sage{background:#f0f2e7;border-color:#dfe4d4;color:#62734f}
+.note.sage{background:#fff0df;border-color:#e8c398;color:#9a5a2d}
 .empty{padding:50px 25px;border:1px dashed #d6beaa;border-radius:18px;text-align:center;color:#886c56;background:#fff9f0cc}
 .empty .bigemoji{font-size:40px;display:block;margin-bottom:10px}
 .gallery-head{margin-top:7px}
@@ -365,13 +366,14 @@ body {
   display: inline-block;
   border-left: 1px solid #c9b09b;
   padding: 3px 0 2px 12px;
-  letter-spacing: .16em;
-  font-size: 9px;
+  letter-spacing: .09em;
+  font-size: 11px;
   line-height: 1.25;
   font-weight: 800;
   color: #997760;
-  white-space: normal;
-  max-width: 90px;
+  white-space: nowrap;
+  max-width: none;
+  flex-shrink: 0;
 }
 .topbar {
   border-radius: 13px;
@@ -592,7 +594,7 @@ body {
 .clothing-card .mini-actions .btn svg {width:14px;height:14px}
 .clothing-card .mini-actions .btn:last-child {color:#794d3e}
 .clothing-card .mini-actions .btn:focus-visible {outline:2px solid #6d5040;outline-offset:2px}
-.clothing-card .badge.green {background:#e0e7d5;color:#51643d}
+.clothing-card .badge.green {background:#f8dfc3;color:#985021}
 .clothing-card .badge.pink,.badge.pink {background:#e7d8c7;color:#735344}
 .btn.primary {background:#70503d;border-color:#70503d;box-shadow:0 3px 0 #4a3327}
 .btn.primary:hover:not(:disabled) {background:#50392c}
@@ -717,8 +719,9 @@ body {
 .borrow-alert strong{font-size:15px}
 .borrow-alert p{margin:4px 0 0;font-size:13px}
 .borrow-alert-icon{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:50%;background:#c0712f;color:#fff;font-weight:700;font-size:18px}
-.borrow-alert.calm{background:#f0f2e7;border-color:#dfe4d4;border-left-color:#7a8f5f;color:#55663f}
-.borrow-alert.calm .borrow-alert-icon{background:#7a8f5f}
+.borrow-alert.calm{background:var(--paper);border-color:var(--line);border-left-color:var(--cocoa);color:var(--ink)}
+.borrow-alert.calm p{color:var(--muted)}
+.borrow-alert.calm .borrow-alert-icon{background:var(--cocoa)}
 .link-btn{background:none;border:0;padding:0;font:inherit;font-weight:700;color:inherit;text-decoration:underline;cursor:pointer}
 .pill-count{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;margin-left:5px;border-radius:20px;font-size:11px;font-weight:700;background:#e7d8c7;color:#6d4f3b}
 .pill.active .pill-count{background:#ffffff38;color:#fff}
@@ -965,8 +968,8 @@ html.scrolled .topbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 14px 34px
 .todo-text,.where-row>div{flex:1;min-width:0}
 .todo-text strong,.where-row strong{display:block;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .todo-text p,.where-row p{margin-top:3px;font-size:12.5px;color:#7b6353;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.calm-state{display:flex;gap:12px;align-items:center;padding:16px;border-radius:12px;background:#f0f2e7;border:1px solid #dfe4d4;color:#55663f}
-.calm-state p{font-size:13px;margin-top:2px;color:#6b7a58}
+.calm-state{display:flex;gap:12px;align-items:center;padding:16px;border-radius:12px;background:#fff0df;border:1px solid #e8c398;color:#9a5a2d}
+.calm-state p{font-size:13px;margin-top:2px;color:#a2714b}
 .rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,260px);gap:14px;overflow-x:auto;padding:10px 4px 14px;margin:0 -4px;scroll-snap-type:x proximity;scrollbar-width:thin;overscroll-behavior-x:contain}
 .rail>*{scroll-snap-align:start}
 .rail-new{display:grid;place-content:center;justify-items:center;gap:10px;min-height:260px;cursor:pointer;color:#70503d;text-align:center}
@@ -1014,18 +1017,18 @@ html.scrolled .topbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 14px 34px
 .steps li::before{content:"";position:absolute;top:6px;right:50%;width:100%;height:2px;background:#e3d5c5;z-index:0}
 .steps li:first-child::before{display:none}
 .steps li span{position:relative;z-index:1;width:14px;height:14px;border-radius:50%;background:#fdf9f2;border:2px solid #d6c3ae}
-.steps li.done{color:#55663f}
-.steps li.done::before,.steps li.current::before{background:#8fa173}
-.steps li.done span{background:#7a8f5f;border-color:#7a8f5f}
-.steps li.current{color:#70503d}
-.steps li.current span{background:#70503d;border-color:#70503d;box-shadow:0 0 0 4px rgba(112,80,61,.18)}
-.loan-card.needs-me .steps li.current span{background:#c0712f;border-color:#c0712f;box-shadow:0 0 0 4px rgba(192,113,47,.2)}
+.steps li.done{color:var(--muted)}
+.steps li.done::before,.steps li.current::before{background:var(--cocoa)}
+.steps li.done span{background:var(--cocoa);border-color:var(--cocoa)}
+.steps li.current{color:var(--ink);font-weight:700}
+.steps li.current span{background:var(--paper);border:4px solid var(--cocoa-dark);box-shadow:0 0 0 4px rgba(112,80,61,.16)}
+.loan-card.needs-me .steps li.current span{border-color:#c0712f;box-shadow:0 0 0 4px rgba(192,113,47,.2)}
 .steps.ended{max-width:260px}
 .steps.ended li.stop{color:#a44f47}
 .steps.ended li.stop span{background:#a44f47;border-color:#a44f47}
 .steps.ended li.stop::before{background:#e3c3ba}
-.how-it-works{margin-top:20px;padding:12px 16px;border-radius:12px;background:#f0f2e7;border:1px solid #dfe4d4;color:#62734f;font-size:13px;line-height:1.55}
-.how-it-works summary{cursor:pointer;font-weight:700;display:flex;align-items:center;gap:8px;list-style:none}
+.how-it-works{margin-top:20px;padding:12px 16px;border-radius:12px;background:var(--cream);border:1px solid var(--line);color:var(--muted);font-size:13px;line-height:1.55}
+.how-it-works summary{cursor:pointer;font-weight:700;display:flex;align-items:center;gap:8px;list-style:none;color:var(--ink)}
 .how-it-works summary::-webkit-details-marker{display:none}
 .how-it-works summary svg{width:15px;height:15px}
 .how-it-works p{margin-top:8px}
@@ -1109,3 +1112,953 @@ html.scrolled .topbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 14px 34px
 .more-grid{display:grid;gap:11px;margin-top:10px}
 @media(max-width:540px){.add-photo{min-height:180px}}
 @media (prefers-reduced-motion:reduce){.add-photo:active,.chip:active span{transform:none}}
+
+/* Login: show/hide password + inline field errors */
+.pw-wrap{position:relative}
+.pw-wrap .input{padding-right:46px}
+.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;display:grid;place-items:center;border:0;background:none;border-radius:9px;color:var(--muted);cursor:pointer}
+.pw-toggle:hover{color:var(--ink);background:#eadcca66}
+.pw-toggle:focus-visible{outline:none;box-shadow:var(--ring,0 0 0 3px #b79a7736)}
+.input[aria-invalid="true"]{border-color:#b5564a;background:#fff6f3}
+.input[aria-invalid="true"]:focus{box-shadow:0 0 0 3px #b5564a29}
+.field .field-error{color:#a3443a;font-size:12px;font-weight:600;display:flex;gap:5px;align-items:center}
+.field .field-error::before{content:"!";display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;background:#a3443a;color:#fff;font-size:10px;font-weight:800;flex:none}
+
+/* ───────── Dark mode ─────────
+   Always on: index.html sets <html data-theme="dark">.
+   Warm cocoa tones so it still feels like the same closet. */
+.auth-box{position:relative}
+html[data-theme="dark"]{color-scheme:dark;
+  --ink:#f0e3d4;--muted:#b9a390;--cocoa:#a3764f;--cocoa-dark:#8a6142;--soft:#3a2c24;--cream:#2a201b;--paper:#2e231d;
+  --line:#4a3a30;--sage:#513525;--gingham-base:#1f1814;--glass:rgba(36,28,23,.84);--ring:0 0 0 3px rgba(214,170,128,.30);
+  --shadow:0 7px 22px rgba(0,0,0,.35)}
+html[data-theme="dark"] body{background-color:#1f1814;background-image:linear-gradient(90deg,rgba(255,236,214,.035) 50%,transparent 50%),linear-gradient(rgba(255,236,214,.03) 50%,transparent 50%)}
+
+/* surfaces */
+html[data-theme="dark"] :is(.topbar,.tabbar){background:rgba(36,28,23,.92);border-color:#3e3028;box-shadow:0 4px 18px rgba(0,0,0,.3)}
+html[data-theme="dark"] :is(.panel,.paper,.modal,.editor-panel,.editor-canvas-wrap,.request-row,.feed-row,.clothing-card,.auth-box,.stat-tile,.dash-card,.loan-card,.steps li span){background:#2b211c;border-color:#43352c;box-shadow:0 6px 20px rgba(0,0,0,.28)}
+html[data-theme="dark"] :is(.clothing-card .photo,.outfit-card .preview,.outfit-detail-preview .preview,.sticker-mini,.upload-zone,.upload-preview,.library-item,.editor-canvas,.friend-card .preview-rail,.request-row>img,.privacy-bar,.stat-chip,.original-pair>div,.todo-row,.where-row,.todo-row img,.where-row img,.loan-img,.add-photo,.add-photo .upload-preview,.chip span,.note,.empty){background:#33281f;border-color:#46372d}
+html[data-theme="dark"] :is(.library-item:hover,.where-row:hover,.add-photo:hover,.chip:hover span,.pill:hover:not(.active)){background:#3b2e25}
+html[data-theme="dark"] :is(.hero,.dash-hero){background:linear-gradient(105deg,#2e231d 15%,#3a2c22);border-color:#46372d}
+html[data-theme="dark"] .auth-art{background:linear-gradient(145deg,#3a2c22,#2a201a)}
+html[data-theme="dark"] .tag-paper{background:linear-gradient(130deg,#3b2d24,#46362b 60%,#3a2c23)}
+html[data-theme="dark"] :is(.feed-icon,.stat-icon,.todo-icon,.rail-new span,.profile-tabs button span,.pill-count){background:#41322a;color:#e2bf9c}
+html[data-theme="dark"] :is(.request-row.needs-me,.feed-row.unread,.loan-card.needs-me){background:#3a2a1e}
+html[data-theme="dark"] .borrow-alert{background:#3d2b1d;color:#f0cfa9;border-color:#6b4a2f;border-left-color:#c0712f}
+html[data-theme="dark"] :is(.calm-state,.note.sage){background:#4b301f;color:#f2c393;border-color:#875433}
+html[data-theme="dark"] .borrow-alert.calm{background:var(--paper);color:var(--ink);border-color:var(--line);border-left-color:var(--cocoa)}
+html[data-theme="dark"] .how-it-works{background:var(--cream);color:var(--muted);border-color:var(--line)}
+html[data-theme="dark"] .calm-state p{color:#dfb38c}
+html[data-theme="dark"] .divider{background:#43352c}
+html[data-theme="dark"] .sheet-grabber{background:linear-gradient(#2b211c 70%,rgba(43,33,28,0))}
+html[data-theme="dark"] :is(.nav-link:hover,.nav-link.active){background:#3e3027}
+html[data-theme="dark"] .avatar{background:linear-gradient(145deg,#5a4434,#60402f);color:#f0e3d4}
+
+/* text */
+html[data-theme="dark"] :is(.dash-hero h1,.stat-tile strong,.profile-stats strong,.profile-tabs button.active,.section-head h2,.modal-title,.nav-link.active,.tab.active){color:#f3e7da}
+html[data-theme="dark"] :is(.nav-link,.tab,.modal-close,.profile-bio,.request-row .who p.borrow-msg,.feed-row .content p.notify-msg,.loan-card .borrow-msg){color:#e0cfbd}
+html[data-theme="dark"] :is(.heading-line p,.dash-hero p,.stat-tile>span:last-child,.todo-text p,.where-row p,.loan-who,.profile-name p,.profile-stats span,.profile-tabs button,.privacy-line,.subline,.outfit-info .date,.clothing-card .meta,.library-item span,.editor-caption,.friend-profile p,.request-row .who p,.feed-row .content p,.auth-art p,.auth-box .switch,.hero p,.add-hint,.field small,.search svg,.footer,.empty,.upload-zone,.add-photo,.brand-atelier,.privacy-bar,.note){color:#bfa894}
+html[data-theme="dark"] :is(.field label,.hero small,.dash-hero small,.section-head a,.link,.auth-box .switch button,.hero h1 em,.stat-icon,.todo-icon,.rail-new,.steps li.current,.add-photo-empty strong,.more-details summary,.brand-heart,.tag-paper:after,.clothing-card .photo .heart){color:#ddb690}
+html[data-theme="dark"] .steps li{color:#8f7a69}
+html[data-theme="dark"] .steps li::before{background:#4a3a30}
+html[data-theme="dark"] :is(.steps li.done::before,.steps li.current::before){background:var(--cocoa)}
+html[data-theme="dark"] .steps li.done{color:var(--muted)}
+html[data-theme="dark"] .steps li.done span{background:var(--cocoa);border-color:var(--cocoa);box-shadow:none}
+html[data-theme="dark"] .steps li.current span{background:var(--paper);border:4px solid #ddb690;box-shadow:0 0 0 4px rgba(221,182,144,.18)}
+html[data-theme="dark"] .loan-card.needs-me .steps li.current span{border-color:#e08a45;box-shadow:0 0 0 4px rgba(224,138,69,.22)}
+
+/* controls */
+html[data-theme="dark"] :is(.input,textarea,select){background:#241b16;border-color:#5a473a;color:#f0e3d4}
+html[data-theme="dark"] :is(.input,textarea)::placeholder{color:#8a7565}
+html[data-theme="dark"] :is(.input:focus,textarea:focus,select:focus){background:#281e18;border-color:#b98c63}
+html[data-theme="dark"] .btn.primary{background:#9c6f4b;border-color:#9c6f4b;box-shadow:0 3px 0 #5a3d2a;color:#fff}
+html[data-theme="dark"] .btn.primary:hover:not(:disabled){background:#ac7d57}
+html[data-theme="dark"] .btn.secondary{background:#33281f;border-color:#5a473a;color:#ecdccb}
+html[data-theme="dark"] .btn.soft{background:#41322a;color:#ecd4bb}
+html[data-theme="dark"] .btn.sage{background:#c47b3d;border-color:#d29353;color:#fff9f1}
+html[data-theme="dark"] .btn.sage:hover:not(:disabled){background:#da8d4c}
+html[data-theme="dark"] .btn.danger{background:#3d2421;color:#f0a8a0}
+html[data-theme="dark"] .btn.ghost{color:#d5bfa9}
+html[data-theme="dark"] .pill{background:#2f251f;border-color:#4d3d32;color:#e0cfbd}
+html[data-theme="dark"] .pill.active{background:#9c6f4b;border-color:#9c6f4b;color:#fff}
+html[data-theme="dark"] .chip input:checked+span{background:#9c6f4b;color:#fff}
+html[data-theme="dark"] .badge{background:#41322a;color:#e7cdb3}
+html[data-theme="dark"] .badge.green,html[data-theme="dark"] .clothing-card .badge.green{background:#593720;color:#f0bd88}
+html[data-theme="dark"] .badge.amber{background:#3f3220;color:#e9c98f}
+html[data-theme="dark"] .badge.blue{background:#26323a;color:#a9c4d6}
+html[data-theme="dark"] :is(.badge.pink,.clothing-card .badge.pink){background:#45332a;color:#ecc7ad}
+html[data-theme="dark"] .pw-toggle:hover{background:#3e3027}
+html[data-theme="dark"] .input[aria-invalid="true"]{background:#2f1f1c;border-color:#c56a5e}
+html[data-theme="dark"] .field .field-error{color:#ef9a8e}
+html[data-theme="dark"] .field .field-error::before{background:#c56a5e}
+html[data-theme="dark"] code{background:#3a2d25;color:#f0d9c2}
+html[data-theme="dark"] .profile-cover{filter:brightness(.62) saturate(.9)}
+html[data-theme="dark"] .clothing-card .photo img,html[data-theme="dark"] .preview img{filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
+@media (prefers-reduced-motion:no-preference){html{transition:background-color .25s}}
+
+/* ───────── Skeleton loading ───────── */
+.sk{display:block;border-radius:8px;background:linear-gradient(90deg,#eadccb 0%,#f5ece1 45%,#eadccb 90%);background-size:220% 100%;animation:sk-shimmer 1.3s ease-in-out infinite}
+.sk-line{height:12px}
+.sk-thin{height:9px;opacity:.75}
+.sk-big{height:34px;border-radius:10px}
+.sk-pill{height:40px;border-radius:999px}
+.sk-circle{width:40px;height:40px;border-radius:50%;flex:none}
+.sk-photo{aspect-ratio:1/1;width:100%;border-radius:14px}
+.sk-photo.sk-tall{aspect-ratio:4/5}
+.sk-block{height:70px;border-radius:12px}
+.sk-card{display:grid;gap:10px;padding:12px;pointer-events:none}
+.sk-row{display:flex;gap:14px;align-items:center;pointer-events:none}
+.sk-hero{display:grid;grid-template-columns:1fr;gap:14px;padding:30px;min-height:170px;align-content:center}
+.skeleton .stat-tile{display:flex;gap:12px;align-items:center}
+.skeleton .dash-card{padding:18px}
+@keyframes sk-shimmer{0%{background-position:120% 0}100%{background-position:-120% 0}}
+@media (prefers-reduced-motion:reduce){.sk{animation:none}}
+html[data-theme="dark"] .sk{background:linear-gradient(90deg,#33281f 0%,#43352b 45%,#33281f 90%);background-size:220% 100%}
+
+/* ───────── Confirm dialog ───────── */
+.confirm-layer{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:18px;background:rgba(51,38,28,.42);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);animation:cf-fade .2s ease-out}
+.confirm-box{width:min(400px,100%);background:#fcf8f2;border:1px solid #e3d0ba;border-radius:22px;padding:26px 24px 22px;text-align:center;box-shadow:0 30px 80px rgba(39,28,20,.3);animation:cf-pop .38s cubic-bezier(.34,1.56,.64,1)}
+.confirm-icon{width:52px;height:52px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;background:#efe3d4;color:#70503d;font:700 24px/1 Georgia,serif}
+.confirm-icon.danger{background:#f6e3de;color:#a44f47}
+.confirm-box h2{margin:0;font-family:Georgia,serif;font-size:22px;color:var(--ink)}
+.confirm-box p{margin:9px 0 0;color:var(--muted);font-size:14px;line-height:1.55}
+.confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+.confirm-actions .btn{width:100%;justify-content:center}
+.btn.danger-solid{background:#a44f47;border-color:#a44f47;color:#fff;box-shadow:0 3px 0 #6f2f29}
+.btn.danger-solid:hover:not(:disabled){background:#b45a51}
+.confirm-layer.is-leaving{animation:cf-fade .18s ease-in reverse forwards}
+@keyframes cf-fade{from{opacity:0}}
+@keyframes cf-pop{from{opacity:0;transform:scale(.9) translateY(8px)}}
+@media (prefers-reduced-motion:reduce){.confirm-layer,.confirm-box{animation:none}}
+@media (max-width:540px){.confirm-layer{place-items:end center;padding:10px}.confirm-box{border-radius:22px 22px 18px 18px}}
+html[data-theme="dark"] .confirm-layer{background:rgba(0,0,0,.55)}
+html[data-theme="dark"] .confirm-box{background:#2b211c;border-color:#46372d;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+html[data-theme="dark"] .confirm-icon{background:#41322a;color:#e2bf9c}
+html[data-theme="dark"] .confirm-icon.danger{background:#3d2421;color:#f0a8a0}
+html[data-theme="dark"] .btn.danger-solid{background:#b35a50;border-color:#b35a50;box-shadow:0 3px 0 #6b2d27}
+
+/* ───────── Keyboard focus for clickable cards ───────── */
+:is(.clothing-card,.where-row,.rail-new,.outfit-open,.preview-cutout)[role="button"]:focus{outline:none}
+:is(.clothing-card,.where-row,.rail-new,.outfit-open)[role="button"]:focus-visible{outline:none;box-shadow:0 0 0 3px #fcf8f2,0 0 0 6px #98704f;border-radius:16px}
+.preview-cutout[role="button"]:focus-visible{outline:3px solid #98704f;outline-offset:3px;border-radius:8px}
+html[data-theme="dark"] :is(.clothing-card,.where-row,.rail-new,.outfit-open)[role="button"]:focus-visible{box-shadow:0 0 0 3px #1f1814,0 0 0 6px #d2a77f}
+html[data-theme="dark"] .preview-cutout[role="button"]:focus-visible{outline-color:#d2a77f}
+/* Dark brown Home design */
+body:has(.dash-hero) {
+  background: #21150f;
+  background-image: none;
+  color: #f1dfc9;
+}
+body:has(.dash-hero) .dash-hero {
+  background: linear-gradient(110deg, #2a1911, #50301f);
+  border: 1px solid #795039;
+  box-shadow: none;
+}
+body:has(.dash-hero) .dash-hero h1 {
+  color: #f3e2cd;
+  font-family: Impact, "Arial Narrow", sans-serif;
+  font-size: clamp(48px, 6vw, 88px);
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+}
+
+body:has(.dash-hero) .dash-hero small,
+body:has(.dash-hero) .dash-hero p {
+  color: #d2ad8d;
+}
+
+body:has(.dash-hero) .dash-hero::before,
+body:has(.dash-hero) .dash-hero::after {
+  display: none;
+}
+
+/* ───────── 404 page ───────── */
+.not-found{max-width:560px;margin:40px auto;padding:44px 30px 36px;text-align:center;border-radius:24px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.nf-hanger{width:110px;height:110px;border-radius:50%;display:grid;place-items:center;background:#efe3d4;color:#8e664a;animation:nf-swing 2.6s ease-in-out infinite;transform-origin:50% 0}
+.not-found h1{margin:4px 0 0;font-family:Georgia,serif;font-size:clamp(26px,4vw,34px)}
+.not-found p{margin:0;color:var(--muted);line-height:1.6;max-width:400px}
+.not-found code{background:#f1e6d8;padding:2px 7px;border-radius:6px;font-size:13px;display:inline-block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}
+.nf-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.nf-actions .btn{text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+@keyframes nf-swing{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.nf-hanger{animation:none}}
+html[data-theme="dark"] .nf-hanger{background:#41322a;color:#e2bf9c}
+html[data-theme="dark"] .not-found code{background:#3a2d25;color:#f0d9c2}
+
+/* Studio and upload usability enhancements */
+.studio-undo{white-space:nowrap}
+.upload-status:not([hidden]){margin:8px 0;padding:10px 12px;border-radius:10px;background:rgba(145,110,72,.10);font-size:13px;line-height:1.5}
+@media(max-width:540px){.studio-undo{min-width:70px}}
+
+/* Streetwear hero image */
+body:has(.dash-hero) .dash-hero {
+  grid-template-columns: 1fr;
+  min-height: 330px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(25, 14, 9, 0.96) 0%,
+      rgba(25, 14, 9, 0.78) 38%,
+      rgba(25, 14, 9, 0.12) 70%
+    ),
+    url("/assets/streetwear-hero.png") center / cover no-repeat;
+}
+
+body:has(.dash-hero) .dash-hero .copy {
+  max-width: 560px;
+}
+
+body:has(.dash-hero) .hero-collage {
+  display: none;
+}
+/* Smoked glass OOTD Studio */
+body:has(.editor-layout) {
+  background:
+    radial-gradient(
+      circle at 50% 18%,
+      rgba(116, 82, 61, 0.28),
+      transparent 46%
+    ),
+    #1d1511;
+}
+
+/* กล่องซ้าย กลาง และขวาแบบกระจกควัน */
+body:has(.editor-layout) .editor-panel,
+body:has(.editor-layout) .editor-canvas-wrap {
+  background: rgba(54, 40, 32, 0.58);
+  border: 1px solid rgba(225, 190, 158, 0.32);
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* แคนวาสกลางสว่างและโปร่ง */
+body:has(.editor-layout) .editor-canvas {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(190, 175, 164, 0.72),
+      rgba(143, 126, 116, 0.64)
+    );
+  border: 1px solid rgba(244, 224, 207, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 40px rgba(48, 33, 25, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ข้อความตรงกลางแคนวาส */
+body:has(.editor-layout) .editor-canvas .empty {
+  background: transparent;
+  border: 0;
+  color: #f1dfcf;
+}
+
+body:has(.editor-layout) .editor-canvas .empty h2,
+body:has(.editor-layout) .editor-canvas .empty strong {
+  color: #f7e9dc;
+}
+
+body:has(.editor-layout) .editor-canvas .empty p {
+  color: rgba(247, 233, 220, 0.78);
+}
+
+/* ช่องค้นหาและ Dropdown ให้โปร่ง */
+body:has(.editor-layout) .editor-panel .input,
+body:has(.editor-layout) .editor-panel select {
+  background: rgba(25, 18, 14, 0.42);
+  border-color: rgba(222, 181, 144, 0.32);
+  backdrop-filter: blur(10px);
+}
+
+/* ปุ่มแท็บและปุ่มหลัก */
+body:has(.editor-layout) .tab.active,
+body:has(.editor-layout) .btn.primary {
+  background: linear-gradient(135deg, #92754d, #b07b50);
+  border-color: #bd8d61;
+  color: #fff4e8;
+}
+
+/* คำอธิบายใต้แคนวาส */
+body:has(.editor-layout) .editor-caption {
+  color: rgba(235, 211, 190, 0.76);
+}
+/* Force smoked-glass Studio colors */
+html[data-theme="dark"] body:has(.editor-layout) .editor-panel,
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas-wrap {
+  background: rgba(64, 47, 38, 0.62) !important;
+  border-color: rgba(229, 194, 162, 0.38) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+}
+
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(190, 175, 164, 0.88),
+      rgba(137, 120, 110, 0.82)
+    ) !important;
+  border-color: rgba(249, 230, 213, 0.48) !important;
+}
+
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas .empty {
+  background: transparent !important;
+  border: 0 !important;
+  color: #f5e7da !important;
+}
+
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas .empty h2,
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas .empty strong,
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas .empty p {
+  color: #f5e7da !important;
+}
+/* Black empty canvas text */
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas h2,
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas strong {
+  color: #181513 !important;
+  text-shadow: none !important;
+}
+
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas p {
+  color: #3a332f !important;
+}
+/* Black blank-canvas message */
+html[data-theme="dark"] #editor-canvas > div[style*="place-content:center"] {
+  color: #181513 !important;
+}
+
+html[data-theme="dark"] #editor-canvas > div[style*="place-content:center"] > div:first-child {
+  color: #181513 !important;
+}
+
+html[data-theme="dark"] #editor-canvas > div[style*="place-content:center"] > div:last-child {
+  color: #3a332f !important;
+}
+/* ==================================================
+   HOME: พื้นหลังไล่สี + สีวิ่งบนการ์ดสถิติ
+   ================================================== */
+
+/* พื้นหลังอ่อนด้านบน แล้วค่อย ๆ เข้มเมื่อเลื่อนลง */
+html[data-theme="dark"] body:has(.dash-hero) {
+  background-color: #140c09 !important;
+  background-image: linear-gradient(
+    180deg,
+    #49372e 0%,
+    #35251f 28%,
+    #251713 62%,
+    #140c09 100%
+  ) !important;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  background-attachment: scroll !important;
+}
+
+/* รูปแบบพื้นฐานของการ์ดทั้ง 4 ช่อง */
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile {
+  --stat-accent: #8b735f;
+  --stat-fill: rgba(139, 115, 95, 0.82);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  background: rgba(30, 22, 19, 0.9) !important;
+  border: 1px solid var(--stat-accent) !important;
+  box-shadow: 0 7px 18px rgba(7, 4, 3, 0.28);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+/* สีที่ซ่อนอยู่ก่อน Hover */
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  background: linear-gradient(
+    90deg,
+    var(--stat-fill) 0%,
+    color-mix(
+      in srgb,
+      var(--stat-accent) 55%,
+      #211713
+    ) 100%
+  );
+
+  transform: scaleX(0);
+  transform-origin: left center;
+
+  transition:
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* เอาเมาส์วางแล้วสีกวาดจากซ้ายไปขวา */
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:hover::before,
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:focus-visible::before {
+  transform: scaleX(1);
+}
+
+/* การ์ดลอยขึ้นเล็กน้อยตอน Hover */
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:hover,
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:focus-visible {
+  transform: translateY(-3px);
+
+  border-color: color-mix(
+    in srgb,
+    var(--stat-accent) 75%,
+    #fff0dc
+  ) !important;
+
+  box-shadow:
+    0 13px 27px rgba(7, 4, 3, 0.44),
+    0 0 18px color-mix(
+      in srgb,
+      var(--stat-accent) 28%,
+      transparent
+    );
+}
+
+/* ให้ข้อความและไอคอนอยู่เหนือสีที่วิ่ง */
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* กล่องไอคอน */
+html[data-theme="dark"] body:has(.dash-hero) .stat-icon {
+  background: color-mix(
+    in srgb,
+    var(--stat-accent) 48%,
+    #2c211d
+  ) !important;
+
+  color: #fff1df !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 13px color-mix(
+      in srgb,
+      var(--stat-accent) 34%,
+      transparent
+    );
+
+  transition:
+    background 0.45s ease,
+    transform 0.45s ease;
+}
+
+/* ไอคอนขยายเล็กน้อยตอน Hover */
+html[data-theme="dark"] body:has(.dash-hero)
+.stat-tile:hover .stat-icon {
+  background: color-mix(
+    in srgb,
+    var(--stat-accent) 74%,
+    #2c211d
+  ) !important;
+
+  transform: scale(1.05);
+}
+
+/* ช่องที่ 1 — Pieces สีเขียว */
+html[data-theme="dark"] body:has(.dash-hero)
+.stat-tile:nth-child(1) {
+  --stat-accent: #698a66;
+  --stat-fill: rgba(65, 91, 61, 0.9);
+}
+
+/* ช่องที่ 2 — Outfits สีฟ้า */
+html[data-theme="dark"] body:has(.dash-hero)
+.stat-tile:nth-child(2) {
+  --stat-accent: #6689a5;
+  --stat-fill: rgba(55, 79, 99, 0.9);
+}
+
+/* ช่องที่ 3 — Lent out สีม่วง */
+html[data-theme="dark"] body:has(.dash-hero)
+.stat-tile:nth-child(3) {
+  --stat-accent: #9a637d;
+  --stat-fill: rgba(91, 54, 73, 0.9);
+}
+
+/* ช่องที่ 4 — Unread สีส้ม */
+html[data-theme="dark"] body:has(.dash-hero)
+.stat-tile:nth-child(4) {
+  --stat-accent: #bd7a4f;
+  --stat-fill: rgba(113, 67, 43, 0.92);
+}
+
+/* คนที่ตั้งค่าลด Animation ไว้ */
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="dark"] body:has(.dash-hero) .stat-tile::before {
+    transition: none;
+  }
+}
+/* ===== Friend profile: gradient cover + sand wardrobe cards ===== */
+
+html[data-theme="dark"] body:has(.profile-hero) .profile-hero {
+  position: relative;
+  isolation: isolate;
+  padding: 0 0 24px;
+  overflow: hidden;
+  background: #38251f;
+  border: 1px solid #725844;
+  box-shadow: 0 12px 30px rgba(8, 5, 4, 0.28);
+}
+
+/* ลายตารางอยู่ด้านหลัง พร้อมไล่เฉด */
+html[data-theme="dark"] body:has(.profile-hero) .profile-cover {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: auto;
+
+  background-image:
+    linear-gradient(
+      to top right,
+      rgba(56, 37, 31, 0.94) 0%,
+      rgba(91, 68, 55, 0.72) 42%,
+      rgba(163, 140, 116, 0.38) 72%,
+      rgba(215, 198, 174, 0.20) 100%
+    ),
+    url("/assets/textiles/brown-linen-gingham.jpg");
+
+  background-position: center;
+  background-size: auto, 260px;
+  background-repeat: no-repeat, repeat;
+  border: 0;
+  box-shadow: none;
+  filter: none;
+}
+
+/* ข้อมูลโปรไฟล์อยู่หน้าลาย ไม่ถูกทับ */
+html[data-theme="dark"] body:has(.profile-hero) .profile-id {
+  position: relative;
+  z-index: 1;
+  align-items: center;
+  margin-top: 0;
+  padding: 28px 26px 0;
+}
+
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .profile-id
+  .avatar.big {
+  border-color: #fff8ed;
+  box-shadow: 0 8px 22px rgba(20, 10, 7, 0.34);
+}
+
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  :is(.profile-name h1, .profile-bio, .profile-stats strong) {
+  color: #fff3e4;
+}
+
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  :is(.profile-name p, .profile-stats span) {
+  color: #ead5bf;
+}
+
+/* การ์ดเสื้อแบบ A: ครีมทราย */
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card {
+  color: #2e211a;
+  background: linear-gradient(
+    180deg,
+    #dfcfb8 0%,
+    #d1b99a 100%
+  );
+  border: 1px solid #aa8e70;
+  box-shadow: 0 7px 17px rgba(12, 7, 5, 0.25);
+}
+
+/* Hover แบบธรรมดา ไม่มีแสงเรือง */
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card:hover {
+  transform: translateY(-3px);
+  border-color: #b99a78;
+  box-shadow: 0 11px 24px rgba(12, 7, 5, 0.32);
+}
+
+/* กล่องรูปเสื้อด้านใน */
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  .photo {
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(222, 211, 196, 0.52),
+      transparent 62%
+    ),
+    #a99a88;
+
+  border: 1px solid #c5b29a;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  .photo
+  img {
+  filter: drop-shadow(0 6px 7px rgba(42, 29, 22, 0.28));
+}
+
+/* ตัวอักษรในการ์ด */
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  .clothing-title {
+  color: #2e211a;
+}
+
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  .meta {
+  color: #5e4b3e;
+}
+
+/* Available */
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  .badge.green {
+  color: #fff4e5;
+  background: #ad6f3d;
+}
+
+/* ปุ่ม OOTD */
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  .mini-actions
+  .btn.soft {
+  color: #fffaf2;
+  background: #ad6f3d;
+  border-color: #ad6f3d;
+}
+
+/* ปุ่ม Borrow */
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  .mini-actions
+  .btn.secondary {
+  color: #2e211a;
+  background: rgba(255, 250, 242, 0.18);
+  border-color: #8e7259;
+}
+
+/* มือถือ */
+@media (max-width: 540px) {
+  html[data-theme="dark"]
+    body:has(.profile-hero)
+    .profile-id {
+    margin-top: 0;
+    padding: 20px 16px 0;
+  }
+}
+/* My Profile — Y2K SWAG */
+html[data-theme="dark"] body:has(#profile-form) {
+  background-color: #241711;
+  background-image: linear-gradient(
+    180deg,
+    #8f6855 0%,
+    #69493e 38%,
+    #3f2924 70%,
+    #211510 100%
+  );
+  background-size: 100% 100%;
+  background-attachment: fixed;
+}
+
+body:has(#profile-form) .page {
+  position: relative;
+  isolation: isolate;
+}
+
+body:has(#profile-form) :is(.heading-line, .profile-layout) {
+  position: relative;
+  z-index: 2;
+}
+
+/* ดาวพื้นหลัง */
+.profile-star-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.profile-star {
+  position: absolute;
+  width: 13px;
+  aspect-ratio: 1;
+  clip-path: polygon(
+    50% 0,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 94%,
+    50% 72%,
+    21% 94%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  background: #d9aa75;
+  opacity: 0.42;
+}
+
+.profile-star:nth-child(3n) {
+  background: #ead8bd;
+  opacity: 0.34;
+}
+
+.profile-star:nth-child(3n + 1) {
+  background: #a97872;
+  opacity: 0.38;
+}
+
+.profile-star:nth-child(even) {
+  width: 20px;
+}
+
+.profile-star.star-1 { left: 8%; top: 12%; }
+.profile-star.star-2 { left: 25%; top: 5%; }
+.profile-star.star-3 { left: 51%; top: 13%; }
+.profile-star.star-4 { right: 8%; top: 8%; }
+.profile-star.star-5 { right: 3%; top: 31%; }
+.profile-star.star-6 { left: 11%; top: 46%; }
+.profile-star.star-7 { right: 18%; top: 52%; }
+.profile-star.star-8 { left: 5%; top: 75%; }
+.profile-star.star-9 { left: 28%; top: 84%; }
+.profile-star.star-10 { right: 9%; top: 80%; }
+
+/* กล่อง Profile */
+html[data-theme="dark"] body:has(#profile-form) .profile-layout {
+  max-width: 860px;
+  grid-template-columns: 270px minmax(0, 1fr);
+  gap: 34px;
+  padding: 34px;
+  color: #2d1c16;
+  background: linear-gradient(
+    135deg,
+    #dfbf99 0%,
+    #c6a287 48%,
+    #8a5f4d 100%
+  );
+  border: 1px solid #c78c4d;
+  box-shadow:
+    0 18px 42px rgba(20, 10, 7, 0.34),
+    inset 0 1px rgba(255, 247, 232, 0.38);
+}
+
+/* ปีก SWAG และรูปผู้ใช้ */
+body:has(#profile-form) .profile-pic {
+  gap: 7px;
+  padding-top: 4px;
+}
+
+.profile-avatar-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 260px;
+  height: 184px;
+  margin-bottom: -4px;
+}
+
+.profile-swag-wings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  width: 260px;
+  max-width: none;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 7px 7px rgba(43, 24, 17, 0.25));
+}
+
+.profile-avatar-stage .avatar.big {
+  position: relative;
+  z-index: 1;
+  width: 94px;
+  height: 94px;
+  color: #f7e8d5;
+  background: linear-gradient(145deg, #80543f, #5c392e);
+  border: 2px solid #fff8ec;
+  box-shadow: 0 4px 12px rgba(42, 22, 15, 0.3);
+}
+
+.profile-username {
+  position: relative;
+  z-index: 2;
+  max-width: 240px;
+  margin-top: -32px;
+  overflow: hidden;
+  color: #352019;
+  font-size: 17px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ช่องกรอกข้อมูล */
+html[data-theme="dark"]
+  body:has(#profile-form)
+  .profile-form
+  .field label {
+  color: #37231b;
+}
+
+html[data-theme="dark"]
+  body:has(#profile-form)
+  .profile-form
+  :is(.input, textarea) {
+  color: #2b1b15;
+  background: linear-gradient(100deg, #f2e8da, #e8d8c4);
+  border-color: #aa8870;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.58);
+}
+
+html[data-theme="dark"]
+  body:has(#profile-form)
+  .profile-form
+  :is(.input, textarea):focus {
+  border-color: #bb732e;
+  box-shadow: 0 0 0 2px rgba(187, 115, 46, 0.2);
+}
+
+html[data-theme="dark"]
+  body:has(#profile-form)
+  .profile-pic
+  .btn.secondary {
+  color: #fff5e8;
+  background: #5b4032;
+  border-color: #71503f;
+}
+
+/* มือถือ */
+@media (max-width: 850px) {
+  html[data-theme="dark"] body:has(#profile-form) .profile-layout {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 24px 18px;
+  }
+
+  .profile-avatar-stage,
+  .profile-swag-wings {
+    width: min(260px, 90vw);
+  }
+}
+.profile-avatar-stage::after {
+  content: "SWAG";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transform: translate(-50%, -48%);
+  font-family: Impact, "Arial Black", sans-serif;
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  line-height: 1;
+  color: #f5dfbc;
+  -webkit-text-stroke: 2px #684536;
+  text-shadow:
+    0 2px 0 #fff4df,
+    0 4px 5px rgba(50, 27, 18, 0.4);
+  pointer-events: none;
+}
+
+.profile-avatar-stage .avatar.big {
+  z-index: 2;
+}
+/* Profile SWAG — final position */
+.profile-avatar-stage {
+  position: relative;
+  width: 290px;
+  height: 150px;
+  margin: -14px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ใช้คำ SWAG ที่อยู่ในไฟล์รูปเท่านั้น */
+.profile-avatar-stage::after {
+  display: none !important;
+  content: none !important;
+}
+
+.profile-swag-wings {
+  position: absolute;
+  width: 290px;
+  max-width: none;
+  height: auto;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* วงกลม P อยู่หน้ารูป SWAG */
+.profile-avatar-stage .avatar {
+  position: relative;
+  z-index: 2;
+}
+
+/* ขยับ @username ขึ้นและจัดกลาง */
+.profile-username {
+  position: relative;
+  z-index: 3;
+  display: block;
+  width: 100%;
+  margin: -34px auto 6px !important;
+  text-align: center;
+  color: #382218;
+}
+
+/* จัดปุ่ม Change Photo ให้อยู่ตรงกลางและชิดขึ้น */
+.profile-pic > .btn,
+.profile-pic > button {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto !important;
+  align-items: center;
+  justify-content: center;
+}
+.profile-pic > .btn,
+.profile-pic > button {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto !important;
+  align-items: center;
+  justify-content: center;
+}

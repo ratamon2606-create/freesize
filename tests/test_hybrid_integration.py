@@ -40,6 +40,10 @@ def test_hybrid_databases_privacy_outbox_and_rollback():
         assert friend.status_code == 200, friend.text
         pending = b.get('/api/friends').json()['incoming'][0]
         assert b.patch('/api/friends/'+pending['friendship_id'],json={'action':'accept'}).status_code == 200
+        # LIKE ... ESCAPE must treat "_" literally on PostgreSQL too.
+        found = [u['username'] for u in a.get('/api/users/search', params={'q': f'ci_b_{salt}'}).json()['users']]
+        assert found == [user_b['username']], found
+        assert a.get('/api/users/search', params={'q': 'ci%b'}).json()['users'] == []
 
         buf = BytesIO(); Image.new('RGB',(50,60),'#89745c').save(buf,format='PNG')
         up = a.post('/api/wardrobe',data={'name':'CI coat','category':'Outerwear','color':'Brown','request_token':salt},

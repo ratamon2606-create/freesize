@@ -14,6 +14,11 @@ with sync_playwright() as p:
     errors=[]
     page.on('pageerror', lambda e: errors.append(str(e)))
     page.goto(base,wait_until='domcontentloaded')
+    # Intro displays for two seconds, then opens automatically without any click.
+    entrance=page.locator('#fs-entrance')
+    entrance.wait_for(state='visible',timeout=10000)
+    assert entrance.locator('.fs-entrance__hint, .fs-entrance__trigger').count()==0
+    entrance.wait_for(state='detached',timeout=10000)
     page.locator('[data-action="demoLogin"]').click()
     page.locator('.topbar').wait_for(timeout=20000)
 
