@@ -1228,3 +1228,10 @@ html[data-theme="dark"] .confirm-box{background:#2b211c;border-color:#46372d;box
 html[data-theme="dark"] .confirm-icon{background:#41322a;color:#e2bf9c}
 html[data-theme="dark"] .confirm-icon.danger{background:#3d2421;color:#f0a8a0}
 html[data-theme="dark"] .btn.danger-solid{background:#b35a50;border-color:#b35a50;box-shadow:0 3px 0 #6b2d27}
+
+/* ───────── Keyboard focus for clickable cards ───────── */
+:is(.clothing-card,.where-row,.rail-new,.outfit-open,.preview-cutout)[role="button"]:focus{outline:none}
+:is(.clothing-card,.where-row,.rail-new,.outfit-open)[role="button"]:focus-visible{outline:none;box-shadow:0 0 0 3px #fcf8f2,0 0 0 6px #98704f;border-radius:16px}
+.preview-cutout[role="button"]:focus-visible{outline:3px solid #98704f;outline-offset:3px;border-radius:8px}
+html[data-theme="dark"] :is(.clothing-card,.where-row,.rail-new,.outfit-open)[role="button"]:focus-visible{box-shadow:0 0 0 3px #1f1814,0 0 0 6px #d2a77f}
+html[data-theme="dark"] .preview-cutout[role="button"]:focus-visible{outline-color:#d2a77f}
