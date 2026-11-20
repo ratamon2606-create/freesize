@@ -1,4 +1,5 @@
 /* WardrobeShare — vintage mocha (brown) */
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@400;600;700;800;900&display=swap");
 :root{--ink:#4f392e;--muted:#866d5d;--cocoa:#8e664a;--cocoa-dark:#775039;--soft:#e9d7c6;--cream:#fcf8f2;--paper:#fff9f0;--line:#e3d5c5;--sage:#f6e4d1;--gingham-base:#eee1d1;--shadow:0 7px 22px #61452e1c}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;font-family:"Trebuchet MS",Arial,sans-serif;color:var(--ink)}
@@ -2061,4 +2062,784 @@ html[data-theme="dark"]
   margin: 0 auto !important;
   align-items: center;
   justify-content: center;
+}
+
+/* ===== SWAG WARDROBE ===== */
+
+html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."]) {
+  isolation: isolate;
+  background: linear-gradient(
+    180deg,
+    #946f5e 0%,
+    #7b5749 25%,
+    #5c3b32 55%,
+    #38211d 78%,
+    #211311 100%
+  ) fixed !important;
+  background-size: 100% 100% !important;
+}
+
+html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."])::before {
+  background: none !important;
+}
+
+html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."]) > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ดาวจากไฟล์ที่เพิ่งใส่ */
+html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."])::after {
+  content: "";
+  position: fixed;
+  inset: 105px 0 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.38;
+
+  background-image:
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png");
+
+  background-repeat: no-repeat;
+
+  background-position:
+    33% 1%,
+    51% 13%,
+    66% 3%,
+    78% 18%,
+    91% 33%,
+    87% 68%,
+    71% 84%,
+    48% 77%,
+    21% 85%,
+    4% 71%;
+
+  background-size:
+    155px auto,
+    55px auto,
+    120px auto,
+    75px auto,
+    185px auto,
+    135px auto,
+    95px auto,
+    48px auto,
+    70px auto,
+    140px auto;
+}
+
+/* การ์ดสีครีม */
+html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."]) .clothing-card {
+  background: linear-gradient(145deg, #f4e3c9, #dfc29d) !important;
+  border: 2px solid rgba(255, 231, 198, 0.85) !important;
+  color: #291914 !important;
+  box-shadow:
+    0 12px 25px rgba(25, 12, 9, 0.3),
+    inset 0 1px rgba(255, 255, 255, 0.55) !important;
+}
+
+html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."]) .clothing-card .photo {
+  background: linear-gradient(145deg, #d4c1aa, #bba58c) !important;
+  border: 1px solid rgba(86, 55, 40, 0.14);
+}
+
+html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."]) .clothing-title {
+  color: #261712 !important;
+  font-family: "Arial Narrow", "Noto Sans Thai", Arial, sans-serif !important;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
+}
+
+html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."]) .clothing-card .meta {
+  color: #6b4d3d !important;
+  font-weight: 600;
+}
+
+/* ฟอนต์หัวข้อแนว Fashion */
+html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."]) .tag-paper {
+  font-family: Impact, "Arial Narrow", sans-serif !important;
+  font-size: clamp(42px, 5vw, 68px) !important;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #f5e6d2 !important;
+  text-shadow:
+    2px 2px 0 rgba(58, 31, 24, 0.85),
+    4px 4px 0 rgba(30, 16, 13, 0.3);
+}
+
+/* ปุ่มในการ์ด */
+html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."]) .clothing-card .btn {
+  color: #2d1a14 !important;
+  border-color: #9c7457 !important;
+  background: rgba(248, 229, 203, 0.68) !important;
+  font-weight: 800;
+}
+
+html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."]) .clothing-card .btn:first-child {
+  color: #fff8ef !important;
+  background: #b86f36 !important;
+  border-color: #b86f36 !important;
+}
+
+html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."]) .badge {
+  color: #fff0db !important;
+  background: #b86f36 !important;
+  border-color: transparent !important;
+  font-weight: 800;
+}
+
+@media (max-width: 700px) {
+  html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."])::after {
+    opacity: 0.23;
+
+    background-size:
+      90px auto,
+      35px auto,
+      70px auto,
+      45px auto,
+      105px auto,
+      80px auto,
+      55px auto,
+      30px auto,
+      42px auto,
+      80px auto;
+  }
+
+  html[data-theme="dark"] body:has(input[placeholder="Search your clothes..."]) .tag-paper {
+    font-size: 40px !important;
+  }
+}
+
+/* ===== FINAL SWAG TYPOGRAPHY ===== */
+
+/* หัวข้อ MY WARDROBE */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.tag-paper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  overflow: visible;
+
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold",
+    sans-serif !important;
+  font-size: clamp(48px, 5vw, 68px) !important;
+  font-weight: 900 !important;
+  line-height: 0.95 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase;
+  color: #f4e1ca !important;
+
+  transform: none !important;
+  text-shadow:
+    1px 1px 0 rgba(255, 247, 235, 0.22),
+    3px 3px 0 rgba(46, 25, 19, 0.38) !important;
+}
+
+/* รอยถลอกบนหัวข้อ */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.tag-paper::before {
+  content: "";
+  position: absolute;
+  inset: 8% 42px 8% 0;
+  z-index: 2;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      96deg,
+      transparent 0 7%,
+      rgba(68, 41, 32, 0.7) 7.3% 8%,
+      transparent 8.4% 17%,
+      rgba(68, 41, 32, 0.45) 17.4% 18%,
+      transparent 18.4% 34%,
+      rgba(68, 41, 32, 0.6) 34.4% 35.2%,
+      transparent 35.6% 54%,
+      rgba(68, 41, 32, 0.52) 54.4% 55%,
+      transparent 55.4% 76%,
+      rgba(68, 41, 32, 0.62) 76.4% 77.1%,
+      transparent 77.5% 100%
+    ),
+    repeating-linear-gradient(
+      174deg,
+      transparent 0 8px,
+      rgba(68, 41, 32, 0.34) 9px 10px,
+      transparent 11px 18px
+    );
+
+  opacity: 0.58;
+  mix-blend-mode: multiply;
+}
+
+/* ชื่อเสื้อภาษาไทย */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.clothing-title {
+  color: #281711 !important;
+  font-family: Tahoma, "Noto Sans Thai", Arial, sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.4px !important;
+}
+
+/* ฟอนต์เมนู ปุ่ม และรายละเอียด */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+:is(.nav-link, .btn, .pill, .meta, .badge, .search input) {
+  font-family: "Arial Narrow", Tahoma, Arial, sans-serif !important;
+  font-weight: 700;
+}
+
+/* ขนาดการ์ด */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.closet-grid {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 360px)) !important;
+  gap: 18px !important;
+  align-items: start;
+}
+
+/* มือถือ */
+@media (max-width: 700px) {
+  html[data-theme="dark"]
+  body:has(input[placeholder="Search your clothes..."])
+  .tag-paper {
+    font-size: 42px !important;
+  }
+
+  html[data-theme="dark"]
+  body:has(input[placeholder="Search your clothes..."])
+  .clothing-title {
+    font-size: 16px !important;
+  }
+}
+
+/* ===== EXACT CONDENSED FASHION FONT ===== */
+
+/* ทุกข้อความในหน้า Wardrobe */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."]) {
+  font-family: "Oswald", "Noto Sans Thai", sans-serif !important;
+}
+
+/* เมนู ปุ่ม ช่องค้นหา หมวดหมู่ รายละเอียด */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+:is(
+  .nav-link,
+  .btn,
+  .pill,
+  .meta,
+  .badge,
+  .search input,
+  .heading-line p,
+  footer
+) {
+  font-family: "Oswald", "Noto Sans Thai", sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1px !important;
+}
+
+/* MY WARDROBE — สูง แคบ คม */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.tag-paper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+
+  font-family: "Oswald", "Arial Narrow", sans-serif !important;
+  font-size: clamp(52px, 5.3vw, 74px) !important;
+  font-weight: 700 !important;
+  font-stretch: condensed;
+  line-height: 0.86 !important;
+  letter-spacing: -2.5px !important;
+  text-transform: uppercase;
+  color: #f3e1ca !important;
+  text-shadow: 3px 3px 0 rgba(45, 24, 18, 0.38) !important;
+}
+
+/* รอยถลอกแบบโปสเตอร์แฟชั่น */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.tag-paper::before {
+  content: "";
+  position: absolute;
+  inset: 4px 42px 4px 0;
+  z-index: 2;
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      78deg,
+      transparent 0 13px,
+      rgba(57, 33, 25, 0.75) 14px 15px,
+      transparent 16px 29px
+    ),
+    repeating-linear-gradient(
+      172deg,
+      transparent 0 7px,
+      rgba(57, 33, 25, 0.38) 8px 9px,
+      transparent 10px 19px
+    );
+
+  opacity: 0.7;
+  mix-blend-mode: multiply;
+}
+
+/* ชื่อเสื้อภาษาไทย แคบ หนา อ่านได้ */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.clothing-title {
+  font-family: "Noto Sans Thai", "Arial Narrow", sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  font-stretch: condensed;
+  line-height: 1.18 !important;
+  letter-spacing: -1px !important;
+  color: #251510 !important;
+}
+
+/* ภาษาอังกฤษในการ์ดให้สูงแคบ */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.clothing-card :is(.meta, .badge, .btn) {
+  font-family: "Oswald", "Noto Sans Thai", sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.2px !important;
+}
+
+/* โลโก้ยังคงรูปแบบเดิม */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.brand {
+  font-family: Georgia, serif !important;
+}
+
+/* ===== POSTER TITLE FINAL ===== */
+
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.tag-paper {
+  font-family: "Oswald", "Arial Narrow", sans-serif !important;
+  font-size: clamp(58px, 5.6vw, 78px) !important;
+  font-weight: 500 !important;
+  font-stretch: ultra-condensed;
+  line-height: 0.83 !important;
+  letter-spacing: -4px !important;
+  color: #f3e0c8 !important;
+  text-shadow:
+    2px 2px 0 rgba(255, 245, 230, 0.12),
+    4px 4px 0 rgba(43, 22, 17, 0.3) !important;
+
+  /* ทำรอยขาดบนตัวอักษรจริง */
+  -webkit-mask-image:
+    repeating-linear-gradient(
+      174deg,
+      #000 0 7px,
+      rgba(0, 0, 0, 0.28) 8px,
+      #000 10px 17px,
+      transparent 18px,
+      #000 19px 29px
+    );
+  -webkit-mask-size: 100% 100%;
+  mask-image:
+    repeating-linear-gradient(
+      174deg,
+      #000 0 7px,
+      rgba(0, 0, 0, 0.28) 8px,
+      #000 10px 17px,
+      transparent 18px,
+      #000 19px 29px
+    );
+  mask-size: 100% 100%;
+}
+
+/* ปิดรอยเส้นดำชุดเดิมที่ลอยทับพื้นหลัง */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.tag-paper::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* ===== RANDOM DISTRESSED POSTER TEXTURE ===== */
+
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.tag-paper {
+  /* ลบรอยขีดเป็นแถวแบบเดิม */
+  mask-image: none;
+
+  /* รอยหมึกหลุดแบบสุ่ม */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='180' viewBox='0 0 900 180'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.035 .22' numOctaves='3' seed='18' result='n'/%3E%3CfeColorMatrix in='n' type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 2.1 -0.82'/%3E%3C/filter%3E%3Cmask id='m'%3E%3Crect width='900' height='180' fill='white'/%3E%3Crect width='900' height='180' filter='url(%23noise)' opacity='.48'/%3E%3Cg fill='black' opacity='.8'%3E%3Crect x='32' y='38' width='58' height='5' transform='rotate(-8 32 38)'/%3E%3Crect x='148' y='101' width='82' height='4' transform='rotate(5 148 101)'/%3E%3Crect x='281' y='54' width='47' height='7' transform='rotate(-13 281 54)'/%3E%3Crect x='421' y='123' width='73' height='5' transform='rotate(7 421 123)'/%3E%3Crect x='558' y='43' width='61' height='4' transform='rotate(-6 558 43)'/%3E%3Crect x='705' y='91' width='96' height='6' transform='rotate(9 705 91)'/%3E%3Ccircle cx='118' cy='64' r='5'/%3E%3Ccircle cx='247' cy='132' r='4'/%3E%3Ccircle cx='367' cy='76' r='6'/%3E%3Ccircle cx='514' cy='109' r='4'/%3E%3Ccircle cx='661' cy='58' r='5'/%3E%3Ccircle cx='826' cy='127' r='6'/%3E%3C/g%3E%3C/mask%3E%3Crect width='900' height='180' fill='white' mask='url(%23m)'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: 100% 100%;
+}
+
+/* ป้องกันเส้นดำลอยทับหัวข้อ */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.tag-paper::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* ===== EXTRA CONDENSED POSTER TITLE ===== */
+
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.tag-paper {
+  font-family: "Bebas Neue", "Arial Narrow", sans-serif !important;
+  font-size: clamp(64px, 6vw, 86px) !important;
+  font-weight: 400 !important;
+  line-height: 0.78 !important;
+  letter-spacing: 1px !important;
+  color: #f3e0c8 !important;
+  white-space: nowrap;
+  text-shadow:
+    2px 2px 0 rgba(255, 245, 230, 0.1),
+    3px 4px 0 rgba(43, 22, 17, 0.3) !important;
+}
+/* ===== WARDROBE TITLE IMAGE ===== */
+
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image {
+  width: 390px;
+  max-width: 72vw;
+  height: 86px;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+
+  color: transparent !important;
+  background: none !important;
+  text-shadow: none !important;
+
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+
+/* ลบรอย CSS เก่าทั้งหมด เพราะรอยอยู่ในรูปแล้ว */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* รูป MY WARDROBE */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image img {
+  display: block;
+  width: 350px;
+  height: 78px;
+  max-width: calc(100% - 38px);
+  object-fit: fill;
+  object-position: left center;
+}
+
+/* มือถือ */
+@media (max-width: 700px) {
+  html[data-theme="dark"]
+  body:has(input[placeholder="Search your clothes..."])
+  .wardrobe-title-image {
+    width: 310px;
+    height: 68px;
+  }
+
+  html[data-theme="dark"]
+  body:has(input[placeholder="Search your clothes..."])
+  .wardrobe-title-image img {
+    width: 275px;
+    height: 61px;
+  }
+}
+
+/* ===== RESTORE WARDROBE TITLE BOX ===== */
+
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image {
+  position: relative;
+  z-index: 2;
+
+  width: 425px !important;
+  height: 92px !important;
+  padding: 10px 44px 10px 14px !important;
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(65, 43, 34, 0.98),
+      rgba(45, 28, 23, 0.98)
+    ) !important;
+
+  border: 1px solid rgba(225, 181, 139, 0.72) !important;
+  border-radius: 5px !important;
+
+  box-shadow:
+    0 7px 16px rgba(29, 15, 12, 0.22),
+    inset 0 0 0 1px rgba(255, 235, 211, 0.07) !important;
+}
+
+/* เส้นประบางด้านในแบบภาพตัวอย่าง */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  z-index: 0;
+  pointer-events: none;
+  border: 1px dashed rgba(224, 181, 141, 0.18);
+}
+
+/* ให้รูปตัวหนังสืออยู่เหนือพื้นหลัง */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image img {
+  position: relative;
+  z-index: 1;
+  width: 345px !important;
+  height: 70px !important;
+  max-width: 100% !important;
+  object-fit: fill;
+}
+
+/* มือถือ */
+@media (max-width: 700px) {
+  html[data-theme="dark"]
+  body:has(input[placeholder="Search your clothes..."])
+  .wardrobe-title-image {
+    width: 320px !important;
+    height: 72px !important;
+    padding: 8px 38px 8px 11px !important;
+  }
+
+  html[data-theme="dark"]
+  body:has(input[placeholder="Search your clothes..."])
+  .wardrobe-title-image img {
+    width: 270px !important;
+    height: 54px !important;
+  }
+}
+
+/* ===== ONE STAR INSIDE WARDROBE TITLE ===== */
+
+/* ย่อคำลงนิดหนึ่งเพื่อเหลือที่ให้ดาว */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image img {
+  width: 310px !important;
+  height: 68px !important;
+  object-fit: fill;
+}
+
+/* ดาว 1 ดวงด้านขวาภายในกรอบ */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  left: auto;
+  bottom: auto;
+  width: 42px;
+  height: 42px;
+  z-index: 4;
+  pointer-events: none;
+
+  background: url("/assets/wardrobe-grunge-star.png")
+    center / contain no-repeat !important;
+
+  transform: translateY(-50%) rotate(-8deg);
+  opacity: 0.9;
+  mix-blend-mode: normal;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+
+/* ย้ายกระดุมไปด้านขวา ถัดจากดาว */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image::after {
+  content: "⦿" !important;
+  position: absolute !important;
+  inset: auto !important;
+  top: 50% !important;
+  right: 12px !important;
+  width: 25px !important;
+  height: 25px !important;
+  display: grid !important;
+  place-items: center !important;
+  transform: translateY(-50%) !important;
+
+  color: #4d3027 !important;
+  background: #ead6a5 !important;
+  border: 2px solid #b99768 !important;
+  border-radius: 50% !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  box-shadow: 0 2px 3px rgba(40, 20, 15, 0.35) !important;
+  z-index: 6 !important;
+}
+
+/* ขยับดาวไปทางซ้าย เพื่อเว้นที่ให้กระดุม */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image::before {
+  right: 49px !important;
+}
+
+/* ลบกระดุมเก่าที่มุมซ้าย */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image .tag-button,
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image > span {
+  display: none !important;
+}
+
+/* กระดุมใหม่ด้านขวา ไม่เลยขอบ */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image::after {
+  content: "••••" !important;
+  position: absolute !important;
+  inset: auto 10px auto auto !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+
+  width: 24px !important;
+  height: 24px !important;
+  display: grid !important;
+  place-items: center !important;
+
+  color: #50382e !important;
+  background: #e7d29d !important;
+  border: 2px solid #b49463 !important;
+  border-radius: 50% !important;
+  font-size: 7px !important;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
+  box-shadow: 0 2px 3px rgba(30, 15, 10, 0.35) !important;
+  z-index: 10 !important;
+}
+
+/* ดาวอยู่ทางซ้ายของกระดุม */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image::before {
+  right: 44px !important;
+}
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: auto 11px auto auto !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+
+  width: 27px !important;
+  height: 27px !important;
+  display: block !important;
+  border-radius: 50% !important;
+
+  background-color: #e7d29d !important;
+  background-image:
+    radial-gradient(circle at 36% 36%, #4d362b 0 2px, transparent 2.4px),
+    radial-gradient(circle at 64% 36%, #4d362b 0 2px, transparent 2.4px),
+    radial-gradient(circle at 36% 64%, #4d362b 0 2px, transparent 2.4px),
+    radial-gradient(circle at 64% 64%, #4d362b 0 2px, transparent 2.4px) !important;
+
+  border: 2px solid #b18d5d !important;
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 244, 207, 0.65),
+    inset 0 -3px 4px rgba(112, 74, 48, 0.25),
+    0 2px 3px rgba(35, 18, 12, 0.4) !important;
+
+  z-index: 10 !important;
+}
+
+/* ดาวอยู่ข้างกระดุมและไม่ชนกัน */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.wardrobe-title-image::before {
+  right: 51px !important;
+  width: 37px !important;
+  height: 37px !important;
+}
+
+/* ===== BLUE SCRAPBOOK TAPE ===== */
+
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.heading-line > div:first-child {
+  position: relative;
+}
+
+/* เทปกาวสีน้ำเงินเฉียงมุมซ้ายบน */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.heading-line > div:first-child::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -9px !important;
+  left: -13px !important;
+
+  width: 69px !important;
+  height: 22px !important;
+  z-index: 20 !important;
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.08) 0 2px,
+      transparent 2px 7px
+    ),
+    linear-gradient(
+      135deg,
+      rgba(72, 135, 158, 0.92),
+      rgba(38, 91, 116, 0.88)
+    ) !important;
+
+  border: 1px dashed rgba(189, 226, 236, 0.52) !important;
+  box-shadow:
+    0 3px 5px rgba(32, 19, 15, 0.35),
+    inset 0 0 5px rgba(255,255,255,0.15) !important;
+
+  transform: rotate(-11deg) !important;
+  clip-path: polygon(
+    3% 8%, 97% 0,
+    94% 18%, 100% 35%,
+    96% 53%, 100% 72%,
+    94% 100%, 4% 92%,
+    7% 73%, 0 57%,
+    5% 38%, 0 20%
+  );
 }
