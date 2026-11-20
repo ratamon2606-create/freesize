@@ -72,6 +72,16 @@ async function route(){const r=getRoute();S.page=r.page;S.friendId=r.id;S.modal=
   render();window.scrollTo(0,0);
  }catch(err){if(seq!==routeSeq)return;clearTimeout(skeletonTimer);S.loading=false;if(err.status===401){S.me=null;render()}else{toast(err.message,true);render()}}
 }
+// Themed confirm dialog (replaces the browser's grey confirm() popup). Resolves true/false.
+function askConfirm(title,message,okLabel='Confirm',danger=false){return new Promise(resolve=>{
+ const back=document.activeElement;const layer=document.createElement('div');layer.className='confirm-layer';
+ layer.innerHTML=`<div class="confirm-box" role="alertdialog" aria-modal="true" aria-labelledby="cf-title" aria-describedby="cf-msg"><div class="confirm-icon ${danger?'danger':''}">${danger?ico('trash',22):'?'}</div><h2 id="cf-title">${esc(title)}</h2><p id="cf-msg">${esc(message)}</p><div class="confirm-actions"><button type="button" class="btn secondary big" data-cf="no">Cancel</button><button type="button" class="btn ${danger?'danger-solid':'primary'} big" data-cf="yes">${esc(okLabel)}</button></div></div>`;
+ const done=v=>{layer.classList.add('is-leaving');setTimeout(()=>layer.remove(),180);back?.focus?.({preventScroll:true});resolve(v)};
+ layer.addEventListener('click',e=>{e.stopPropagation();const b=e.target.closest('[data-cf]');if(b)done(b.dataset.cf==='yes');else if(e.target===layer)done(false)});
+ layer.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Escape'){e.preventDefault();done(false)}
+  if(e.key==='Tab'){const f=[...layer.querySelectorAll('button')];const i=f.indexOf(document.activeElement);e.preventDefault();f[(i+(e.shiftKey?-1:1)+f.length)%f.length].focus()}});
+ document.body.append(layer);layer.querySelector(danger?'[data-cf="no"]':'[data-cf="yes"]').focus();
+})}
 // Skeleton loading placeholders (shimmering boxes shown while a page's data loads)
 let routeSeq=0,skeletonTimer=null;
 const SKELETON_PAGES=['home','wardrobe','ootd','friends','friend','borrowing','notifications'];
@@ -180,18 +190,18 @@ async function doAction(a,id){switch(a){
  case'authSwitch':S.authMode=S.authMode==='login'?'register':'login';render();break;
  case'demoLogin':await api('/auth/login',{method:'POST',body:{username:'taa',password:'demo12345'}});S.me=await api('/me');navigate('/home');break;
  case'logout':await api('/auth/logout',{method:'POST'});S.me=null;S.authMode='login';history.pushState({},'','/');render();break;
- case'deleteAccount':if(confirm('Permanently close your account? Active loans must be resolved first. This cannot be undone.')){await api('/me',{method:'DELETE'});S.me=null;history.pushState({},'','/');render();toast('Account closed')}break;
+ case'deleteAccount':if(await askConfirm("Close your account?","Active loans must be resolved first. This cannot be undone.","Close account",true)){await api('/me',{method:'DELETE'});S.me=null;history.pushState({},'','/');render();toast('Account closed')}break;
  case'openAdd':S.uploadRequestToken=globalThis.crypto?.randomUUID?.()||('upload-'+Date.now()+'-'+Math.random().toString(36).slice(2));S.modal='add';render();break;case'closeModal':S.modal=null;render();break;case'backdrop':S.modal=null;render();break;
  case'selectPhoto':document.querySelector('#clothing-file')?.click();break;
  case'openClothing':case'friendItem':{let item=pickItem(id);if(item){S.detail=item;S.modal='detail';render()}break}
  case'editClothing':S.detail=pickItem(id)||S.detail;S.modal='edit';render();break;
- case'deleteClothing':if(confirm('Remove this clothing item? It will remain in the lending history.')){await api(`/wardrobe/${id}`,{method:'DELETE'});S.modal=null;S.wardrobe=(await api('/wardrobe')).items;render();toast('Clothing removed')}break;
+ case'deleteClothing':if(await askConfirm("Remove this piece?","It will be removed from your wardrobe but stay in the lending history.","Remove",true)){await api(`/wardrobe/${id}`,{method:'DELETE'});S.modal=null;S.wardrobe=(await api('/wardrobe')).items;render();toast('Clothing removed')}break;
  case'filter':S.filter=id;render();break;
  case'newOOTD':S.pendingItem=null;navigate('/studio');break;
  case'editOOTD':navigate('/studio/'+id);break;
  case'showOutfit':case'showFriendOutfit':{let friend=a==='showFriendOutfit';let o=friend?S.friendCloset?.ootds?.find(v=>v.id===id):S.outfits.find(v=>v.id===id);if(o){S.outfitDetail=o;S.outfitItemIndex=0;S.outfitIsFriend=friend;S.modal='outfit';render()}break}
  case'selectOutfitItem':S.outfitItemIndex=Number(id);render();break;
- case'deleteOOTD':if(confirm('Delete this saved OOTD?')){await api(`/ootds/${id}`,{method:'DELETE'});S.outfits=(await api('/ootds')).ootds;render();toast('OOTD deleted')}break;
+ case'deleteOOTD':if(await askConfirm("Delete this OOTD?","This saved outfit will be gone for good.","Delete",true)){await api(`/ootds/${id}`,{method:'DELETE'});S.outfits=(await api('/ootds')).ootds;render();toast('OOTD deleted')}break;
  case'putItem':{let i=pickItem(id);if(i){addCanvasItem(i);render();popIn(S.editor.items.length-1)}break}
  case'studioMine':S.studioTab='mine';S.filter='All';S.search='';render();break;
  case'studioFriends':S.studioTab='friends';S.filter='All';S.search='';render();break;
@@ -205,22 +215,22 @@ async function doAction(a,id){switch(a){
  case'viewFriend':S.friendTab='wardrobe';navigate('/friend/'+id);break;
  case'friendWardrobe':S.friendTab='wardrobe';S.filter='All';S.search='';render();break;case'friendOutfits':S.friendTab='outfits';render();break;
  case'acceptFriend':case'rejectFriend':case'cancelFriend':await api('/friends/'+id,{method:'PATCH',body:{action:a.replace('Friend','')}});S.friends=await api('/friends');render();toast('Friend request updated');break;
- case'removeFriend':if(confirm('Remove this friend? Their wardrobe and restricted OOTDs will no longer be visible.')){await api('/friends/'+id,{method:'DELETE'});navigate('/friends')}break;
+ case'removeFriend':if(await askConfirm("Remove this friend?","Their wardrobe and restricted OOTDs will no longer be visible to you.","Remove friend",true)){await api('/friends/'+id,{method:'DELETE'});navigate('/friends')}break;
  case'addOwnToOOTD':case'addFriendToOOTD':{let item=pickItem(id);if(!item)break;S.pendingItem=item;S.modal=null;navigate('/studio');break}
- case'requestBorrow':if(confirm('Send a request to borrow this piece?')){await api('/borrowing',{method:'POST',body:{item_id:id}});S.modal=null;toast('Borrow request sent');navigate('/borrowing')}break;
+ case'requestBorrow':if(await askConfirm("Borrow this piece?","Your friend will get a request and can accept or decline.","Send request")){await api('/borrowing',{method:'POST',body:{item_id:id}});S.modal=null;toast('Borrow request sent');navigate('/borrowing')}break;
  case'viewFriendOutfit':{const o=S.friendCloset?.ootds?.find(v=>v.id===id);if(o){S.modal=null;toast(`${o.title} — clothes from: ${[...new Set(o.items.map(i=>i.owner_name))].join(', ')}`)}break}
  case'borrowTab':S.borrowTab=id;render();break;
  case'borrowAction':{let [rid,action]=id.split('|');await api('/borrowing/'+rid,{method:'PATCH',body:{action}});S.borrow=(await api('/borrowing')).requests;render();toast({approve:'Approved. Hand the item over, then press Confirm Handover.',reject:'Request rejected.',handover:'Handover confirmed. Your friend has it now.',confirm_return:'Return confirmed. The item is back in your wardrobe.',cancel:'Request cancelled.',request_return:'Return requested. The owner will confirm it.'}[action]||'Borrowing status updated')}break;
- case'deleteBorrowHistory':if(confirm('Delete this completed borrowing request and its SQL loan record?')){await api('/borrowing/'+id,{method:'DELETE'});S.borrow=(await api('/borrowing')).requests;render();toast('Completed request deleted')}break;
+ case'deleteBorrowHistory':if(await askConfirm("Delete this request?","The completed borrowing request and its loan record will be deleted.","Delete",true)){await api('/borrowing/'+id,{method:'DELETE'});S.borrow=(await api('/borrowing')).requests;render();toast('Completed request deleted')}break;
  case'notifyNotifications':S.notifyTab='notifications';render();break;case'notifyActivity':S.notifyTab='activity';render();break;case'notifyBorrowLogs':S.notifyTab='borrowlogs';render();break;
  case'markAllRead':{await Promise.all(S.notifications.filter(n=>!n.read).map(n=>api('/notifications/'+n.id,{method:'PATCH',body:{read:true}})));S.notifications=(await api('/notifications')).notifications;render();toast('All notifications marked as read');break}
  case'goBorrowing':case'goFriends':{let item=S.notifications?.find(n=>n.id===id);if(item&&!item.read){try{await api('/notifications/'+id,{method:'PATCH',body:{read:true}});item.read=true}catch{}}navigate(a==='goBorrowing'?'/borrowing':'/friends');break}
  case'markNotification':{let item=S.notifications.find(n=>n.id===id);await api('/notifications/'+id,{method:'PATCH',body:{read:!!item.read?false:true}});S.notifications=(await api('/notifications')).notifications;render();break}
  case'deleteNotification':await api('/notifications/'+id,{method:'DELETE'});S.notifications=(await api('/notifications')).notifications;render();break;
  case'editJournal':{let d=S.activity.activity.find(x=>x.id===id);S.noteId=id;S.noteValue=d?.note;S.modal='journal';render();break}
- case'deleteJournal':if(confirm('Delete your journal note?')){await api('/activity/'+id,{method:'DELETE'});S.activity=await api('/activity');render()}break;
+ case'deleteJournal':if(await askConfirm("Delete this note?","Your journal note will be permanently deleted.","Delete",true)){await api('/activity/'+id,{method:'DELETE'});S.activity=await api('/activity');render()}break;
  case'annotateLog':{let d=S.activity.borrow_logs.find(x=>x.id===id);S.noteId=id;S.noteValue=d?.note;S.modal='log';render();break}
- case'deleteBorrowLog':if(confirm('Delete this personal borrowing note?')){await api('/borrow-logs/'+id,{method:'DELETE'});S.activity=await api('/activity');render();toast('Note removed')}break;
+ case'deleteBorrowLog':if(await askConfirm("Delete this note?","This personal borrowing note will be permanently deleted.","Delete",true)){await api('/borrow-logs/'+id,{method:'DELETE'});S.activity=await api('/activity');render();toast('Note removed')}break;
  case'changeAvatar':document.querySelector('#avatar-input')?.click();break;
  default:break;
 }}

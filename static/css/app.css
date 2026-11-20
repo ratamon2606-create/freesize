@@ -1206,3 +1206,25 @@ html[data-theme="dark"] .clothing-card .photo img,html[data-theme="dark"] .previ
 @keyframes sk-shimmer{0%{background-position:120% 0}100%{background-position:-120% 0}}
 @media (prefers-reduced-motion:reduce){.sk{animation:none}}
 html[data-theme="dark"] .sk{background:linear-gradient(90deg,#33281f 0%,#43352b 45%,#33281f 90%);background-size:220% 100%}
+
+/* ───────── Confirm dialog ───────── */
+.confirm-layer{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:18px;background:rgba(51,38,28,.42);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);animation:cf-fade .2s ease-out}
+.confirm-box{width:min(400px,100%);background:#fcf8f2;border:1px solid #e3d0ba;border-radius:22px;padding:26px 24px 22px;text-align:center;box-shadow:0 30px 80px rgba(39,28,20,.3);animation:cf-pop .38s cubic-bezier(.34,1.56,.64,1)}
+.confirm-icon{width:52px;height:52px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;background:#efe3d4;color:#70503d;font:700 24px/1 Georgia,serif}
+.confirm-icon.danger{background:#f6e3de;color:#a44f47}
+.confirm-box h2{margin:0;font-family:Georgia,serif;font-size:22px;color:var(--ink)}
+.confirm-box p{margin:9px 0 0;color:var(--muted);font-size:14px;line-height:1.55}
+.confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+.confirm-actions .btn{width:100%;justify-content:center}
+.btn.danger-solid{background:#a44f47;border-color:#a44f47;color:#fff;box-shadow:0 3px 0 #6f2f29}
+.btn.danger-solid:hover:not(:disabled){background:#b45a51}
+.confirm-layer.is-leaving{animation:cf-fade .18s ease-in reverse forwards}
+@keyframes cf-fade{from{opacity:0}}
+@keyframes cf-pop{from{opacity:0;transform:scale(.9) translateY(8px)}}
+@media (prefers-reduced-motion:reduce){.confirm-layer,.confirm-box{animation:none}}
+@media (max-width:540px){.confirm-layer{place-items:end center;padding:10px}.confirm-box{border-radius:22px 22px 18px 18px}}
+html[data-theme="dark"] .confirm-layer{background:rgba(0,0,0,.55)}
+html[data-theme="dark"] .confirm-box{background:#2b211c;border-color:#46372d;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+html[data-theme="dark"] .confirm-icon{background:#41322a;color:#e2bf9c}
+html[data-theme="dark"] .confirm-icon.danger{background:#3d2421;color:#f0a8a0}
+html[data-theme="dark"] .btn.danger-solid{background:#b35a50;border-color:#b35a50;box-shadow:0 3px 0 #6b2d27}
