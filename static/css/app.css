@@ -1276,3 +1276,8 @@ body:has(.dash-hero) .dash-hero::after {
 @media (prefers-reduced-motion:reduce){.nf-hanger{animation:none}}
 html[data-theme="dark"] .nf-hanger{background:#41322a;color:#e2bf9c}
 html[data-theme="dark"] .not-found code{background:#3a2d25;color:#f0d9c2}
+
+/* Studio and upload usability enhancements */
+.studio-undo{white-space:nowrap}
+.upload-status:not([hidden]){margin:8px 0;padding:10px 12px;border-radius:10px;background:rgba(145,110,72,.10);font-size:13px;line-height:1.5}
+@media(max-width:540px){.studio-undo{min-width:70px}}

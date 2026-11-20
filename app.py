@@ -421,7 +421,10 @@ async def save_image(file:UploadFile,background=False):
         require(source.width*source.height<=18_000_000,'Image dimensions too large',413)
         im=ImageOps.exif_transpose(source).convert('RGBA')
         im.thumbnail((1500,1500))
-    except Exception:fail('Upload a valid image file')
+    except HTTPException:
+        raise
+    except Exception:
+        fail('Upload a valid image file')
     name=UID();original=name+'-original.png'
     ai=False;processed=im
     if background:
@@ -721,6 +724,11 @@ async def borrow_action(ident:str,req:Request,user=Depends(current)):
         if action=='approve':
             require(owner and state=='pending' and item['state']=='available','Item not available or request no longer pending',409)
             nextstate='approved';t.execute("UPDATE clothing_items SET state='reserved' WHERE id=?",(item['id'],))
+            competing=t.all("SELECT id,borrower_id FROM borrow_requests WHERE item_id=? AND status='pending' AND id<>?",(item['id'],ident))
+            for other in competing:
+                t.execute("UPDATE borrow_requests SET status='rejected',updated_at=? WHERE id=?",(STAMP(),other['id']))
+                event(t,'notification',user_id=other['borrower_id'],title='Borrow request unavailable',message=f'{item["name"]} has been reserved for another borrower')
+                event(t,'borrow_log',user_id=other['borrower_id'],request_id=other['id'],item_id=item['id'],action='rejected',message=f'{item["name"]}: request closed after another reservation')
             event(t,'notification',user_id=r['borrower_id'],title='Borrow request approved',message=f'{item["name"]} is ready for handover')
         elif action=='reject':require(owner and state=='pending');nextstate='rejected'
         elif action=='cancel':require(borrower and state in ('pending','approved'));nextstate='cancelled';
