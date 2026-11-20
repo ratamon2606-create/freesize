@@ -95,7 +95,11 @@ def test_reserved_item_cannot_be_approved_twice_and_rolls_back():
         active=may_client.get('/api/wardrobe').json()['items'][0]
         assert active['state']=='reserved' and active['current_holder_id'] is None
         reqs=may_client.get('/api/borrowing').json()['requests']
-        assert next(x for x in reqs if x['id']==r2.json()['id'])['status']=='pending'
+        assert next(x for x in reqs if x['id']==r1.json()['id'])['status']=='approved'
+        assert next(x for x in reqs if x['id']==r2.json()['id'])['status']=='rejected'
+        # The second borrower should be told why their request is no longer pending.
+        updates=june_client.get('/api/notifications').json()['notifications']
+        assert any('reserved for another borrower' in n['message'] for n in updates)
     work.cleanup()
 
 
