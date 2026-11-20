@@ -1413,3 +1413,25 @@ html[data-theme="dark"] body:has(.editor-layout) .editor-canvas .empty strong,
 html[data-theme="dark"] body:has(.editor-layout) .editor-canvas .empty p {
   color: #f5e7da !important;
 }
+/* Black empty canvas text */
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas h2,
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas strong {
+  color: #181513 !important;
+  text-shadow: none !important;
+}
+
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas p {
+  color: #3a332f !important;
+}
+/* Black blank-canvas message */
+html[data-theme="dark"] #editor-canvas > div[style*="place-content:center"] {
+  color: #181513 !important;
+}
+
+html[data-theme="dark"] #editor-canvas > div[style*="place-content:center"] > div:first-child {
+  color: #181513 !important;
+}
+
+html[data-theme="dark"] #editor-canvas > div[style*="place-content:center"] > div:last-child {
+  color: #3a332f !important;
+}
