@@ -540,8 +540,11 @@ async def edit_clothing(ident:str,req:Request,user=Depends(current)):
         old=t.one('SELECT * FROM clothing_items WHERE id=? AND deleted_at IS NULL',(ident,))
         require(old is not None,'Clothing not found',404);require(old['owner_id']==user['id'])
         fields={k:str(d[k])[:400 if k=='details' else 100] for k in ('name','category','color','details') if k in d}
-        if fields:t.execute('UPDATE clothing_items SET '+','.join(f'{k}=?' for k in fields)+' WHERE id=?',(*fields.values(),ident))
-        event(t,'activity',user_id=user['id'],action='edit_clothing',message=f'Updated {old["name"]}')
+        # Saving the form unchanged must not write a row or an activity entry.
+        fields={k:v for k,v in fields.items() if v!=old[k]}
+        if fields:
+            t.execute('UPDATE clothing_items SET '+','.join(f'{k}=?' for k in fields)+' WHERE id=?',(*fields.values(),ident))
+            event(t,'activity',user_id=user['id'],action='edit_clothing',message=f'Updated {old["name"]}')
     process_outbox();return {'ok':True}
 
 @app.delete('/api/wardrobe/{ident}')
@@ -558,8 +561,10 @@ def delete_clothing(ident:str,user=Depends(current)):
 def search_users(q:str='',user=Depends(current)):
     q=q.strip().lower()
     if not q:return {'users':[]}
+    # Usernames may contain "_", which LIKE would treat as a wildcard.
+    pattern='%'+q.replace('\\','\\\\').replace('%','\\%').replace('_','\\_')+'%'
     with sql.tx() as t:
-        matches=t.all('SELECT id,username,display_name,avatar_path,bio FROM users WHERE username LIKE ? AND id<>? AND password_hash!=? LIMIT 20',('%'+q+'%',user['id'],'!deleted!'))
+        matches=t.all("SELECT id,username,display_name,avatar_path,bio FROM users WHERE username LIKE ? ESCAPE '\\' AND id<>? AND password_hash!=? LIMIT 20",(pattern,user['id'],'!deleted!'))
     return {'users':[user_public(u) for u in matches]}
 
 def friend_record(a,b,t):
