@@ -1235,3 +1235,31 @@ html[data-theme="dark"] .btn.danger-solid{background:#b35a50;border-color:#b35a5
 .preview-cutout[role="button"]:focus-visible{outline:3px solid #98704f;outline-offset:3px;border-radius:8px}
 html[data-theme="dark"] :is(.clothing-card,.where-row,.rail-new,.outfit-open)[role="button"]:focus-visible{box-shadow:0 0 0 3px #1f1814,0 0 0 6px #d2a77f}
 html[data-theme="dark"] .preview-cutout[role="button"]:focus-visible{outline-color:#d2a77f}
+/* Dark brown Home design */
+body:has(.dash-hero) {
+  background: #21150f;
+  background-image: none;
+  color: #f1dfc9;
+}
+body:has(.dash-hero) .dash-hero {
+  background: linear-gradient(110deg, #2a1911, #50301f);
+  border: 1px solid #795039;
+  box-shadow: none;
+}
+body:has(.dash-hero) .dash-hero h1 {
+  color: #f3e2cd;
+  font-family: Impact, "Arial Narrow", sans-serif;
+  font-size: clamp(48px, 6vw, 88px);
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+}
+
+body:has(.dash-hero) .dash-hero small,
+body:has(.dash-hero) .dash-hero p {
+  color: #d2ad8d;
+}
+
+body:has(.dash-hero) .dash-hero::before,
+body:has(.dash-hero) .dash-hero::after {
+  display: none;
+}
