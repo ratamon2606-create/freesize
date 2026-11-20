@@ -1014,12 +1014,12 @@ html.scrolled .topbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 14px 34px
 .steps li::before{content:"";position:absolute;top:6px;right:50%;width:100%;height:2px;background:#e3d5c5;z-index:0}
 .steps li:first-child::before{display:none}
 .steps li span{position:relative;z-index:1;width:14px;height:14px;border-radius:50%;background:#fdf9f2;border:2px solid #d6c3ae}
-.steps li.done{color:#55663f}
-.steps li.done::before,.steps li.current::before{background:#8fa173}
-.steps li.done span{background:#7a8f5f;border-color:#7a8f5f}
-.steps li.current{color:#70503d}
-.steps li.current span{background:#70503d;border-color:#70503d;box-shadow:0 0 0 4px rgba(112,80,61,.18)}
-.loan-card.needs-me .steps li.current span{background:#c0712f;border-color:#c0712f;box-shadow:0 0 0 4px rgba(192,113,47,.2)}
+.steps li.done{color:var(--muted)}
+.steps li.done::before,.steps li.current::before{background:var(--cocoa)}
+.steps li.done span{background:var(--cocoa);border-color:var(--cocoa)}
+.steps li.current{color:var(--ink);font-weight:700}
+.steps li.current span{background:var(--paper);border:4px solid var(--cocoa-dark);box-shadow:0 0 0 4px rgba(112,80,61,.16)}
+.loan-card.needs-me .steps li.current span{border-color:#c0712f;box-shadow:0 0 0 4px rgba(192,113,47,.2)}
 .steps.ended{max-width:260px}
 .steps.ended li.stop{color:#a44f47}
 .steps.ended li.stop span{background:#a44f47;border-color:#a44f47}
@@ -1156,6 +1156,11 @@ html[data-theme="dark"] :is(.heading-line p,.dash-hero p,.stat-tile>span:last-ch
 html[data-theme="dark"] :is(.field label,.hero small,.dash-hero small,.section-head a,.link,.auth-box .switch button,.hero h1 em,.stat-icon,.todo-icon,.rail-new,.steps li.current,.add-photo-empty strong,.more-details summary,.brand-heart,.tag-paper:after,.clothing-card .photo .heart){color:#ddb690}
 html[data-theme="dark"] .steps li{color:#8f7a69}
 html[data-theme="dark"] .steps li::before{background:#4a3a30}
+html[data-theme="dark"] :is(.steps li.done::before,.steps li.current::before){background:var(--cocoa)}
+html[data-theme="dark"] .steps li.done{color:var(--muted)}
+html[data-theme="dark"] .steps li.done span{background:var(--cocoa);border-color:var(--cocoa);box-shadow:none}
+html[data-theme="dark"] .steps li.current span{background:var(--paper);border:4px solid #ddb690;box-shadow:0 0 0 4px rgba(221,182,144,.18)}
+html[data-theme="dark"] .loan-card.needs-me .steps li.current span{border-color:#e08a45;box-shadow:0 0 0 4px rgba(224,138,69,.22)}
 
 /* controls */
 html[data-theme="dark"] :is(.input,textarea,select){background:#241b16;border-color:#5a473a;color:#f0e3d4}
