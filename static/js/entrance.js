@@ -8,6 +8,7 @@ if(entrance&&['/','/home','/home/'].includes(location.pathname)){
   let completeTimer;
   function complete(){
     clearTimeout(completeTimer);
+    document.removeEventListener('keydown',keydown);
     entrance.remove();
     document.documentElement.classList.remove('fs-intro-active','fs-intro-leaving');
   }
@@ -29,8 +30,4 @@ if(entrance&&['/','/home','/home/'].includes(location.pathname)){
   };
   document.addEventListener('keydown',keydown);
   entrance.addEventListener('transitionend',e=>{if(opening&&e.target.classList.contains('fs-entrance__portal'))complete()});
-  const originalComplete=complete;
-  // Drop document listener once the intro has finished, so Space works normally in the app.
-  entrance.addEventListener('transitionend',e=>{if(opening&&e.target.classList.contains('fs-entrance__portal'))document.removeEventListener('keydown',keydown)});
-  entrance.addEventListener('click',()=>{if(opening)document.removeEventListener('keydown',keydown)},{once:true});
 }else entrance?.remove();
