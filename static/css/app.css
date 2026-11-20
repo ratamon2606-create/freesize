@@ -1120,3 +1120,70 @@ html.scrolled .topbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 14px 34px
 .input[aria-invalid="true"]:focus{box-shadow:0 0 0 3px #b5564a29}
 .field .field-error{color:#a3443a;font-size:12px;font-weight:600;display:flex;gap:5px;align-items:center}
 .field .field-error::before{content:"!";display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;background:#a3443a;color:#fff;font-size:10px;font-weight:800;flex:none}
+
+/* ───────── Dark mode ─────────
+   Toggled by the moon/sun button (html[data-theme="dark"]).
+   Warm cocoa tones so it still feels like the same closet. */
+.auth-box{position:relative}
+.auth-theme{position:absolute;top:18px;right:18px}
+.theme-toggle{border:0;background:none;color:inherit;cursor:pointer}
+.theme-toggle:hover{background:#e6d3bf}
+html[data-theme="dark"]{color-scheme:dark;
+  --ink:#f0e3d4;--muted:#b9a390;--cocoa:#a3764f;--cocoa-dark:#8a6142;--soft:#3a2c24;--cream:#2a201b;--paper:#2e231d;
+  --line:#4a3a30;--sage:#2e3428;--gingham-base:#1f1814;--glass:rgba(36,28,23,.84);--ring:0 0 0 3px rgba(214,170,128,.30);
+  --shadow:0 7px 22px rgba(0,0,0,.35)}
+html[data-theme="dark"] body{background-color:#1f1814;background-image:linear-gradient(90deg,rgba(255,236,214,.035) 50%,transparent 50%),linear-gradient(rgba(255,236,214,.03) 50%,transparent 50%)}
+
+/* surfaces */
+html[data-theme="dark"] :is(.topbar,.tabbar){background:rgba(36,28,23,.92);border-color:#3e3028;box-shadow:0 4px 18px rgba(0,0,0,.3)}
+html[data-theme="dark"] :is(.panel,.paper,.modal,.editor-panel,.editor-canvas-wrap,.request-row,.feed-row,.clothing-card,.auth-box,.stat-tile,.dash-card,.loan-card,.steps li span){background:#2b211c;border-color:#43352c;box-shadow:0 6px 20px rgba(0,0,0,.28)}
+html[data-theme="dark"] :is(.clothing-card .photo,.outfit-card .preview,.outfit-detail-preview .preview,.sticker-mini,.upload-zone,.upload-preview,.library-item,.editor-canvas,.friend-card .preview-rail,.request-row>img,.privacy-bar,.stat-chip,.original-pair>div,.todo-row,.where-row,.todo-row img,.where-row img,.loan-img,.add-photo,.add-photo .upload-preview,.chip span,.note,.empty){background:#33281f;border-color:#46372d}
+html[data-theme="dark"] :is(.library-item:hover,.where-row:hover,.add-photo:hover,.chip:hover span,.pill:hover:not(.active)){background:#3b2e25}
+html[data-theme="dark"] :is(.hero,.dash-hero){background:linear-gradient(105deg,#2e231d 15%,#3a2c22);border-color:#46372d}
+html[data-theme="dark"] .auth-art{background:linear-gradient(145deg,#3a2c22,#2a201a)}
+html[data-theme="dark"] .tag-paper{background:linear-gradient(130deg,#3b2d24,#46362b 60%,#3a2c23)}
+html[data-theme="dark"] :is(.feed-icon,.stat-icon,.todo-icon,.rail-new span,.profile-tabs button span,.pill-count){background:#41322a;color:#e2bf9c}
+html[data-theme="dark"] :is(.request-row.needs-me,.feed-row.unread,.loan-card.needs-me){background:#3a2a1e}
+html[data-theme="dark"] .borrow-alert{background:#3d2b1d;color:#f0cfa9;border-color:#6b4a2f;border-left-color:#c0712f}
+html[data-theme="dark"] :is(.borrow-alert.calm,.calm-state,.how-it-works,.note.sage){background:#2a3024;color:#c3d1aa;border-color:#3e4a33}
+html[data-theme="dark"] .calm-state p{color:#9fae8a}
+html[data-theme="dark"] .divider{background:#43352c}
+html[data-theme="dark"] .sheet-grabber{background:linear-gradient(#2b211c 70%,rgba(43,33,28,0))}
+html[data-theme="dark"] .theme-toggle:hover,html[data-theme="dark"] :is(.nav-link:hover,.nav-link.active){background:#3e3027}
+html[data-theme="dark"] .avatar{background:linear-gradient(145deg,#5a4434,#3c4532);color:#f0e3d4}
+
+/* text */
+html[data-theme="dark"] :is(.dash-hero h1,.stat-tile strong,.profile-stats strong,.profile-tabs button.active,.section-head h2,.modal-title,.nav-link.active,.tab.active){color:#f3e7da}
+html[data-theme="dark"] :is(.nav-link,.tab,.modal-close,.profile-bio,.request-row .who p.borrow-msg,.feed-row .content p.notify-msg,.loan-card .borrow-msg){color:#e0cfbd}
+html[data-theme="dark"] :is(.heading-line p,.dash-hero p,.stat-tile>span:last-child,.todo-text p,.where-row p,.loan-who,.profile-name p,.profile-stats span,.profile-tabs button,.privacy-line,.subline,.outfit-info .date,.clothing-card .meta,.library-item span,.editor-caption,.friend-profile p,.request-row .who p,.feed-row .content p,.auth-art p,.auth-box .switch,.hero p,.add-hint,.field small,.search svg,.footer,.empty,.upload-zone,.add-photo,.brand-atelier,.privacy-bar,.note){color:#bfa894}
+html[data-theme="dark"] :is(.field label,.hero small,.dash-hero small,.section-head a,.link,.auth-box .switch button,.hero h1 em,.stat-icon,.todo-icon,.rail-new,.steps li.current,.add-photo-empty strong,.more-details summary,.brand-heart,.tag-paper:after,.clothing-card .photo .heart){color:#ddb690}
+html[data-theme="dark"] .steps li{color:#8f7a69}
+html[data-theme="dark"] .steps li::before{background:#4a3a30}
+
+/* controls */
+html[data-theme="dark"] :is(.input,textarea,select){background:#241b16;border-color:#5a473a;color:#f0e3d4}
+html[data-theme="dark"] :is(.input,textarea)::placeholder{color:#8a7565}
+html[data-theme="dark"] :is(.input:focus,textarea:focus,select:focus){background:#281e18;border-color:#b98c63}
+html[data-theme="dark"] .btn.primary{background:#9c6f4b;border-color:#9c6f4b;box-shadow:0 3px 0 #5a3d2a;color:#fff}
+html[data-theme="dark"] .btn.primary:hover:not(:disabled){background:#ac7d57}
+html[data-theme="dark"] .btn.secondary{background:#33281f;border-color:#5a473a;color:#ecdccb}
+html[data-theme="dark"] .btn.soft{background:#41322a;color:#ecd4bb}
+html[data-theme="dark"] .btn.sage{background:#2e3528;color:#c3d1aa}
+html[data-theme="dark"] .btn.danger{background:#3d2421;color:#f0a8a0}
+html[data-theme="dark"] .btn.ghost{color:#d5bfa9}
+html[data-theme="dark"] .pill{background:#2f251f;border-color:#4d3d32;color:#e0cfbd}
+html[data-theme="dark"] .pill.active{background:#9c6f4b;border-color:#9c6f4b;color:#fff}
+html[data-theme="dark"] .chip input:checked+span{background:#9c6f4b;color:#fff}
+html[data-theme="dark"] .badge{background:#41322a;color:#e7cdb3}
+html[data-theme="dark"] .badge.green,html[data-theme="dark"] .clothing-card .badge.green{background:#2e3828;color:#bcd0a0}
+html[data-theme="dark"] .badge.amber{background:#3f3220;color:#e9c98f}
+html[data-theme="dark"] .badge.blue{background:#26323a;color:#a9c4d6}
+html[data-theme="dark"] :is(.badge.pink,.clothing-card .badge.pink){background:#45332a;color:#ecc7ad}
+html[data-theme="dark"] .pw-toggle:hover{background:#3e3027}
+html[data-theme="dark"] .input[aria-invalid="true"]{background:#2f1f1c;border-color:#c56a5e}
+html[data-theme="dark"] .field .field-error{color:#ef9a8e}
+html[data-theme="dark"] .field .field-error::before{background:#c56a5e}
+html[data-theme="dark"] code{background:#3a2d25;color:#f0d9c2}
+html[data-theme="dark"] .profile-cover{filter:brightness(.62) saturate(.9)}
+html[data-theme="dark"] .clothing-card .photo img,html[data-theme="dark"] .preview img{filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
+@media (prefers-reduced-motion:no-preference){html{transition:background-color .25s}}
