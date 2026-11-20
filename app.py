@@ -57,6 +57,7 @@ def source_key(req:Request):
     # We never trust X-Forwarded-For supplied by an arbitrary client.
     return str(req.client.host if req.client else 'unknown')
 
+CATEGORIES=('Tops','Bottoms','Dresses','Outerwear','Shoes','Bags','Accessories','Other')
 STAMP=lambda: datetime.now(timezone.utc).isoformat()
 UID=lambda: uuid.uuid4().hex
 
@@ -287,7 +288,10 @@ def check_pw(pw,stored):
 def session_cookie(r:Response,user_id):
     secret=secrets.token_urlsafe(32);token_hash=hashlib.sha256(secret.encode()).hexdigest()
     expiration=(datetime.now(timezone.utc)+timedelta(days=14)).isoformat()
-    with sql.tx() as t:t.insert('sessions',{'id_hash':token_hash,'user_id':user_id,'expires_at':expiration})
+    with sql.tx() as t:
+        # Housekeeping: expired sessions can never authenticate again.
+        t.execute('DELETE FROM sessions WHERE expires_at<=?',(STAMP(),))
+        t.insert('sessions',{'id_hash':token_hash,'user_id':user_id,'expires_at':expiration})
     r.set_cookie(COOKIE_NAME,secret,httponly=True,secure=IS_PROD,samesite='lax',max_age=14*86400,path='/')
 def current(req:Request):
     token=req.cookies.get(COOKIE_NAME)
@@ -409,7 +413,12 @@ async def update_profile(req:Request,user=Depends(current)):
             if t.one('SELECT id FROM users WHERE username=? AND id<>?',(name,user['id'])):fail('Username already used',409)
         updates['username']=name
     if updates:
-        with sql.tx() as t:t.execute('UPDATE users SET '+','.join(f'{k}=?' for k in updates)+' WHERE id=?',(*updates.values(),user['id']))
+        with sql.tx() as t:
+            t.execute('UPDATE users SET '+','.join(f'{k}=?' for k in updates)+' WHERE id=?',(*updates.values(),user['id']))
+            if 'password_hash' in updates:
+                # Sign out every other device; keep the session that changed it.
+                token=req.cookies.get(COOKIE_NAME,'')
+                t.execute('DELETE FROM sessions WHERE user_id=? AND id_hash<>?',(user['id'],hashlib.sha256(token.encode()).hexdigest()))
     return {'ok':True}
 
 async def save_image(file:UploadFile,background=False):
@@ -493,6 +502,7 @@ def wardrobe(owner:str='me',user=Depends(current)):
 async def add_clothing(req:Request,name:str=Form(...),category:str=Form(...),color:str=Form(''),details:str=Form(''),file:UploadFile=File(...),request_token:str=Form(''),user=Depends(current)):
     rate_limit('clothing-upload:'+user['id'], 40, 3600)
     require(1<=len(name.strip())<=100,'Clothing name must be 1-100 characters')
+    require(category in CATEGORIES,'Invalid category',400)
     require(len(request_token)<=100,'Invalid upload request token')
     if request_token:
         # A retry with the same form token must return the original clothing item.
@@ -530,12 +540,19 @@ async def add_clothing(req:Request,name:str=Form(...),category:str=Form(...),col
 @app.patch('/api/wardrobe/{ident}')
 async def edit_clothing(ident:str,req:Request,user=Depends(current)):
     d=await req.json()
+    if 'name' in d:
+        d['name']=str(d['name']).strip()
+        require(1<=len(d['name'])<=100,'Clothing name must be 1-100 characters',400)
+    if 'category' in d:require(d['category'] in CATEGORIES,'Invalid category',400)
     with sql.tx() as t:
         old=t.one('SELECT * FROM clothing_items WHERE id=? AND deleted_at IS NULL',(ident,))
         require(old is not None,'Clothing not found',404);require(old['owner_id']==user['id'])
         fields={k:str(d[k])[:400 if k=='details' else 100] for k in ('name','category','color','details') if k in d}
-        if fields:t.execute('UPDATE clothing_items SET '+','.join(f'{k}=?' for k in fields)+' WHERE id=?',(*fields.values(),ident))
-        event(t,'activity',user_id=user['id'],action='edit_clothing',message=f'Updated {old["name"]}')
+        # Saving the form unchanged must not write a row or an activity entry.
+        fields={k:v for k,v in fields.items() if v!=old[k]}
+        if fields:
+            t.execute('UPDATE clothing_items SET '+','.join(f'{k}=?' for k in fields)+' WHERE id=?',(*fields.values(),ident))
+            event(t,'activity',user_id=user['id'],action='edit_clothing',message=f'Updated {old["name"]}')
     process_outbox();return {'ok':True}
 
 @app.delete('/api/wardrobe/{ident}')
@@ -552,8 +569,10 @@ def delete_clothing(ident:str,user=Depends(current)):
 def search_users(q:str='',user=Depends(current)):
     q=q.strip().lower()
     if not q:return {'users':[]}
+    # Usernames may contain "_", which LIKE would treat as a wildcard.
+    pattern='%'+q.replace('\\','\\\\').replace('%','\\%').replace('_','\\_')+'%'
     with sql.tx() as t:
-        matches=t.all('SELECT id,username,display_name,avatar_path,bio FROM users WHERE username LIKE ? AND id<>? AND password_hash!=? LIMIT 20',('%'+q+'%',user['id'],'!deleted!'))
+        matches=t.all("SELECT id,username,display_name,avatar_path,bio FROM users WHERE username LIKE ? ESCAPE '\\' AND id<>? AND password_hash!=? LIMIT 20",(pattern,user['id'],'!deleted!'))
     return {'users':[user_public(u) for u in matches]}
 
 def friend_record(a,b,t):
@@ -577,14 +596,20 @@ def friends(user=Depends(current)):
 async def add_friend(req:Request,user=Depends(current)):
     username=str((await req.json()).get('username','')).lower().strip()
     with sql.tx() as t:
-        other=t.one('SELECT * FROM users WHERE username=?',(username,))
+        other=t.one('SELECT * FROM users WHERE username=? AND password_hash!=?',(username,'!deleted!'))
         require(other is not None,'Username not found',404);require(other['id']!=user['id'],'Cannot friend yourself')
         existing=friend_record(user['id'],other['id'],t)
-        if existing and existing['status'] in ('accepted','pending'):fail('Friendship/request already exists',409)
-        if existing:t.execute('DELETE FROM friendships WHERE id=?',(existing['id'],))
-        t.insert('friendships',{'id':UID(),'requester_id':user['id'],'addressee_id':other['id'],'status':'pending','created_at':STAMP(),'updated_at':STAMP()})
-        event(t,'notification',user_id=other['id'],title='New friend request',message=f'{user["display_name"]} wants to be friends')
-    process_outbox();return {'ok':True}
+        accepted=bool(existing and existing['status']=='pending' and existing['requester_id']==other['id'])
+        if accepted:
+            # They already asked us: adding them back accepts their request.
+            t.execute("UPDATE friendships SET status='accepted',updated_at=? WHERE id=?",(STAMP(),existing['id']))
+            event(t,'notification',user_id=other['id'],title='Friend request accepted',message=f'{user["display_name"]} is now your friend')
+        else:
+            if existing and existing['status'] in ('accepted','pending'):fail('Friendship/request already exists',409)
+            if existing:t.execute('DELETE FROM friendships WHERE id=?',(existing['id'],))
+            t.insert('friendships',{'id':UID(),'requester_id':user['id'],'addressee_id':other['id'],'status':'pending','created_at':STAMP(),'updated_at':STAMP()})
+            event(t,'notification',user_id=other['id'],title='New friend request',message=f'{user["display_name"]} wants to be friends')
+    process_outbox();return {'ok':True,'accepted':accepted}
 
 @app.patch('/api/friends/{ident}')
 async def friend_decision(ident:str,req:Request,user=Depends(current)):
@@ -607,7 +632,19 @@ def remove_friend(ident:str,user=Depends(current)):
         r=t.one('SELECT * FROM friendships WHERE id=?',(ident,))
         require(r is not None and r['status']=='accepted' and user['id'] in (r['requester_id'],r['addressee_id']),'Friendship not found',404)
         t.execute('DELETE FROM friendships WHERE id=?',(ident,))
-    return {'ok':True}
+        # Requests not yet handed over end with the friendship. Borrowed items
+        # keep their request so the return flow can still finish.
+        a,b=r['requester_id'],r['addressee_id']
+        stale=t.all("SELECT * FROM borrow_requests WHERE ((owner_id=? AND borrower_id=?) OR (owner_id=? AND borrower_id=?)) AND status IN ('pending','approved')",(a,b,b,a))
+        for s in stale:
+            item=t.one('SELECT name FROM clothing_items WHERE id=?',(s['item_id'],))
+            if s['status']=='approved':t.execute("UPDATE clothing_items SET state='available' WHERE id=? AND state='reserved'",(s['item_id'],))
+            t.execute("UPDATE borrow_requests SET status='cancelled',updated_at=? WHERE id=?",(STAMP(),s['id']))
+            for party in (s['owner_id'],s['borrower_id']):
+                event(t,'borrow_log',user_id=party,request_id=s['id'],item_id=s['item_id'],action='cancelled',message=f'{item["name"]}: cancelled after friendship ended')
+            other=s['owner_id'] if s['borrower_id']==user['id'] else s['borrower_id']
+            event(t,'notification',user_id=other,title='Borrow request cancelled',message=f'The request for {item["name"]} was cancelled because the friendship ended')
+    process_outbox();return {'ok':True}
 
 @app.get('/api/friends/{ident}/closet')
 def friend_closet(ident:str,user=Depends(current)):
@@ -730,15 +767,21 @@ async def borrow_action(ident:str,req:Request,user=Depends(current)):
                 event(t,'notification',user_id=other['borrower_id'],title='Borrow request unavailable',message=f'{item["name"]} has been reserved for another borrower')
                 event(t,'borrow_log',user_id=other['borrower_id'],request_id=other['id'],item_id=item['id'],action='rejected',message=f'{item["name"]}: request closed after another reservation')
             event(t,'notification',user_id=r['borrower_id'],title='Borrow request approved',message=f'{item["name"]} is ready for handover')
-        elif action=='reject':require(owner and state=='pending');nextstate='rejected'
-        elif action=='cancel':require(borrower and state in ('pending','approved'));nextstate='cancelled';
+        elif action=='reject':
+            require(owner and state=='pending');nextstate='rejected'
+            event(t,'notification',user_id=r['borrower_id'],title='Borrow request declined',message=f'{user["display_name"]} declined your request for {item["name"]}')
+        elif action=='cancel':
+            require(borrower and state in ('pending','approved'));nextstate='cancelled'
+            event(t,'notification',user_id=r['owner_id'],title='Borrow request cancelled',message=f'{user["display_name"]} cancelled the request for {item["name"]}')
         elif action=='handover':
             require(owner and state=='approved','Handover requires owner confirmation',409)
             require(item['state']=='reserved','Item is no longer reserved',409)
             nextstate='borrowed';t.execute("UPDATE clothing_items SET state='borrowed',current_holder_id=? WHERE id=?",(r['borrower_id'],item['id']))
             t.insert('loans',{'id':UID(),'request_id':r['id'],'item_id':item['id'],'lender_id':r['owner_id'],'borrower_id':r['borrower_id'],'status':'active','started_at':STAMP()})
             event(t,'notification',user_id=r['borrower_id'],title='Item handed over',message=f'{item["name"]} is now with you')
-        elif action=='request_return':require(borrower and state=='borrowed');nextstate='return_requested'
+        elif action=='request_return':
+            require(borrower and state=='borrowed');nextstate='return_requested'
+            event(t,'notification',user_id=r['owner_id'],title='Return requested',message=f'{user["display_name"]} is returning {item["name"]}. Confirm once you have it back')
         elif action=='confirm_return':
             require(owner and state=='return_requested');nextstate='returned'
             t.execute("UPDATE clothing_items SET state='available',current_holder_id=NULL WHERE id=?",(item['id'],))
