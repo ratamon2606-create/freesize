@@ -1259,7 +1259,7 @@ body:has(.dash-hero) .dash-hero h1 {
   font-family: Impact, "Arial Narrow", sans-serif;
   font-size: clamp(48px, 6vw, 88px);
   text-transform: uppercase;
-  letter-spacing: -0.03em;
+  letter-spacing: 0.015em;
 }
 
 body:has(.dash-hero) .dash-hero small,
