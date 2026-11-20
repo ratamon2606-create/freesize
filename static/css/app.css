@@ -1278,3 +1278,130 @@ html[data-theme="dark"] .not-found code{background:#3a2d25;color:#f0d9c2}
 .studio-undo{white-space:nowrap}
 .upload-status:not([hidden]){margin:8px 0;padding:10px 12px;border-radius:10px;background:rgba(145,110,72,.10);font-size:13px;line-height:1.5}
 @media(max-width:540px){.studio-undo{min-width:70px}}
+
+/* Streetwear hero image */
+body:has(.dash-hero) .dash-hero {
+  grid-template-columns: 1fr;
+  min-height: 330px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(25, 14, 9, 0.96) 0%,
+      rgba(25, 14, 9, 0.78) 38%,
+      rgba(25, 14, 9, 0.12) 70%
+    ),
+    url("/assets/streetwear-hero.png") center / cover no-repeat;
+}
+
+body:has(.dash-hero) .dash-hero .copy {
+  max-width: 560px;
+}
+
+body:has(.dash-hero) .hero-collage {
+  display: none;
+}
+/* Smoked glass OOTD Studio */
+body:has(.editor-layout) {
+  background:
+    radial-gradient(
+      circle at 50% 18%,
+      rgba(116, 82, 61, 0.28),
+      transparent 46%
+    ),
+    #1d1511;
+}
+
+/* กล่องซ้าย กลาง และขวาแบบกระจกควัน */
+body:has(.editor-layout) .editor-panel,
+body:has(.editor-layout) .editor-canvas-wrap {
+  background: rgba(54, 40, 32, 0.58);
+  border: 1px solid rgba(225, 190, 158, 0.32);
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* แคนวาสกลางสว่างและโปร่ง */
+body:has(.editor-layout) .editor-canvas {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(190, 175, 164, 0.72),
+      rgba(143, 126, 116, 0.64)
+    );
+  border: 1px solid rgba(244, 224, 207, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 40px rgba(48, 33, 25, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ข้อความตรงกลางแคนวาส */
+body:has(.editor-layout) .editor-canvas .empty {
+  background: transparent;
+  border: 0;
+  color: #f1dfcf;
+}
+
+body:has(.editor-layout) .editor-canvas .empty h2,
+body:has(.editor-layout) .editor-canvas .empty strong {
+  color: #f7e9dc;
+}
+
+body:has(.editor-layout) .editor-canvas .empty p {
+  color: rgba(247, 233, 220, 0.78);
+}
+
+/* ช่องค้นหาและ Dropdown ให้โปร่ง */
+body:has(.editor-layout) .editor-panel .input,
+body:has(.editor-layout) .editor-panel select {
+  background: rgba(25, 18, 14, 0.42);
+  border-color: rgba(222, 181, 144, 0.32);
+  backdrop-filter: blur(10px);
+}
+
+/* ปุ่มแท็บและปุ่มหลัก */
+body:has(.editor-layout) .tab.active,
+body:has(.editor-layout) .btn.primary {
+  background: linear-gradient(135deg, #92754d, #b07b50);
+  border-color: #bd8d61;
+  color: #fff4e8;
+}
+
+/* คำอธิบายใต้แคนวาส */
+body:has(.editor-layout) .editor-caption {
+  color: rgba(235, 211, 190, 0.76);
+}
+/* Force smoked-glass Studio colors */
+html[data-theme="dark"] body:has(.editor-layout) .editor-panel,
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas-wrap {
+  background: rgba(64, 47, 38, 0.62) !important;
+  border-color: rgba(229, 194, 162, 0.38) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+}
+
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(190, 175, 164, 0.88),
+      rgba(137, 120, 110, 0.82)
+    ) !important;
+  border-color: rgba(249, 230, 213, 0.48) !important;
+}
+
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas .empty {
+  background: transparent !important;
+  border: 0 !important;
+  color: #f5e7da !important;
+}
+
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas .empty h2,
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas .empty strong,
+html[data-theme="dark"] body:has(.editor-layout) .editor-canvas .empty p {
+  color: #f5e7da !important;
+}
