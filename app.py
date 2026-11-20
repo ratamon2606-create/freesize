@@ -288,7 +288,10 @@ def check_pw(pw,stored):
 def session_cookie(r:Response,user_id):
     secret=secrets.token_urlsafe(32);token_hash=hashlib.sha256(secret.encode()).hexdigest()
     expiration=(datetime.now(timezone.utc)+timedelta(days=14)).isoformat()
-    with sql.tx() as t:t.insert('sessions',{'id_hash':token_hash,'user_id':user_id,'expires_at':expiration})
+    with sql.tx() as t:
+        # Housekeeping: expired sessions can never authenticate again.
+        t.execute('DELETE FROM sessions WHERE expires_at<=?',(STAMP(),))
+        t.insert('sessions',{'id_hash':token_hash,'user_id':user_id,'expires_at':expiration})
     r.set_cookie(COOKIE_NAME,secret,httponly=True,secure=IS_PROD,samesite='lax',max_age=14*86400,path='/')
 def current(req:Request):
     token=req.cookies.get(COOKIE_NAME)
@@ -410,7 +413,12 @@ async def update_profile(req:Request,user=Depends(current)):
             if t.one('SELECT id FROM users WHERE username=? AND id<>?',(name,user['id'])):fail('Username already used',409)
         updates['username']=name
     if updates:
-        with sql.tx() as t:t.execute('UPDATE users SET '+','.join(f'{k}=?' for k in updates)+' WHERE id=?',(*updates.values(),user['id']))
+        with sql.tx() as t:
+            t.execute('UPDATE users SET '+','.join(f'{k}=?' for k in updates)+' WHERE id=?',(*updates.values(),user['id']))
+            if 'password_hash' in updates:
+                # Sign out every other device; keep the session that changed it.
+                token=req.cookies.get(COOKIE_NAME,'')
+                t.execute('DELETE FROM sessions WHERE user_id=? AND id_hash<>?',(user['id'],hashlib.sha256(token.encode()).hexdigest()))
     return {'ok':True}
 
 async def save_image(file:UploadFile,background=False):

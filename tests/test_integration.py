@@ -308,6 +308,27 @@ def test_profile_email_password_crud_and_permission_checks():
         assert c.post('/api/auth/login',json={'username':'newtaa@example.test','password':'newsecret123'}).status_code==200
     work.cleanup()
 
+def test_password_change_signs_out_other_devices_only():
+    work,server=fresh_app()
+    with TestClient(server.app) as laptop, TestClient(server.app) as phone:
+        signin(laptop,'taa');signin(phone,'taa')
+        assert laptop.patch('/api/me',json={'current_password':'demo12345','new_password':'newsecret123'}).status_code==200
+        assert laptop.get('/api/me').status_code==200
+        assert phone.get('/api/me').status_code==401
+    work.cleanup()
+
+def test_login_removes_expired_sessions():
+    work,server=fresh_app()
+    with TestClient(server.app) as c:
+        taa=signin(c,'taa')
+        with server.sql.tx() as t:
+            t.insert('sessions',{'id_hash':'stale','user_id':taa['id'],'expires_at':'2000-01-01T00:00:00+00:00'})
+        signin(c,'may')
+        with server.sql.tx() as t:
+            assert t.one("SELECT id_hash FROM sessions WHERE id_hash='stale'") is None
+            assert t.one('SELECT COUNT(*) AS n FROM sessions')['n']==2
+    work.cleanup()
+
 def test_borrow_reject_cancel_and_return_notify_the_other_party():
     work,server=fresh_app()
     with TestClient(server.app) as borrower, TestClient(server.app) as owner:
