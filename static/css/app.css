@@ -1109,3 +1109,14 @@ html.scrolled .topbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 14px 34px
 .more-grid{display:grid;gap:11px;margin-top:10px}
 @media(max-width:540px){.add-photo{min-height:180px}}
 @media (prefers-reduced-motion:reduce){.add-photo:active,.chip:active span{transform:none}}
+
+/* Login: show/hide password + inline field errors */
+.pw-wrap{position:relative}
+.pw-wrap .input{padding-right:46px}
+.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;display:grid;place-items:center;border:0;background:none;border-radius:9px;color:var(--muted);cursor:pointer}
+.pw-toggle:hover{color:var(--ink);background:#eadcca66}
+.pw-toggle:focus-visible{outline:none;box-shadow:var(--ring,0 0 0 3px #b79a7736)}
+.input[aria-invalid="true"]{border-color:#b5564a;background:#fff6f3}
+.input[aria-invalid="true"]:focus{box-shadow:0 0 0 3px #b5564a29}
+.field .field-error{color:#a3443a;font-size:12px;font-weight:600;display:flex;gap:5px;align-items:center}
+.field .field-error::before{content:"!";display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;background:#a3443a;color:#fff;font-size:10px;font-weight:800;flex:none}
