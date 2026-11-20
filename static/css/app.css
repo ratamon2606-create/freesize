@@ -1263,3 +1263,16 @@ body:has(.dash-hero) .dash-hero::before,
 body:has(.dash-hero) .dash-hero::after {
   display: none;
 }
+
+/* ───────── 404 page ───────── */
+.not-found{max-width:560px;margin:40px auto;padding:44px 30px 36px;text-align:center;border-radius:24px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.nf-hanger{width:110px;height:110px;border-radius:50%;display:grid;place-items:center;background:#efe3d4;color:#8e664a;animation:nf-swing 2.6s ease-in-out infinite;transform-origin:50% 0}
+.not-found h1{margin:4px 0 0;font-family:Georgia,serif;font-size:clamp(26px,4vw,34px)}
+.not-found p{margin:0;color:var(--muted);line-height:1.6;max-width:400px}
+.not-found code{background:#f1e6d8;padding:2px 7px;border-radius:6px;font-size:13px;display:inline-block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}
+.nf-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.nf-actions .btn{text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+@keyframes nf-swing{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.nf-hanger{animation:none}}
+html[data-theme="dark"] .nf-hanger{background:#41322a;color:#e2bf9c}
+html[data-theme="dark"] .not-found code{background:#3a2d25;color:#f0d9c2}
