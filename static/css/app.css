@@ -54,7 +54,8 @@ small{font-size:12px}
 .btn.primary:hover{background:var(--cocoa-dark)}
 .btn.secondary{background:#fbf6ee;border-color:#ddc6ae}
 .btn.soft{background:#eee1d3;color:#77563f}
-.btn.sage{background:#e5ebd9;color:#526747}
+.btn.sage{background:#c47b3d;color:#fff9f1;border-color:#a95f2d}
+.btn.sage:hover:not(:disabled){background:#ac632f}
 .btn.danger{background:#f8ece7;color:#a44f47;border-color:#e3c3ba}
 .btn.ghost{padding:8px 9px;color:#745848}
 .btn.small{padding:7px 10px;font-size:12px}
@@ -370,8 +371,9 @@ body {
   line-height: 1.25;
   font-weight: 800;
   color: #997760;
-  white-space: normal;
-  max-width: 90px;
+  white-space: nowrap;
+  max-width: none;
+  flex-shrink: 0;
 }
 .topbar {
   border-radius: 13px;
@@ -1173,7 +1175,8 @@ html[data-theme="dark"] .btn.primary{background:#9c6f4b;border-color:#9c6f4b;box
 html[data-theme="dark"] .btn.primary:hover:not(:disabled){background:#ac7d57}
 html[data-theme="dark"] .btn.secondary{background:#33281f;border-color:#5a473a;color:#ecdccb}
 html[data-theme="dark"] .btn.soft{background:#41322a;color:#ecd4bb}
-html[data-theme="dark"] .btn.sage{background:#2e3528;color:#c3d1aa}
+html[data-theme="dark"] .btn.sage{background:#c47b3d;border-color:#d29353;color:#fff9f1}
+html[data-theme="dark"] .btn.sage:hover:not(:disabled){background:#da8d4c}
 html[data-theme="dark"] .btn.danger{background:#3d2421;color:#f0a8a0}
 html[data-theme="dark"] .btn.ghost{color:#d5bfa9}
 html[data-theme="dark"] .pill{background:#2f251f;border-color:#4d3d32;color:#e0cfbd}
