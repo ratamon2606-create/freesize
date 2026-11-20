@@ -583,14 +583,20 @@ def friends(user=Depends(current)):
 async def add_friend(req:Request,user=Depends(current)):
     username=str((await req.json()).get('username','')).lower().strip()
     with sql.tx() as t:
-        other=t.one('SELECT * FROM users WHERE username=?',(username,))
+        other=t.one('SELECT * FROM users WHERE username=? AND password_hash!=?',(username,'!deleted!'))
         require(other is not None,'Username not found',404);require(other['id']!=user['id'],'Cannot friend yourself')
         existing=friend_record(user['id'],other['id'],t)
-        if existing and existing['status'] in ('accepted','pending'):fail('Friendship/request already exists',409)
-        if existing:t.execute('DELETE FROM friendships WHERE id=?',(existing['id'],))
-        t.insert('friendships',{'id':UID(),'requester_id':user['id'],'addressee_id':other['id'],'status':'pending','created_at':STAMP(),'updated_at':STAMP()})
-        event(t,'notification',user_id=other['id'],title='New friend request',message=f'{user["display_name"]} wants to be friends')
-    process_outbox();return {'ok':True}
+        accepted=bool(existing and existing['status']=='pending' and existing['requester_id']==other['id'])
+        if accepted:
+            # They already asked us: adding them back accepts their request.
+            t.execute("UPDATE friendships SET status='accepted',updated_at=? WHERE id=?",(STAMP(),existing['id']))
+            event(t,'notification',user_id=other['id'],title='Friend request accepted',message=f'{user["display_name"]} is now your friend')
+        else:
+            if existing and existing['status'] in ('accepted','pending'):fail('Friendship/request already exists',409)
+            if existing:t.execute('DELETE FROM friendships WHERE id=?',(existing['id'],))
+            t.insert('friendships',{'id':UID(),'requester_id':user['id'],'addressee_id':other['id'],'status':'pending','created_at':STAMP(),'updated_at':STAMP()})
+            event(t,'notification',user_id=other['id'],title='New friend request',message=f'{user["display_name"]} wants to be friends')
+    process_outbox();return {'ok':True,'accepted':accepted}
 
 @app.patch('/api/friends/{ident}')
 async def friend_decision(ident:str,req:Request,user=Depends(current)):

@@ -76,6 +76,31 @@ def test_permissions_and_journal_crud():
         assert c.get('/media/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png').status_code in (403,404)
     work.cleanup()
 
+def test_adding_someone_who_already_asked_accepts_their_request():
+    work,server=fresh_app()
+    with TestClient(server.app) as leo, TestClient(server.app) as may:
+        signin(leo,'leo');signin(may,'may')
+        assert leo.post('/api/friends',json={'username':'may'}).status_code==200
+        r=may.post('/api/friends',json={'username':'leo'})
+        assert r.status_code==200 and r.json()['accepted'] is True,r.text
+        assert 'may' in [f['username'] for f in leo.get('/api/friends').json()['friends']]
+        assert not may.get('/api/friends').json()['incoming']
+        assert 'Friend request accepted' in [n['title'] for n in leo.get('/api/notifications').json()['notifications']]
+        # Asking twice in the same direction is still a duplicate.
+        assert leo.post('/api/friends',json={'username':'june'}).status_code==200
+        assert leo.post('/api/friends',json={'username':'june'}).status_code==409
+    work.cleanup()
+
+def test_cannot_send_friend_request_to_closed_account():
+    work,server=fresh_app()
+    with TestClient(server.app) as gone, TestClient(server.app) as c:
+        assert gone.post('/api/auth/register',json={'username':'leaving','email':'leaving@example.local','password':'password123'}).status_code==200
+        closed=gone.get('/api/me').json()
+        assert gone.delete('/api/me').status_code==200
+        signin(c,'leo')
+        assert c.post('/api/friends',json={'username':'closed_'+closed['id'][:16]}).status_code==404
+    work.cleanup()
+
 def test_reserved_item_cannot_be_approved_twice_and_rolls_back():
     work,server=fresh_app()
     with TestClient(server.app) as taa_client, TestClient(server.app) as june_client, TestClient(server.app) as may_client:
