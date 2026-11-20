@@ -282,3 +282,56 @@ def test_profile_email_password_crud_and_permission_checks():
         assert c.post('/api/auth/login',json={'username':'taa','password':'demo12345'}).status_code==401
         assert c.post('/api/auth/login',json={'username':'newtaa@example.test','password':'newsecret123'}).status_code==200
     work.cleanup()
+
+def test_borrow_reject_cancel_and_return_notify_the_other_party():
+    work,server=fresh_app()
+    with TestClient(server.app) as borrower, TestClient(server.app) as owner:
+        signin(borrower,'taa');signin(owner,'may')
+        items=owner.get('/api/wardrobe').json()['items']
+        titles=lambda c:[n['title'] for n in c.get('/api/notifications').json()['notifications']]
+        rid=borrower.post('/api/borrowing',json={'item_id':items[0]['id']}).json()['id']
+        assert owner.patch('/api/borrowing/'+rid,json={'action':'reject'}).status_code==200
+        assert 'Borrow request declined' in titles(borrower)
+        rid=borrower.post('/api/borrowing',json={'item_id':items[1]['id']}).json()['id']
+        assert borrower.patch('/api/borrowing/'+rid,json={'action':'cancel'}).status_code==200
+        assert 'Borrow request cancelled' in titles(owner)
+        rid=borrower.post('/api/borrowing',json={'item_id':items[2]['id']}).json()['id']
+        for who,action in ((owner,'approve'),(owner,'handover'),(borrower,'request_return')):
+            assert who.patch('/api/borrowing/'+rid,json={'action':action}).status_code==200
+        assert 'Return requested' in titles(owner)
+    work.cleanup()
+
+def test_edit_clothing_rejects_blank_name_and_unknown_category():
+    work,server=fresh_app()
+    with TestClient(server.app) as c:
+        signin(c,'taa')
+        item=c.get('/api/wardrobe').json()['items'][0]
+        assert c.patch('/api/wardrobe/'+item['id'],json={'name':'   '}).status_code==400
+        assert c.patch('/api/wardrobe/'+item['id'],json={'category':'Spaceship'}).status_code==400
+        assert c.patch('/api/wardrobe/'+item['id'],json={'name':'  Renamed  ','category':'Other'}).status_code==200
+        after=next(i for i in c.get('/api/wardrobe').json()['items'] if i['id']==item['id'])
+        assert after['name']=='Renamed' and after['category']=='Other'
+    work.cleanup()
+
+def test_unfriend_cancels_open_requests_but_keeps_borrowed_loan():
+    work,server=fresh_app()
+    with TestClient(server.app) as borrower, TestClient(server.app) as owner:
+        signin(borrower,'taa');signin(owner,'may')
+        items=owner.get('/api/wardrobe').json()['items']
+        pending=borrower.post('/api/borrowing',json={'item_id':items[0]['id']}).json()['id']
+        approved=borrower.post('/api/borrowing',json={'item_id':items[1]['id']}).json()['id']
+        borrowed=borrower.post('/api/borrowing',json={'item_id':items[2]['id']}).json()['id']
+        assert owner.patch('/api/borrowing/'+approved,json={'action':'approve'}).status_code==200
+        for action in ('approve','handover'):
+            assert owner.patch('/api/borrowing/'+borrowed,json={'action':action}).status_code==200
+        friendship=next(f for f in borrower.get('/api/friends').json()['friends'] if f['username']=='may')['friendship_id']
+        assert borrower.delete('/api/friends/'+friendship).status_code==200
+        status={r['id']:r['status'] for r in owner.get('/api/borrowing').json()['requests']}
+        assert status[pending]=='cancelled' and status[approved]=='cancelled' and status[borrowed]=='borrowed'
+        states={i['id']:i['state'] for i in owner.get('/api/wardrobe').json()['items']}
+        assert states[items[1]['id']]=='available' and states[items[2]['id']]=='borrowed'
+        assert 'Borrow request cancelled' in [n['title'] for n in owner.get('/api/notifications').json()['notifications']]
+        # The physical return can still be completed after unfriending.
+        assert borrower.patch('/api/borrowing/'+borrowed,json={'action':'request_return'}).status_code==200
+        assert owner.patch('/api/borrowing/'+borrowed,json={'action':'confirm_return'}).status_code==200
+    work.cleanup()
