@@ -1,6 +1,6 @@
 /* Fullscreen wardrobe entrance. No external assets or flash overlay. */
 .fs-entrance{position:fixed;inset:0;z-index:1000;display:none;overflow:hidden;isolation:isolate;background:#160b07;color:#f3e1cd;perspective:1500px}
-.fs-entrance.is-ready{display:block}
+html.fs-intro-active .fs-entrance,.fs-entrance.is-ready{display:block}
 .fs-entrance__depth{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,#3c2216 0%,#190d09 58%,#090504 100%);transition:opacity 1.1s ease .75s}
 .fs-entrance__portal{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform,opacity;transition:transform 2.5s cubic-bezier(.16,.68,.18,1) .38s,opacity 1.15s ease 1.25s}
 .fs-entrance__doors{position:absolute;inset:0;display:flex;transform-style:preserve-3d}
