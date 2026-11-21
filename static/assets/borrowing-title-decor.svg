@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 230" fill="none">
+  <defs>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#5a2d1e"/>
+      <stop offset=".18" stop-color="#f4d5a5"/>
+      <stop offset=".38" stop-color="#8d4f2e"/>
+      <stop offset=".56" stop-color="#fff0c9"/>
+      <stop offset=".76" stop-color="#9a5e38"/>
+      <stop offset="1" stop-color="#3b211c"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#fff7dc"/>
+      <stop offset=".35" stop-color="#c98b57"/>
+      <stop offset=".7" stop-color="#6e3928"/>
+      <stop offset="1" stop-color="#f0c28c"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
+  </defs>
+
+  <!-- Warm chrome tribal heart, positioned for the left edge of the title -->
+  <g transform="translate(18 21) scale(.86)" stroke-linejoin="round">
+    <path d="M105 177C87 145 31 119 25 75 20 36 61 15 91 48 99 57 104 68 105 78 107 67 112 56 120 47 151 13 192 36 185 76 178 120 124 145 105 177Z"
+          stroke="url(#metal)" stroke-width="13"/>
+    <path d="M105 150C91 124 52 107 48 77 45 57 64 47 80 60 95 72 101 93 105 109 110 92 115 73 130 60 146 46 166 58 162 78 156 108 119 125 105 150Z"
+          stroke="url(#shine)" stroke-width="6"/>
+    <path d="M28 69C54 85 74 105 105 145M183 69C157 86 137 106 105 145"
+          stroke="#fff0c7" stroke-width="3" opacity=".72"/>
+    <path d="M105 179 97 147H113Z" fill="url(#metal)"/>
+  </g>
+
+  <!-- Long chrome sparkle, positioned for the right edge of the title -->
+  <g transform="translate(1190 7)">
+    <path d="M102 2C108 70 122 89 204 106 123 116 108 137 101 218 92 138 76 117 0 107 77 90 93 69 102 2Z"
+          fill="url(#metal)"/>
+    <path d="M102 32C105 81 116 96 174 106 116 113 106 129 101 189 96 130 84 114 29 107 85 94 97 80 102 32Z"
+          fill="url(#shine)"/>
+    <path d="M102 55C104 89 111 99 148 106 111 111 104 121 101 161 98 122 90 112 55 107 91 98 99 88 102 55Z"
+          fill="#3c211b" opacity=".78"/>
+    <path d="M102 44V169M38 107H165" stroke="#fff1cc" stroke-width="2.5" opacity=".8"/>
+    <ellipse cx="103" cy="107" rx="22" ry="8" fill="#ffe6b8" opacity=".35" filter="url(#soft)"/>
+  </g>
+</svg>

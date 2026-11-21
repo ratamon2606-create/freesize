@@ -147,9 +147,171 @@ function loanSteps(r){const st=r.status;if(st==='rejected'||st==='cancelled')ret
  const idx=LOAN_STEPS.findIndex(s=>s[0]===st);return `<ol class="steps">${LOAN_STEPS.map(([,l],i)=>`<li class="${i<idx||st==='returned'?'done':i===idx?'current':''}"><span></span>${l}</li>`).join('')}</ol>`}
 function loanCard(r){const info=borrowInfo(r),other=r.is_owner?r.borrower:r.owner;
  return `<article class="loan-card ${info.need?'needs-me':''}"><img loading="lazy" decoding="async" class="loan-img" src="${esc(r.image_path)}" alt="${esc(r.item_name)}"><div class="loan-main"><div class="loan-head"><div class="loan-title"><strong>${esc(r.item_name)}</strong>${info.need?'<span class="your-turn">Your turn</span>':''}</div><div class="loan-who">${avatar(other,'tiny')}<span>${r.is_owner?'Lending to':'Borrowing from'} <strong>${esc(other?.display_name||'a friend')}</strong></span></div></div><p class="borrow-msg">${info.msg}</p>${loanSteps(r)}<div class="loan-foot"><span class="muted">Requested ${niceDate(r.created_at)}${r.updated_at&&r.updated_at!==r.created_at?' · updated '+niceDate(r.updated_at):''}</span><div class="actions">${borrowActions(r)}${['cancelled','rejected','returned'].includes(r.status)?btn(ico('trash')+' Delete','deleteBorrowHistory',r.id,'ghost','small'):''}</div></div></div></article>`}
-function pageBorrowing(){const all=S.borrow||[];const tabs=BORROW_TABS.map(([k,label,f])=>{const rows=all.filter(f);return {k,label,rows,need:rows.filter(r=>borrowInfo(r).need).length}});const cur=tabs.find(t=>t.k===S.borrowTab)||tabs[0];const found=cur.rows;const needAll=all.filter(r=>borrowInfo(r).need);
- const alert=needAll.length?`<div class="borrow-alert" role="status"><span class="borrow-alert-icon">!</span><div><strong>${needAll.length} ${needAll.length===1?'item needs':'items need'} your action</strong><p>${tabs.filter(t=>t.need).map(t=>`<button class="link-btn" data-action="borrowTab" data-id="${t.k}">${t.need} in ${t.label}</button>`).join(' · ')}</p></div></div>`:(all.some(r=>!['returned','rejected','cancelled'].includes(r.status))?`<div class="borrow-alert calm" role="status"><span class="borrow-alert-icon">✓</span><div><strong>Nothing needs your action right now</strong><p>You are waiting on your friends for the rest.</p></div></div>`:'');
- return `<div class="heading-line"><div><h1 class="tag-paper">Borrowing & Tracking</h1><p>Know where your clothes are, and share with care.</p></div></div>${alert}<div class="pill-tabs" style="margin-bottom:20px">${tabs.map(t=>`<button class="pill ${cur.k===t.k?'active':''}" data-action="borrowTab" data-id="${t.k}">${t.label}${t.rows.length?` <span class="pill-count ${t.need?'urgent':''}" title="${t.need?t.need+' need your action':t.rows.length+' items'}">${t.need||t.rows.length}</span>`:''}</button>`).join('')}</div>${found.length?`<div class="loan-list">${found.map(loanCard).join('')}</div>`:empty('All caught up',cur.k==='requests'?'No incoming or outgoing requests right now.':'No items in this section.')}<details class="how-it-works"><summary>${ico('lock')} How borrowing works</summary><p>Borrowing is separate from outfit planning. Approval reserves an item; the owner confirms the physical handover before its holder changes. Returns also require owner confirmation.</p></details>`}
+function pageBorrowing() {
+  const all = S.borrow || [];
+
+  const tabs = BORROW_TABS.map(([k, label, f]) => {
+    const rows = all.filter(f);
+
+    return {
+      k,
+      label,
+      rows,
+      need: rows.filter(r => borrowInfo(r).need).length
+    };
+  });
+
+  const cur =
+    tabs.find(t => t.k === S.borrowTab) || tabs[0];
+
+  const found = cur.rows;
+
+  const needAll =
+    all.filter(r => borrowInfo(r).need);
+
+  const alert = needAll.length
+    ? `
+      <div class="borrow-alert" role="status">
+        <span class="borrow-alert-icon">!</span>
+
+        <div>
+          <strong>
+            ${needAll.length}
+            ${needAll.length === 1
+              ? 'item needs'
+              : 'items need'}
+            your action
+          </strong>
+
+          <p>
+            ${tabs
+              .filter(t => t.need)
+              .map(t => `
+                <button
+                  class="link-btn"
+                  data-action="borrowTab"
+                  data-id="${t.k}"
+                >
+                  ${t.need} in ${t.label}
+                </button>
+              `)
+              .join(' · ')}
+          </p>
+        </div>
+      </div>
+    `
+    : (
+        all.some(r =>
+          ![
+            'returned',
+            'rejected',
+            'cancelled'
+          ].includes(r.status)
+        )
+          ? `
+            <div
+              class="borrow-alert calm"
+              role="status"
+            >
+              <span class="borrow-alert-icon">✓</span>
+
+              <div>
+                <strong>
+                  Nothing needs your action right now
+                </strong>
+
+                <p>
+                  You are waiting on your friends
+                  for the rest.
+                </p>
+              </div>
+            </div>
+          `
+          : ''
+      );
+
+  return `
+    <div class="heading-line">
+      <div>
+        <h1 class="tag-paper">
+          Borrowing & Tracking
+        </h1>
+
+        <p>
+          Know where your clothes are,
+          and share with care.
+        </p>
+      </div>
+    </div>
+
+    ${alert}
+
+    <div
+      class="pill-tabs"
+      style="margin-bottom:20px"
+    >
+      ${tabs.map(t => `
+        <button
+          class="pill ${cur.k === t.k ? 'active' : ''}"
+          data-action="borrowTab"
+          data-id="${t.k}"
+        >
+          ${t.label}
+
+          ${t.rows.length
+            ? `
+              <span
+                class="pill-count ${t.need ? 'urgent' : ''}"
+                title="${
+                  t.need
+                    ? t.need + ' need your action'
+                    : t.rows.length + ' items'
+                }"
+              >
+                ${t.need || t.rows.length}
+              </span>
+            `
+            : ''
+          }
+        </button>
+      `).join('')}
+    </div>
+
+    ${found.length
+      ? `
+        <div class="loan-list">
+          ${found.map(loanCard).join('')}
+        </div>
+      `
+      : empty(
+          'All caught up',
+          cur.k === 'requests'
+            ? 'No incoming or outgoing requests right now.'
+            : 'No items in this section.'
+        )
+    }
+
+    <img
+      class="borrowing-steps-image"
+      src="/assets/borrowing-steps.png"
+      alt="Request, Approve, Return"
+    >
+
+    <details class="how-it-works">
+      <summary>
+        ${ico('lock')}
+        How borrowing works
+      </summary>
+
+      <p>
+        Borrowing is separate from outfit planning.
+        Approval reserves an item; the owner confirms
+        the physical handover before its holder changes.
+        Returns also require owner confirmation.
+      </p>
+    </details>
+  `;
+}
 // ---- Friend profile: social-style header, stats and tabs ----
 function pageFriend(){let c=S.friendCloset;if(!c)return empty('Friend not found','');let u=c.user,ward=c.items.filter(matches),avail=c.items.filter(i=>i.state==='available').length,outfits=S.friendTab==='outfits';
  return `<div class="page-toolbar">${btn(ico('back')+' Friends','goFriends','','ghost')}</div><section class="profile-hero paper"><div class="profile-cover" aria-hidden="true"></div><div class="profile-id">${avatar(u,'big')}<div class="profile-name"><h1>${esc(u.display_name)}</h1><p>@${esc(u.username)}</p></div><div class="profile-cta">${btn(ico('plus')+' Style with their pieces','newOOTD','','primary')}</div></div><p class="profile-bio">${esc(u.bio||'My little closet')}</p><div class="profile-stats"><div><strong>${u.items_count}</strong><span>pieces</span></div><div><strong>${u.ootds_count}</strong><span>outfits</span></div><div><strong>${avail}</strong><span>free to borrow</span></div></div></section>

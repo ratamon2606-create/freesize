@@ -2842,3 +2842,890 @@ body:has(input[placeholder="Search your clothes..."])
     5% 38%, 0 20%
   );
 }
+
+/* ===== BORROWING & TRACKING — COCOA Y2K ===== */
+
+@keyframes borrowingButtonSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* พื้นหลังไล่สี + ลาย SVG */
+html[data-theme="dark"] body:has(.how-it-works) {
+  min-height: 100vh;
+  background-color: #211512 !important;
+  background-image:
+    url("/assets/borrowing-bg-pattern.svg"),
+    linear-gradient(
+      180deg,
+      #9b7462 0%,
+      #835e50 24%,
+      #68463d 50%,
+      #452b26 73%,
+      #211512 100%
+    ) !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-position: center top, center top !important;
+  background-size: 100% auto, 100% 100% !important;
+  background-attachment: fixed, fixed !important;
+  color: #f2dfbf;
+}
+
+/* ปิดลายของหน้าอื่น */
+html[data-theme="dark"] body:has(.how-it-works)::before,
+html[data-theme="dark"] body:has(.how-it-works)::after {
+  content: none !important;
+  display: none !important;
+}
+
+html[data-theme="dark"] body:has(.how-it-works) .app-shell {
+  position: relative;
+  z-index: 1;
+}
+
+/* จัดหัวข้อไว้ตรงกลาง */
+html[data-theme="dark"] body:has(.how-it-works) .heading-line {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin: 14px auto 22px;
+}
+
+html[data-theme="dark"] body:has(.how-it-works) .heading-line > div {
+  width: min(1060px, 100%);
+}
+
+/* ป้ายหัวข้อกระดาษฉีก */
+html[data-theme="dark"] body:has(.how-it-works) .tag-paper {
+  position: relative;
+  display: block;
+  width: min(1040px, 100%);
+  margin: 0 auto 10px;
+  padding: 22px 130px 25px;
+  overflow: visible;
+
+  color: #f5e5c9 !important;
+
+  background-color: #281915 !important;
+  background-image:
+    url("/assets/borrowing-title-decor.svg"),
+    radial-gradient(
+      circle at 20% 35%,
+      rgba(255,255,255,.055) 0 1px,
+      transparent 2px
+    ),
+    linear-gradient(
+      100deg,
+      #1d1210,
+      #39231e 54%,
+      #211411
+    ) !important;
+
+  background-repeat: no-repeat, repeat, no-repeat !important;
+  background-position: center, 0 0, center !important;
+  background-size: 100% 100%, 18px 18px, 100% 100% !important;
+
+  border: 0 !important;
+  border-radius: 0 !important;
+
+  box-shadow:
+    0 12px 24px rgba(23, 12, 10, .26);
+
+  clip-path: polygon(
+    0 9%, 3% 4%, 7% 8%, 11% 2%,
+    16% 7%, 22% 3%, 28% 7%, 35% 2%,
+    42% 6%, 49% 3%, 56% 7%, 63% 2%,
+    70% 7%, 77% 3%, 84% 8%, 91% 2%,
+    97% 7%, 100% 4%,
+    99% 93%, 95% 98%, 89% 94%, 83% 99%,
+    76% 94%, 69% 98%, 62% 94%, 55% 99%,
+    48% 94%, 41% 98%, 34% 94%, 27% 99%,
+    20% 94%, 13% 98%, 7% 94%, 1% 98%
+  );
+
+  font-family:
+    Impact,
+    Haettenschweiler,
+    "Arial Narrow Bold",
+    "Arial Narrow",
+    sans-serif !important;
+
+  font-size: clamp(42px, 5.2vw, 78px) !important;
+  font-weight: 900 !important;
+  line-height: .95 !important;
+  letter-spacing: .01em !important;
+  text-transform: uppercase;
+
+  text-shadow:
+    2px 2px 0 rgba(70, 39, 29, .4);
+}
+
+/* เทปกาวสีฟ้า */
+html[data-theme="dark"] body:has(.how-it-works) .tag-paper::before {
+  content: "" !important;
+  display: block !important;
+
+  position: absolute;
+  z-index: 4;
+  top: -17px;
+  left: 45px;
+
+  width: 105px;
+  height: 29px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(144, 176, 192, .88) 0 8px,
+      rgba(128, 160, 178, .9) 8px 10px
+    );
+
+  opacity: .9;
+  transform: rotate(-8deg);
+
+  clip-path:
+    polygon(2% 8%, 98% 0, 95% 91%, 4% 100%);
+
+  box-shadow:
+    0 3px 7px rgba(20, 25, 28, .18);
+}
+
+/* คำอธิบายใต้หัวข้อ */
+html[data-theme="dark"] body:has(.how-it-works) .heading-line p {
+  color: #ead7bd !important;
+  font-size: 17px;
+  font-style: italic;
+  letter-spacing: .02em;
+}
+
+/* แท็บ */
+html[data-theme="dark"] body:has(.how-it-works) .pill-tabs {
+  justify-content: center;
+  gap: 14px;
+  margin: 0 auto 24px !important;
+}
+
+html[data-theme="dark"] body:has(.how-it-works) .pill-tabs .pill {
+  min-width: 165px;
+  padding: 12px 23px;
+
+  color: #f1dfc4;
+
+  background:
+    rgba(41, 25, 21, .62);
+
+  border:
+    1.5px solid rgba(242, 222, 191, .72);
+
+  border-radius: 999px;
+
+  font-family:
+    "Arial Narrow",
+    Arial,
+    sans-serif;
+
+  font-weight: 800;
+  letter-spacing: .01em;
+
+  backdrop-filter: blur(5px);
+  transition: .2s ease;
+}
+
+html[data-theme="dark"] body:has(.how-it-works) .pill-tabs .pill:hover {
+  background:
+    rgba(87, 52, 42, .84);
+
+  transform: translateY(-1px);
+}
+
+html[data-theme="dark"] body:has(.how-it-works) .pill-tabs .pill.active {
+  color: #fff3dd;
+
+  background:
+    linear-gradient(
+      180deg,
+      #b77a4f,
+      #9c623d
+    ) !important;
+
+  border-color: #c98b5d !important;
+
+  box-shadow:
+    0 4px 0 rgba(68, 36, 26, .48);
+}
+
+/* กล่องสถานะกระดาษครีม */
+html[data-theme="dark"] body:has(.how-it-works) .empty {
+  position: relative;
+
+  width: min(1190px, 100%);
+  min-height: 270px;
+
+  margin: 0 auto 28px;
+  padding: 48px 34px 38px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  overflow: visible;
+
+  color: #2d1b17 !important;
+
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(91,57,43,.035) 0 1px,
+      transparent 2px
+    ),
+    linear-gradient(
+      120deg,
+      #f7e8cc,
+      #eddbbc 55%,
+      #f7e7ca
+    ) !important;
+
+  background-size:
+    15px 15px,
+    100% 100% !important;
+
+  border:
+    2px solid #4b3028 !important;
+
+  border-radius:
+    2px !important;
+
+  outline:
+    12px solid rgba(245, 226, 195, .95);
+
+  box-shadow:
+    0 15px 28px rgba(27, 14, 12, .3);
+
+  clip-path: polygon(
+    0 3%, 4% 1%, 9% 3%, 14% 1%,
+    20% 3%, 27% 1%, 34% 3%, 42% 1%,
+    49% 3%, 57% 1%, 65% 3%, 73% 1%,
+    81% 3%, 89% 1%, 96% 3%, 100% 1%,
+    99% 97%, 94% 99%, 87% 97%, 80% 99%,
+    72% 97%, 64% 99%, 56% 97%, 48% 99%,
+    40% 97%, 32% 99%, 24% 97%, 16% 99%,
+    8% 97%, 1% 99%
+  );
+}
+
+html[data-theme="dark"] body:has(.how-it-works) .empty h3 {
+  margin-top: 15px;
+
+  color: #2b1915 !important;
+
+  font-family:
+    "Arial Narrow",
+    Arial,
+    sans-serif !important;
+
+  font-size:
+    clamp(30px, 3.2vw, 48px) !important;
+
+  font-style: italic;
+  font-weight: 900 !important;
+}
+
+html[data-theme="dark"] body:has(.how-it-works) .empty p {
+  color: #4f342a !important;
+  font-size: 16px !important;
+  font-style: italic;
+}
+
+/* กระดุมหมุน */
+html[data-theme="dark"] body:has(.how-it-works) .empty-button {
+  width: 78px !important;
+  height: 78px !important;
+
+  border:
+    7px double #b89565 !important;
+
+  border-radius:
+    50% !important;
+
+  background-color:
+    #ead5a9 !important;
+
+  background-image:
+    radial-gradient(
+      circle at 35% 35%,
+      #56392d 0 5px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle at 65% 35%,
+      #56392d 0 5px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle at 35% 65%,
+      #56392d 0 5px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle at 65% 65%,
+      #56392d 0 5px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle at 35% 25%,
+      rgba(255,255,255,.8),
+      transparent 36%
+    ) !important;
+
+  box-shadow:
+    inset -5px -7px 10px rgba(102, 67, 45, .24),
+    inset 5px 5px 9px rgba(255,255,255,.62),
+    0 6px 10px rgba(61, 35, 25, .25) !important;
+
+  animation:
+    borrowingButtonSpin 8s linear infinite;
+
+  transform-origin: center;
+}
+
+/* เมื่อนำเมาส์ไปชี้ กระดุมจะหมุนเร็วขึ้น */
+html[data-theme="dark"] body:has(.how-it-works) .empty:hover .empty-button {
+  animation-duration: 2.8s;
+}
+
+/* กล่อง How borrowing works */
+html[data-theme="dark"] body:has(.how-it-works) .how-it-works {
+  width: min(1190px, 100%);
+  margin: 28px auto 70px;
+
+  color: #f2dfc3;
+
+  background:
+    rgba(40, 24, 20, .62);
+
+  border:
+    1.5px solid rgba(238, 216, 184, .56);
+
+  border-radius:
+    14px;
+
+  backdrop-filter: blur(5px);
+}
+
+html[data-theme="dark"] body:has(.how-it-works) .how-it-works summary {
+  padding: 15px 20px;
+
+  font-family:
+    "Arial Narrow",
+    Arial,
+    sans-serif;
+
+  font-size: 16px;
+  font-weight: 800;
+}
+
+html[data-theme="dark"] body:has(.how-it-works) .how-it-works p {
+  padding: 0 20px 18px;
+  color: #d9c3a7;
+}
+
+/* ผู้ใช้ที่ปิด animation */
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="dark"] body:has(.how-it-works) .empty-button {
+    animation: none;
+  }
+}
+
+/* มือถือ */
+@media (max-width: 700px) {
+  html[data-theme="dark"] body:has(.how-it-works) {
+    background-size:
+      auto 100vh,
+      100% 100% !important;
+  }
+
+  html[data-theme="dark"] body:has(.how-it-works) .tag-paper {
+    padding:
+      18px 54px 20px;
+
+    font-size:
+      clamp(31px, 10vw, 49px) !important;
+  }
+
+  html[data-theme="dark"] body:has(.how-it-works) .tag-paper::before {
+    left: 18px;
+    width: 72px;
+  }
+
+  html[data-theme="dark"] body:has(.how-it-works) .pill-tabs {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+
+  html[data-theme="dark"] body:has(.how-it-works) .pill-tabs .pill {
+    min-width: max-content;
+  }
+
+  html[data-theme="dark"] body:has(.how-it-works) .empty {
+    min-height: 240px;
+    padding-inline: 18px;
+  }
+}
+
+/* ===== FIX BORROWING TITLE + STEPS ===== */
+
+/* บังคับหัวข้อให้อยู่บรรทัดเดียวและเรียวขึ้น */
+html[data-theme="dark"] body:has(.how-it-works) .tag-paper {
+  width: min(1120px, 100%) !important;
+  padding: 24px 125px 27px !important;
+
+  font-family:
+    Impact,
+    Haettenschweiler,
+    "Arial Narrow Bold",
+    sans-serif !important;
+
+  font-size: clamp(42px, 4vw, 64px) !important;
+  font-stretch: condensed;
+  letter-spacing: -1.5px !important;
+  line-height: .9 !important;
+  white-space: nowrap !important;
+}
+
+/* กล่องรวม 1–2–3 */
+html[data-theme="dark"] body:has(.how-it-works) .borrow-steps {
+  width: min(1190px, 100%);
+  margin: 35px auto 28px;
+
+  display: grid;
+  grid-template-columns:
+    minmax(220px, 1fr)
+    45px
+    minmax(220px, 1fr)
+    45px
+    minmax(220px, 1fr);
+
+  align-items: center;
+  gap: 12px;
+}
+
+/* กระดาษฉีกแต่ละใบ */
+html[data-theme="dark"] body:has(.how-it-works) .borrow-step {
+  position: relative;
+  min-height: 105px;
+  padding: 17px 25px;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  overflow: hidden;
+
+  color: #2e1b17;
+
+  background-color: #f1dfbf;
+  background-image:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(79, 46, 35, .08) 0 1px,
+      transparent 2px
+    ),
+    linear-gradient(
+      115deg,
+      #f7e8cc,
+      #ead4ae
+    );
+
+  background-size:
+    14px 14px,
+    100% 100%;
+
+  box-shadow:
+    0 10px 20px rgba(24, 12, 10, .26);
+
+  clip-path: polygon(
+    0 8%, 8% 2%, 16% 7%, 25% 1%,
+    34% 6%, 45% 2%, 55% 7%, 66% 1%,
+    77% 6%, 88% 2%, 100% 8%,
+    98% 92%, 89% 98%, 78% 93%, 67% 99%,
+    55% 94%, 44% 99%, 32% 93%, 20% 98%,
+    10% 93%, 1% 98%
+  );
+}
+
+/* เลข 1–2–3 */
+html[data-theme="dark"] body:has(.how-it-works) .borrow-step strong {
+  position: relative;
+  z-index: 2;
+
+  color: #a7623e;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 65px;
+  font-style: italic;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* คำ Request Approve Return */
+html[data-theme="dark"] body:has(.how-it-works) .borrow-step span {
+  position: relative;
+  z-index: 2;
+
+  color: #2f1c17;
+
+  font-family:
+    Impact,
+    Haettenschweiler,
+    "Arial Narrow Bold",
+    sans-serif;
+
+  font-size: clamp(27px, 2.3vw, 39px);
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -.5px;
+}
+
+/* รูปคอลลาจด้านขวาของการ์ด */
+html[data-theme="dark"] body:has(.how-it-works) .borrow-step::after {
+  content: "";
+  position: absolute;
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 39%;
+
+  opacity: .82;
+
+  background:
+    repeating-radial-gradient(
+      circle at 75% 40%,
+      rgba(48, 29, 24, .65) 0 2px,
+      transparent 3px 8px
+    );
+
+  clip-path:
+    polygon(28% 0, 100% 0, 100% 100%, 5% 100%, 20% 70%, 8% 42%);
+}
+
+/* การ์ด 1 ให้เหมือนราวแขวนเสื้อ */
+html[data-theme="dark"] body:has(.how-it-works) .step-request::after {
+  background:
+    linear-gradient(
+      108deg,
+      transparent 0 27%,
+      rgba(49, 31, 26, .9) 28% 31%,
+      transparent 32% 43%,
+      rgba(49, 31, 26, .82) 44% 48%,
+      transparent 49% 60%,
+      rgba(49, 31, 26, .72) 61% 66%,
+      transparent 67%
+    ),
+    repeating-radial-gradient(
+      circle,
+      rgba(54, 34, 28, .5) 0 2px,
+      transparent 3px 8px
+    );
+}
+
+/* การ์ด 2 มีดาวแหลม */
+html[data-theme="dark"] body:has(.how-it-works) .step-approve::before {
+  content: "✦";
+
+  position: absolute;
+  z-index: 3;
+  right: 28px;
+  top: 8px;
+
+  color: #9d5d3c;
+
+  font-family: Georgia, serif;
+  font-size: 76px;
+  line-height: 1;
+
+  transform: scaleX(.65);
+
+  text-shadow:
+    1px 0 #f7dfba,
+    -1px 0 #5e3427,
+    0 5px 8px rgba(60, 31, 23, .28);
+}
+
+/* การ์ด 3 เป็นลายเข็มขัด */
+html[data-theme="dark"] body:has(.how-it-works) .step-return::after {
+  width: 46%;
+
+  background:
+    linear-gradient(
+      155deg,
+      transparent 0 23%,
+      #39241f 24% 58%,
+      #6f4939 59% 66%,
+      #2a1916 67% 83%,
+      transparent 84%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 20px,
+      rgba(240, 213, 174, .6) 21px 24px
+    );
+}
+
+/* เส้นเชื่อม */
+html[data-theme="dark"] body:has(.how-it-works) .step-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #f0d9b7 20%,
+      #f0d9b7 80%,
+      transparent
+    );
+}
+
+/* ขยับ How borrowing works ให้ชิดกับการ์ด */
+html[data-theme="dark"] body:has(.how-it-works) .how-it-works {
+  margin-top: 18px !important;
+}
+
+/* มือถือ */
+@media (max-width: 800px) {
+  html[data-theme="dark"] body:has(.how-it-works) .tag-paper {
+    padding: 20px 58px !important;
+    font-size: clamp(27px, 8.5vw, 45px) !important;
+    letter-spacing: -1px !important;
+  }
+
+  html[data-theme="dark"] body:has(.how-it-works) .borrow-steps {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  html[data-theme="dark"] body:has(.how-it-works) .step-line {
+    width: 2px;
+    height: 22px;
+    margin: auto;
+  }
+}
+
+/* ===== USE REAL BORROWING COLLAGE IMAGES ===== */
+
+/* เปลี่ยนหัวข้อเก่าเป็นรูปกระดาษฉีกจริง */
+html[data-theme="dark"] body:has(.how-it-works) .tag-paper {
+  display: block !important;
+
+  width: min(1200px, 100%) !important;
+  height: clamp(150px, 15vw, 225px) !important;
+
+  margin: 0 auto 2px !important;
+  padding: 0 !important;
+
+  color: transparent !important;
+  font-size: 0 !important;
+  text-shadow: none !important;
+
+  background-color: transparent !important;
+  background-image:
+    url("/assets/borrowing-title-banner.png") !important;
+
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: contain !important;
+
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  clip-path: none !important;
+}
+
+/* ปิดเทป CSS เพราะในรูปใหม่มีเทปแล้ว */
+html[data-theme="dark"] body:has(.how-it-works) .tag-paper::before,
+html[data-theme="dark"] body:has(.how-it-works) .tag-paper::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* ลดช่องว่างระหว่างหัวข้อกับคำอธิบาย */
+html[data-theme="dark"] body:has(.how-it-works) .heading-line {
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+}
+
+html[data-theme="dark"] body:has(.how-it-works) .heading-line > div {
+  width: min(1200px, 100%) !important;
+}
+
+html[data-theme="dark"] body:has(.how-it-works) .heading-line p {
+  margin-top: -10px !important;
+  color: #f1dcc0 !important;
+  font-size: 18px !important;
+}
+
+/* เตรียมพื้นที่สำหรับรูป 1–2–3 */
+html[data-theme="dark"] body:has(.how-it-works) .empty {
+  margin-bottom: 205px !important;
+  overflow: visible !important;
+}
+
+/* นำรูป 1–2–3 มาแสดงใต้กล่อง */
+html[data-theme="dark"] body:has(.how-it-works) .empty::after {
+  content: "" !important;
+  display: block !important;
+
+  position: absolute;
+  z-index: 5;
+
+  left: 50%;
+  bottom: -195px;
+
+  width: min(1210px, 96vw);
+  height: 175px;
+
+  transform: translateX(-50%);
+
+  background-image:
+    url("/assets/borrowing-steps.png");
+
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  pointer-events: none;
+}
+
+/* ถ้าเคยเพิ่ม 1–2–3 แบบ HTML ให้ซ่อนของเก่า */
+html[data-theme="dark"] body:has(.how-it-works) .borrow-steps {
+  display: none !important;
+}
+
+/* กล่อง How borrowing works */
+html[data-theme="dark"] body:has(.how-it-works) .how-it-works {
+  margin-top: 12px !important;
+}
+
+/* มือถือ */
+@media (max-width: 700px) {
+  html[data-theme="dark"] body:has(.how-it-works) .tag-paper {
+    width: 100% !important;
+    height: 125px !important;
+  }
+
+  html[data-theme="dark"] body:has(.how-it-works) .heading-line p {
+    margin-top: -5px !important;
+    font-size: 14px !important;
+  }
+
+  html[data-theme="dark"] body:has(.how-it-works) .empty {
+    margin-bottom: 135px !important;
+  }
+
+  html[data-theme="dark"] body:has(.how-it-works) .empty::after {
+    bottom: -130px;
+    width: 100%;
+    height: 115px;
+  }
+}
+
+/* ===== RESIZE AND CROP BORROWING STEPS ===== */
+
+html[data-theme="dark"] body:has(.how-it-works) .borrowing-steps-image {
+  display: block !important;
+
+  /* ทำให้เล็กลง */
+  width: min(980px, 88%) !important;
+  height: 135px !important;
+
+  /* ตัดพื้นที่โปร่งใสบน–ล่าง */
+  object-fit: cover !important;
+  object-position: center center !important;
+
+  /* ลดระยะห่าง */
+  margin: 8px auto 14px !important;
+
+  filter:
+    drop-shadow(0 8px 10px rgba(31, 15, 12, .22));
+}
+
+/* ลดช่องว่างใต้กล่องครีม */
+html[data-theme="dark"] body:has(.how-it-works) .empty {
+  margin-bottom: 12px !important;
+}
+
+/* ดึง How borrowing works ขึ้นมา */
+html[data-theme="dark"] body:has(.how-it-works) .how-it-works {
+  margin-top: 4px !important;
+  margin-bottom: 45px !important;
+}
+
+@media (max-width: 700px) {
+  html[data-theme="dark"] body:has(.how-it-works) .borrowing-steps-image {
+    width: 96% !important;
+    height: 85px !important;
+    margin: 5px auto 10px !important;
+  }
+}
+
+/* ===== INNER BORDER FOR EMPTY PAPER ===== */
+
+html[data-theme="dark"] body:has(.how-it-works) .empty {
+  position: relative !important;
+
+  /* ขอบกระดาษครีมซ้อนด้านนอก */
+  outline:
+    10px solid rgba(242, 222, 190, .96) !important;
+
+  filter:
+    drop-shadow(0 12px 15px rgba(35, 17, 13, .22));
+}
+
+/* เส้นกรอบด้านในเหมือนภาพแรก */
+html[data-theme="dark"] body:has(.how-it-works) .empty::before {
+  content: "" !important;
+  display: block !important;
+
+  position: absolute;
+  z-index: 1;
+
+  top: 14px;
+  right: 16px;
+  bottom: 14px;
+  left: 16px;
+
+  border:
+    2px solid #4a2c23;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 244, 220, .35);
+
+  pointer-events: none;
+}
+
+/* ให้กระดุมและข้อความอยู่เหนือเส้นกรอบ */
+html[data-theme="dark"] body:has(.how-it-works) .empty > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* มือถือให้กรอบไม่ชิดเกินไป */
+@media (max-width: 700px) {
+  html[data-theme="dark"] body:has(.how-it-works) .empty::before {
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+
+    border-width: 1.5px;
+  }
+}
