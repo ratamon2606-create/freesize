@@ -1,5 +1,4 @@
 /* WardrobeShare — vintage mocha (brown) */
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@400;600;700;800;900&display=swap");
 :root{--ink:#4f392e;--muted:#866d5d;--cocoa:#8e664a;--cocoa-dark:#775039;--soft:#e9d7c6;--cream:#fcf8f2;--paper:#fff9f0;--line:#e3d5c5;--sage:#f6e4d1;--gingham-base:#eee1d1;--shadow:0 7px 22px #61452e1c}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;font-family:"Trebuchet MS",Arial,sans-serif;color:var(--ink)}
