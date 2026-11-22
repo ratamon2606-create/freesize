@@ -5605,3 +5605,286 @@ html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-info .date 
 html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-info .btn {
   color: #2e211a;
 }
+
+/* ===== FRIEND OUTFITS EMPTY BOX: MATCH FRIEND WARDROBE CARDS ===== */
+
+html[data-theme="dark"] body:has(.profile-hero) .empty {
+  color: #5e4b3e;
+  background: linear-gradient(
+    180deg,
+    #dfcfb8 0%,
+    #d1b99a 100%
+  );
+  border: 1px dashed #aa8e70;
+  box-shadow: 0 7px 17px rgba(12, 7, 5, 0.25);
+}
+
+html[data-theme="dark"] body:has(.profile-hero) .empty h3 {
+  color: #2e211a;
+}
+
+/* ข้อความใต้หัวข้อ empty state อยู่กึ่งกลาง (inline style ตั้ง margin ซ้ายขวาเป็น 0) */
+.empty p {
+  margin-inline: auto !important;
+}
+
+/* ===== MY WARDROBE: 4 CARDS PER ROW ===== */
+
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+.closet-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+@media (max-width: 1100px) {
+  html[data-theme="dark"]
+  body:has(input[placeholder="Search your clothes..."])
+  .closet-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 800px) {
+  html[data-theme="dark"]
+  body:has(input[placeholder="Search your clothes..."])
+  .closet-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* ===== LOGIN: BROWN BACKGROUND + CREAM SIGN-IN PANEL ===== */
+
+html[data-theme="dark"] body:has(.auth-wrap) {
+  background:
+    radial-gradient(
+      circle at 16% 18%,
+      rgba(205, 148, 111, 0.18),
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at 84% 30%,
+      rgba(154, 93, 67, 0.2),
+      transparent 35%
+    ),
+    linear-gradient(
+      180deg,
+      #98715f 0%,
+      #80584b 36%,
+      #5d3931 67%,
+      #2b1815 100%
+    ) !important;
+
+  background-attachment: fixed !important;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box {
+  color: #291914;
+  background: linear-gradient(145deg, #f4e3c9, #dfc29d);
+  border: 2px solid rgba(255, 231, 198, 0.85);
+  box-shadow:
+    0 12px 25px rgba(25, 12, 9, 0.3),
+    inset 0 1px rgba(255, 255, 255, 0.55);
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box :is(h1, strong) {
+  color: #261712;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box :is(.muted, .switch, .field label) {
+  color: #6b4d3d;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .switch button {
+  color: #9a5a2c;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .input {
+  color: #2d1a14;
+  background: rgba(255, 248, 238, 0.75);
+  border-color: #b89a7c;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .input::placeholder {
+  color: #8f735f;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .pw-toggle {
+  color: #6b4d3d;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .btn.primary {
+  color: #fff8ef;
+  background: #b86f36;
+  border-color: #b86f36;
+  box-shadow: 0 3px 0 #7a4422;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .btn.secondary {
+  color: #2d1a14;
+  background: rgba(248, 229, 203, 0.68);
+  border-color: #9c7457;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .note {
+  color: #4a3228;
+  background: rgba(255, 248, 238, 0.55);
+  border-color: #c79a6f;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .note code {
+  color: #4a2a1c;
+  background: rgba(184, 111, 54, 0.16);
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .divider {
+  background: rgba(107, 77, 61, 0.25);
+}
+
+/* ===== POPUPS: CREAM LIKE THE CARDS ===== */
+
+html[data-theme="dark"] .modal-layer .modal {
+  color: #291914;
+  background: linear-gradient(145deg, #f4e3c9, #dfc29d);
+  border: 2px solid rgba(255, 231, 198, 0.85);
+  box-shadow: 0 30px 80px rgba(25, 12, 9, 0.45);
+}
+
+html[data-theme="dark"] .modal-layer .modal :is(.modal-title, h2, h3, strong, label) {
+  color: #261712;
+}
+
+html[data-theme="dark"] .modal-layer .modal :is(.muted, p, small, .field small) {
+  color: #6b4d3d;
+}
+
+html[data-theme="dark"] .modal-layer .modal .modal-close {
+  color: #4a3228;
+  background: rgba(112, 80, 61, 0.14);
+}
+
+/* กล่องรูปในป๊อปอัป */
+html[data-theme="dark"] .modal-layer .modal :is(.paper, .preview, .upload-zone, .upload-preview, .add-photo) {
+  background: linear-gradient(145deg, #d4c1aa, #bba58c);
+  border-color: rgba(86, 55, 40, 0.18);
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .modal-layer .modal :is(.input, textarea, select) {
+  color: #2d1a14;
+  background: rgba(255, 248, 238, 0.75);
+  border-color: #b89a7c;
+}
+
+html[data-theme="dark"] .modal-layer .modal :is(.input, textarea)::placeholder {
+  color: #8f735f;
+}
+
+html[data-theme="dark"] .modal-layer .modal .btn.primary,
+html[data-theme="dark"] .modal-layer .modal .btn.soft {
+  color: #fff8ef;
+  background: #b86f36;
+  border-color: #b86f36;
+}
+
+html[data-theme="dark"] .modal-layer .modal .btn.secondary {
+  color: #2d1a14;
+  background: rgba(248, 229, 203, 0.68);
+  border-color: #9c7457;
+}
+
+html[data-theme="dark"] .modal-layer .modal .btn.danger {
+  color: #9b2f25;
+  background: rgba(248, 229, 203, 0.68);
+  border-color: #b3554b;
+}
+
+html[data-theme="dark"] .modal-layer .modal .divider {
+  background: rgba(107, 77, 61, 0.25);
+}
+
+/* ปุ่มหมวดหมู่ใน Add/Edit Clothing */
+html[data-theme="dark"] .modal-layer .modal .chip span {
+  color: #2d1a14;
+  background: rgba(248, 229, 203, 0.68);
+  border-color: #b89a7c;
+}
+
+html[data-theme="dark"] .modal-layer .modal .chip input:checked + span {
+  color: #fff8ef;
+  background: #b86f36;
+  border-color: #b86f36;
+}
+
+html[data-theme="dark"] .modal-layer .modal :is(.more-details summary, .add-photo-empty strong) {
+  color: #8a4f26;
+}
+
+html[data-theme="dark"] .modal-layer .modal :is(.add-hint, .add-photo-empty span) {
+  color: #6b4d3d;
+}
+
+/* รายการชิ้นเสื้อผ้าและกล่องข้อความในป๊อปอัป */
+html[data-theme="dark"] .modal-layer .modal :is(.feed-row, .note) {
+  color: #291914;
+  background: rgba(255, 248, 238, 0.6);
+  border-color: #c4a585;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .modal-layer .modal .feed-row:hover {
+  background: rgba(255, 248, 238, 0.85);
+}
+
+html[data-theme="dark"] .modal-layer .modal .feed-row .content p {
+  color: #6b4d3d;
+}
+
+/* ===== CONFIRM POPUPS: CREAM LIKE THE CARDS ===== */
+
+html[data-theme="dark"] .confirm-layer .confirm-box {
+  background: linear-gradient(145deg, #f4e3c9, #dfc29d);
+  border: 2px solid rgba(255, 231, 198, 0.85);
+  box-shadow: 0 30px 80px rgba(25, 12, 9, 0.45);
+}
+
+html[data-theme="dark"] .confirm-layer .confirm-box h2 {
+  color: #261712;
+}
+
+html[data-theme="dark"] .confirm-layer .confirm-box p {
+  color: #6b4d3d;
+}
+
+html[data-theme="dark"] .confirm-layer .confirm-icon {
+  color: #8a4f26;
+  background: rgba(184, 111, 54, 0.16);
+}
+
+html[data-theme="dark"] .confirm-layer .confirm-icon.danger {
+  color: #9b2f25;
+  background: rgba(179, 85, 75, 0.16);
+}
+
+html[data-theme="dark"] .confirm-layer .confirm-actions .btn.secondary {
+  color: #2d1a14;
+  background: rgba(248, 229, 203, 0.68);
+  border-color: #9c7457;
+}
+
+html[data-theme="dark"] .confirm-layer .confirm-actions .btn.primary {
+  color: #fff8ef;
+  background: #b86f36;
+  border-color: #b86f36;
+  box-shadow: 0 3px 0 #7a4422;
+}
+
+/* ===== MY WARDROBE: KEEP CONFIRM POPUP CENTERED ===== */
+
+/* กฎ "body > *" ของหน้า My Wardrobe ทำให้ป๊อปอัปยืนยันเป็น position: relative
+   แล้วไปโผล่ท้ายหน้า จึงตั้งกลับเป็น fixed ให้เหมือนหน้า OOTD */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+> .confirm-layer {
+  position: fixed;
+  z-index: 200;
+}
