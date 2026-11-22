@@ -324,7 +324,105 @@ function matches(item){return(S.filter==='All'||item.category===S.filter)&&(!S.s
 function pageWardrobe(){let items=S.wardrobe.filter(matches);return `<div class="heading-line"><div><h1 class="tag-paper wardrobe-title-image"><img src="/assets/wardrobe-title-distressed.png" alt="My Wardrobe"></h1><p>My little closet · ${S.wardrobe.length} pieces</p></div><div class="heading-right">${btn(ico('plus')+' Add Clothing','openAdd','','primary','big')}</div></div><div class="page-toolbar"><div class="search"><span>${ico('search')}</span><input class="input" id="wardrobe-search" placeholder="Search your clothes..." value="${esc(S.search)}"></div>${categoryTabs(S.wardrobe)}</div>${items.length?`<div class="closet-grid">${items.map(item=>clothingCard(item,false)).join('')}</div>`:empty('No clothes found','Add your first piece or try another filter.','openAdd','Add Clothing')}`}
 function clothingCard(i,friend=false){return `<div class="clothing-card" data-action="${friend?'friendItem':'openClothing'}" data-id="${esc(i.id)}" role="button" tabindex="0" aria-label="Open ${esc(i.name)}"><div class="photo"><img loading="lazy" decoding="async" src="${esc(urlItem(i))}" alt="${esc(i.name)}"><span class="card-button" aria-hidden="true"></span></div><div class="clothing-title">${esc(i.name)}</div><div class="meta"><span>${esc(i.color||i.category)}</span><span>${esc(i.category)}</span></div>${badge(i.state,i.holder)}<div class="mini-actions">${friend?`${btn(ico('plus')+' OOTD','addFriendToOOTD',i.id,'soft','tiny')}${btn('Borrow','requestBorrow',i.id,'secondary','tiny')}`:`${btn(ico('plus')+' OOTD','addOwnToOOTD',i.id,'soft','tiny')}${btn(ico('edit')+' Edit','editClothing',i.id,'secondary','tiny')}${btn(ico('trash')+' Delete','deleteClothing',i.id,'secondary','tiny')}`}</div></div>`}
 const empty=(title,desc,action,label)=>`<div class="empty"><span class="empty-button" aria-hidden="true"></span><h3>${title}</h3><p style="margin:10px 0 16px">${desc}</p>${action?btn(label,action,'','primary'):''}</div>`;
-function pageOOTD(){let found=S.outfits.filter(o=>o.title.toLowerCase().includes(S.search.toLowerCase()));return `<div class="heading-line gallery-head"><div><h1 class="tag-paper">My OOTD</h1><p>Your saved outfit combinations · ${S.outfits.length} slots</p></div><div class="heading-right">${btn(ico('plus')+' New OOTD','newOOTD','','primary','big')}</div></div><div class="page-toolbar"><div class="search"><span>${ico('search')}</span><input id="ootd-search" class="input" placeholder="Search your OOTD..." value="${esc(S.search)}"></div><span class="badge pink">Outfit collection</span></div>${found.length?`<div class="outfit-grid">${found.map(o=>outfitCard(o)).join('')}</div>`:empty('Your OOTD gallery is waiting','Drag clothes together and save your first look.','newOOTD','Create OOTD')}`}
+function pageOOTD() {
+  let found = S.outfits.filter(o =>
+    o.title.toLowerCase().includes(S.search.toLowerCase())
+  );
+
+  return `
+    <div class="ootd-page">
+
+      <div class="ootd-decor" aria-hidden="true">
+        <span class="ootd-star star-1">☆</span>
+        <span class="ootd-star star-2">☆</span>
+        <span class="ootd-star star-3">☆</span>
+        <span class="ootd-star star-4">☆</span>
+        <span class="ootd-star star-5">☆</span>
+        <span class="ootd-star star-6">☆</span>
+        <span class="ootd-star star-7">☆</span>
+        <span class="ootd-star star-8">☆</span>
+      </div>
+
+      <div class="heading-line gallery-head ootd-heading">
+        <div>
+          <h1 class="tag-paper ootd-title-box">
+            <span class="ootd-blue-tape" aria-hidden="true"></span>
+
+            <img
+              class="ootd-title-image"
+              src="/assets/ootd-title-distressed.png"
+              alt="My OOTD"
+            >
+
+            <span class="ootd-title-button" aria-hidden="true">
+              ••
+            </span>
+          </h1>
+
+          <p class="ootd-subtitle">
+            Your saved outfit combinations · ${S.outfits.length} slots
+          </p>
+        </div>
+
+        <div class="heading-right">
+          ${btn(
+            ico('plus') + ' New OOTD',
+            'newOOTD',
+            '',
+            'primary',
+            'big'
+          )}
+        </div>
+      </div>
+
+      <div class="page-toolbar ootd-toolbar">
+        <div class="search">
+          <span>${ico('search')}</span>
+          <input
+            id="ootd-search"
+            class="input"
+            placeholder="Search your OOTD..."
+            value="${esc(S.search)}"
+          >
+        </div>
+
+        <span class="badge pink">Outfit collection</span>
+      </div>
+
+      ${
+        found.length
+          ? `
+            <div class="outfit-grid ootd-swag-grid">
+              ${found.map((o, index) =>
+                `<div class="ootd-card-wrap" data-look="${String(index + 1).padStart(2, '0')}">
+                  ${outfitCard(o)}
+                </div>`
+              ).join('')}
+            </div>
+          `
+          : `
+            <div class="ootd-empty-wrap">
+            <div class="ootd-empty-wrap">
+  <img
+    class="ootd-empty-hanger"
+    src="/assets/ootd-hanger-button.png"
+    alt=""
+    aria-hidden="true"
+  >
+
+  ${empty(
+                'Your OOTD gallery is waiting',
+                'Drag clothes together and save your first look.',
+                'newOOTD',
+                'Create OOTD'
+              )}
+            </div>
+          `
+      }
+
+    </div>
+  `;
+}
 function libraryItems(){return S.studioTab==='mine'?S.wardrobe:S.studioFriendItems}
 function pageStudio(){let e=S.editor;if(!e)return empty('Loading editor…','');let items=libraryItems().filter(i=>(S.filter==='All'||i.category===S.filter)&&(!S.search||i.name.toLowerCase().includes(S.search.toLowerCase())));let selected=e.items[e.selected];let detail=selected?[...S.wardrobe,...S.studioFriendItems].find(i=>i.id===selected.item_id):null;
  return `<div class="heading-line"><div><h1 class="tag-paper">OOTD Studio</h1><p>Pick, layer, drag and arrange your pieces like fabric cutouts.</p></div><div class="heading-right" style="display:flex;gap:9px">${btn('← Gallery','goOOTD','','secondary')}${btn('↶ Undo','undoStudio','','secondary','studio-undo')}${btn(ico('save')+' Save OOTD','saveOOTD','','primary')}</div></div><div class="editor-layout"><aside class="editor-panel"><div class="pill-tabs" style="margin-bottom:12px">${btn('My Wardrobe','studioMine','',''+(S.studioTab==='mine'?'primary':'secondary'),'small')}${btn('Friends','studioFriends','',''+(S.studioTab==='friends'?'primary':'secondary'),'small')}</div>${S.studioTab==='friends'?`<select class="input" id="studio-friend" style="margin-bottom:10px"><option value="">Choose a friend...</option>${(S.friends?.friends||[]).map(f=>`<option value="${f.id}" ${S.studioFriendId===f.id?'selected':''}>${esc(f.display_name)}</option>`).join('')}</select>`:''}<div class="search" style="margin-bottom:10px">${ico('search')}<input id="library-search" class="input" placeholder="Search clothing..." value="${esc(S.search)}"></div><select class="input" id="library-category" style="margin-bottom:12px"><option>All</option>${[...new Set(libraryItems().map(i=>i.category))].map(c=>`<option ${S.filter===c?'selected':''}>${esc(c)}</option>`).join('')}</select><div class="editor-library"><div class="library-grid">${items.map(i=>`<button class="library-item" data-action="putItem" data-id="${esc(i.id)}" title="Add ${esc(i.name)} to canvas"><img loading="lazy" decoding="async" src="${esc(urlItem(i))}"><span>${esc(i.name)}</span></button>`).join('')}</div>${!items.length?`<p class="muted" style="padding:14px;font-size:12px">${S.studioTab==='friends'?'Choose a friend to add their pieces':'No matching clothes — add items in My Wardrobe, or clear your search'}</p>`:''}</div></aside><div class="editor-canvas-wrap"><div class="editor-canvas" id="editor-canvas">${e.items.map((item,index)=>{const i=[...S.wardrobe,...S.studioFriendItems].find(p=>p.id===item.item_id)||item;return item.image_path||i.image_path?`<div class="editor-object ${e.selected===index?'selected':''}" data-index="${index}" style="left:${item.x*100}%;top:${item.y*100}%;width:${item.w*100}%;z-index:${item.z}"><img draggable="false" src="${esc(item.image_path||i.image_path)}" alt="${esc(i.name||'Item')}">${e.selected===index?['nw','ne','sw','se'].map(c=>`<span class="handle ${c}" data-corner="${c}"></span>`).join(''):''}</div>`:''}).join('')}${!e.items.length?'<div style="position:absolute;inset:0;display:grid;place-content:center;text-align:center;color:#9a8574;pointer-events:none"><div style="font-family:Georgia;font-size:35px">Your blank canvas</div><div style="margin-top:10px;font-size:13px">Click clothes on the left to start styling</div></div>':''}</div><div class="editor-caption">Drag to move · Drag a corner or use the slider to resize · Select an item to change its layer · No mannequin, no snapping</div></div><aside class="editor-panel"><h3>Outfit Details</h3><div class="field" style="margin-bottom:16px"><label>OOTD Title *</label><input id="editor-title" class="input" maxlength="80" placeholder="e.g. Café Day" value="${esc(e.title)}"></div><div class="divider"></div><h3>Selected Item</h3>${selected?`<img loading="lazy" decoding="async" class="inspector-img" src="${esc(detail?.image_path||selected.image_path||'')}" alt=""><strong>${esc(detail?.name||selected.name||'Item')}</strong><p style="font-size:12px;margin:8px 0 15px;color:#846b58">Owner: ${esc(detail?.owner||selected.owner_name||'Friend')}</p><div class="note" style="margin-bottom:15px">Outfit planning only — this does not borrow or transfer clothing.</div><div class="field"><label>Size: <span id="size-percent">${Math.round(selected.w*100)}%</span></label><input type="range" class="range" id="item-size" min="8" max="95" value="${Math.round(selected.w*100)}"></div><div class="divider"></div><label class="muted" style="font-size:12px">Layer order</label><div class="inspector-buttons" style="margin-top:9px">${btn(ico('up')+' Forward','layerForward','','secondary','small')}${btn(ico('down')+' Backward','layerBackward','','secondary','small')}</div><div class="divider"></div>${btn(ico('trash')+' Remove from canvas','removeCanvas','','danger')}`:'<p class="muted" style="font-size:13px;line-height:1.7">Click an item on the canvas to see its name, owner, and editing controls.</p>'}<div class="divider"></div><p class="muted" style="font-size:12px">${e.items.length} pieces in current outfit</p></aside></div>`}
