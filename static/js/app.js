@@ -845,6 +845,23 @@ document.addEventListener('pointerup',endSheet);document.addEventListener('point
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches?.('[data-action][role="button"]')&&!e.repeat){e.preventDefault();e.target.click()}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&S.modal){e.preventDefault();run(()=>doAction('closeModal'))}});
 document.addEventListener('touchstart',()=>{},{passive:true}); // enables :active press states on iOS
+// Borrowing empty-state button: one shared angle so re-renders continue the spin
+// instead of restarting at 0deg; hover eases speed up/down instead of jumping.
+(function spinBorrowingButtons(){
+ const IDLE=360/8,HOVER=360/2.8;let angle=0,speed=IDLE,last=performance.now();
+ const frame=now=>{
+  const dt=Math.min((now-last)/1000,.1);last=now;
+  const buttons=document.querySelectorAll('body:has(.how-it-works) .empty-button');
+  if(buttons.length&&!reduceMotion()){
+   const hovered=[...buttons].some(b=>b.closest('.empty')?.matches(':hover'));
+   speed+=((hovered?HOVER:IDLE)-speed)*Math.min(dt*3,1);
+   angle=(angle+speed*dt)%360;
+   buttons.forEach(b=>{b.style.transform=`rotate(${angle}deg)`});
+  }
+  requestAnimationFrame(frame);
+ };
+ requestAnimationFrame(frame);
+})();
 addEventListener('scroll',()=>document.documentElement.classList.toggle('scrolled',scrollY>4),{passive:true});
 window.addEventListener('popstate',async()=>{
  if(studioDirty()){
