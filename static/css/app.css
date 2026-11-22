@@ -6270,3 +6270,20 @@ html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothi
   border-color: var(--pop-accent);
   box-shadow: 0 0 0 3px rgba(196, 116, 61, 0.25);
 }
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .chip span {
+  color: #ecd3ba;
+  background: #3a261d;
+  border-color: var(--pop-line);
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .chip:hover span {
+  background: #46302500;
+  background-color: #462f25;
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .chip input:checked + span {
+  color: #fff6ec;
+  background: var(--pop-accent);
+  border-color: var(--pop-accent);
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .more-details summary {
+  color: #e7a877;
+}
