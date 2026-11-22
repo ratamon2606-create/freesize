@@ -6247,3 +6247,14 @@ html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothi
 html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .modal-close:hover {
   background: rgba(255, 225, 195, 0.16);
 }
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.add-photo, .upload-preview) {
+  background: linear-gradient(150deg, #3d281f, #2f1e17);
+  border-color: #8a5d45;
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .add-photo:hover {
+  background: linear-gradient(150deg, #47302500, #3a261d), #3a261d;
+  border-color: var(--pop-accent);
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.add-photo-empty strong, .add-photo-empty svg) {
+  color: #e7a877;
+}
