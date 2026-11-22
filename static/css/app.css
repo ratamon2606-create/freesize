@@ -6222,3 +6222,28 @@ html[data-theme="dark"] body:has(.dash-hero) .section:has(.rail) .section-head h
       0 0 !important;
   }
 }
+
+/* ===== ADD / EDIT CLOTHING POPUP: น้ำตาลเข้ม ไม่สว่างเกิน ===== */
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) {
+  --pop-text: #f4e2cc;
+  --pop-soft: #c9a88f;
+  --pop-line: #6b4636;
+  --pop-accent: #c4743d;
+  color: var(--pop-text);
+  background: linear-gradient(160deg, #3b241b 0%, #2c1a14 55%, #24150f 100%);
+  border: 1px solid #7a5040;
+  box-shadow: 0 30px 80px rgba(10, 4, 2, 0.6), inset 0 1px 0 rgba(255, 220, 190, 0.08);
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.modal-title, h2, h3, strong, label) {
+  color: var(--pop-text);
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.muted, p, small, .field small, .add-hint, .add-photo-empty span) {
+  color: var(--pop-soft);
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .modal-close {
+  color: var(--pop-text);
+  background: rgba(255, 225, 195, 0.08);
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .modal-close:hover {
+  background: rgba(255, 225, 195, 0.16);
+}
