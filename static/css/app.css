@@ -6132,3 +6132,4 @@ html[data-theme="dark"] body:has(.dash-hero) .dash-hero {
     radial-gradient(ellipse at 20% 30%, #6c3b2a 0%, transparent 60%),
     linear-gradient(100deg, #5a3122 0%, #5e3423 60%, #5f3423 100%) !important;
 }
+html[data-theme="dark"] body:has(.dash-hero) .dash-hero h1 { font-style: italic; }
