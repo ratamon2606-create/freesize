@@ -5970,10 +5970,10 @@ html[data-theme="dark"] body:has(.editor-layout)::after {
 /* ===== OOTD CARDS: SHORTER CARD HEIGHT ===== */
 
 .ootd-card-wrap .outfit-card .preview {
-  aspect-ratio: 1 / 0.82 !important;
+  aspect-ratio: 1 / 1 !important;
 }
 
 .ootd-card-wrap .outfit-card .preview .preview-cutout {
-  transform: scale(0.86);
+  transform: scale(0.97);
   transform-origin: top left;
 }
