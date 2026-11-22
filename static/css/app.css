@@ -5485,3 +5485,123 @@ html[data-theme="dark"] .friends-people-grid .friends-card .btn.secondary {
   border-color: #9c7457;
   font-weight: 800;
 }
+
+/* ===== FRIEND PROFILE: SAME BACKGROUND AS FRIENDS PAGE ===== */
+
+html[data-theme="dark"] body:has(.profile-hero) {
+  background:
+    radial-gradient(
+      circle at 16% 18%,
+      rgba(205, 148, 111, 0.18),
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at 84% 30%,
+      rgba(154, 93, 67, 0.2),
+      transparent 35%
+    ),
+    linear-gradient(
+      180deg,
+      #98715f 0%,
+      #80584b 36%,
+      #5d3931 67%,
+      #2b1815 100%
+    ) !important;
+
+  background-attachment: fixed !important;
+}
+
+/* ลบพื้นหลังสีดำของโครงหน้า ให้เห็น gradient ด้านหลัง */
+html[data-theme="dark"] body:has(.profile-hero) #app,
+html[data-theme="dark"] body:has(.profile-hero) .app-shell,
+html[data-theme="dark"] body:has(.profile-hero) .page-shell,
+html[data-theme="dark"] body:has(.profile-hero) .page-content,
+html[data-theme="dark"] body:has(.profile-hero) main {
+  background: transparent !important;
+}
+
+/* ===== NOTIFICATIONS: SAME BACKGROUND AS FRIENDS PAGE ===== */
+
+html[data-theme="dark"]
+  body:has(:is(#reminder-form, #journal-form, #borrow-log-form)) {
+  background:
+    radial-gradient(
+      circle at 16% 18%,
+      rgba(205, 148, 111, 0.18),
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at 84% 30%,
+      rgba(154, 93, 67, 0.2),
+      transparent 35%
+    ),
+    linear-gradient(
+      180deg,
+      #98715f 0%,
+      #80584b 36%,
+      #5d3931 67%,
+      #2b1815 100%
+    ) !important;
+
+  background-attachment: fixed !important;
+}
+
+/* ===== MY PROFILE: SHOW ITS BROWN GRADIENT AGAIN ===== */
+
+/* ไล่สีเดิมของหน้า My Profile ถูกกฎ body transparent ทับ จึงใส่ !important */
+html[data-theme="dark"] body:has(#profile-form) {
+  background:
+    linear-gradient(
+      180deg,
+      #8f6855 0%,
+      #69493e 38%,
+      #3f2924 70%,
+      #211510 100%
+    ) !important;
+
+  background-attachment: fixed !important;
+}
+
+/* ===== FRIEND PROFILE OUTFITS: MATCH FRIEND WARDROBE CARDS ===== */
+
+html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-card {
+  color: #2e211a;
+  background: linear-gradient(
+    180deg,
+    #dfcfb8 0%,
+    #d1b99a 100%
+  );
+  border: 1px solid #aa8e70;
+  box-shadow: 0 7px 17px rgba(12, 7, 5, 0.25);
+}
+
+html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-card:hover {
+  border-color: #b99a78;
+  box-shadow: 0 11px 24px rgba(12, 7, 5, 0.32);
+}
+
+/* กล่องรูปชุดด้านใน แบบเดียวกับกล่องรูปเสื้อ */
+html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-card .preview {
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(222, 211, 196, 0.52),
+      transparent 62%
+    ),
+    #a99a88;
+  border: 1px solid #c5b29a;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+/* ชื่อชุด วันที่ และไอคอน */
+html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-info .name {
+  color: #2e211a;
+}
+
+html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-info .date {
+  color: #5e4b3e;
+}
+
+html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-info .btn {
+  color: #2e211a;
+}
