@@ -5470,3 +5470,29 @@ html[data-theme="dark"] body:has(.profile-hero) .page-content,
 html[data-theme="dark"] body:has(.profile-hero) main {
   background: transparent !important;
 }
+
+/* ===== NOTIFICATIONS: SAME BACKGROUND AS FRIENDS PAGE ===== */
+
+html[data-theme="dark"]
+  body:has(:is(#reminder-form, #journal-form, #borrow-log-form)) {
+  background:
+    radial-gradient(
+      circle at 16% 18%,
+      rgba(205, 148, 111, 0.18),
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at 84% 30%,
+      rgba(154, 93, 67, 0.2),
+      transparent 35%
+    ),
+    linear-gradient(
+      180deg,
+      #98715f 0%,
+      #80584b 36%,
+      #5d3931 67%,
+      #2b1815 100%
+    ) !important;
+
+  background-attachment: fixed !important;
+}
