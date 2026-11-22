@@ -5622,3 +5622,8 @@ html[data-theme="dark"] body:has(.profile-hero) .empty {
 html[data-theme="dark"] body:has(.profile-hero) .empty h3 {
   color: #2e211a;
 }
+
+/* ข้อความใต้หัวข้อ empty state อยู่กึ่งกลาง (inline style ตั้ง margin ซ้ายขวาเป็น 0) */
+.empty p {
+  margin-inline: auto !important;
+}
