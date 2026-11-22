@@ -5997,3 +5997,25 @@ html[data-theme="dark"] .ootd-card-wrap .outfit-card .preview {
   background: linear-gradient(145deg, #d4c1aa, #bba58c) !important;
   border: 1px solid rgba(86, 55, 40, 0.14) !important;
 }
+
+/* ==================================================
+   HOME: Y2K swag theme — ครีมบนน้ำตาลแดง + สติกเกอร์
+   (เปลี่ยนแค่สี/พื้นหลัง ไม่แตะขนาดกล่อง)
+   ================================================== */
+html[data-theme="dark"] body:has(.dash-hero) {
+  --swag-cream: #f6e7cf;
+  --swag-cream-2: #fbf0de;
+  --swag-line: #dcbf98;
+  --swag-ink: #3a2219;
+  --swag-ink-soft: #7a5644;
+  background-color: #3b1d15 !important;
+  background-image:
+    url("/assets/home-star-outline.svg"),
+    url("/assets/home-star-outline.svg"),
+    url("/assets/home-star-outline.svg"),
+    linear-gradient(180deg, #7a4535 0%, #66372a 30%, #4f281e 65%, #3b1d15 100%) !important;
+  background-size: 64px 64px, 96px 96px, 44px 44px, 100% 100% !important;
+  background-position: 24% 742px, 97% 900px, 93% 1150px, 0 0 !important;
+  background-repeat: no-repeat !important;
+}
+
