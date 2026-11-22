@@ -6031,3 +6031,26 @@ html[data-theme="dark"] body:has(.dash-hero) .dash-hero h1 { color: #f6e4cc; }
 html[data-theme="dark"] body:has(.dash-hero) .dash-hero small { color: #e3b99a; }
 html[data-theme="dark"] body:has(.dash-hero) .dash-hero p { color: #e8cdb4; }
 
+/* การ์ดสถิติ 4 ช่อง → ครีม */
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile,
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(n) {
+  --stat-accent: #c99a6e;
+  --stat-fill: #f0dcbd;
+  background: var(--swag-cream) !important;
+  border: 1px solid var(--swag-line) !important;
+  box-shadow: 0 6px 16px rgba(30, 12, 8, 0.28);
+}
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:hover,
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:focus-visible {
+  border-color: #b98557 !important;
+  box-shadow: 0 12px 24px rgba(30, 12, 8, 0.38);
+}
+html[data-theme="dark"] body:has(.dash-hero) .stat-icon,
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:hover .stat-icon {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--swag-ink) !important;
+}
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile strong { color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile > span:last-child { color: var(--swag-ink-soft); }
+
