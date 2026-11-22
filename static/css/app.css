@@ -5739,3 +5739,141 @@ html[data-theme="dark"] .auth-wrap .auth-box .note code {
 html[data-theme="dark"] .auth-wrap .auth-box .divider {
   background: rgba(107, 77, 61, 0.25);
 }
+
+/* ===== POPUPS: CREAM LIKE THE CARDS ===== */
+
+html[data-theme="dark"] .modal-layer .modal {
+  color: #291914;
+  background: linear-gradient(145deg, #f4e3c9, #dfc29d);
+  border: 2px solid rgba(255, 231, 198, 0.85);
+  box-shadow: 0 30px 80px rgba(25, 12, 9, 0.45);
+}
+
+html[data-theme="dark"] .modal-layer .modal :is(.modal-title, h2, h3, strong, label) {
+  color: #261712;
+}
+
+html[data-theme="dark"] .modal-layer .modal :is(.muted, p, small, .field small) {
+  color: #6b4d3d;
+}
+
+html[data-theme="dark"] .modal-layer .modal .modal-close {
+  color: #4a3228;
+  background: rgba(112, 80, 61, 0.14);
+}
+
+/* กล่องรูปในป๊อปอัป */
+html[data-theme="dark"] .modal-layer .modal :is(.paper, .preview, .upload-zone, .upload-preview, .add-photo) {
+  background: linear-gradient(145deg, #d4c1aa, #bba58c);
+  border-color: rgba(86, 55, 40, 0.18);
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .modal-layer .modal :is(.input, textarea, select) {
+  color: #2d1a14;
+  background: rgba(255, 248, 238, 0.75);
+  border-color: #b89a7c;
+}
+
+html[data-theme="dark"] .modal-layer .modal :is(.input, textarea)::placeholder {
+  color: #8f735f;
+}
+
+html[data-theme="dark"] .modal-layer .modal .btn.primary,
+html[data-theme="dark"] .modal-layer .modal .btn.soft {
+  color: #fff8ef;
+  background: #b86f36;
+  border-color: #b86f36;
+}
+
+html[data-theme="dark"] .modal-layer .modal .btn.secondary {
+  color: #2d1a14;
+  background: rgba(248, 229, 203, 0.68);
+  border-color: #9c7457;
+}
+
+html[data-theme="dark"] .modal-layer .modal .btn.danger {
+  color: #9b2f25;
+  background: rgba(248, 229, 203, 0.68);
+  border-color: #b3554b;
+}
+
+html[data-theme="dark"] .modal-layer .modal .divider {
+  background: rgba(107, 77, 61, 0.25);
+}
+
+/* ปุ่มหมวดหมู่ใน Add/Edit Clothing */
+html[data-theme="dark"] .modal-layer .modal .chip span {
+  color: #2d1a14;
+  background: rgba(248, 229, 203, 0.68);
+  border-color: #b89a7c;
+}
+
+html[data-theme="dark"] .modal-layer .modal .chip input:checked + span {
+  color: #fff8ef;
+  background: #b86f36;
+  border-color: #b86f36;
+}
+
+html[data-theme="dark"] .modal-layer .modal :is(.more-details summary, .add-photo-empty strong) {
+  color: #8a4f26;
+}
+
+html[data-theme="dark"] .modal-layer .modal :is(.add-hint, .add-photo-empty span) {
+  color: #6b4d3d;
+}
+
+/* รายการชิ้นเสื้อผ้าและกล่องข้อความในป๊อปอัป */
+html[data-theme="dark"] .modal-layer .modal :is(.feed-row, .note) {
+  color: #291914;
+  background: rgba(255, 248, 238, 0.6);
+  border-color: #c4a585;
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .modal-layer .modal .feed-row:hover {
+  background: rgba(255, 248, 238, 0.85);
+}
+
+html[data-theme="dark"] .modal-layer .modal .feed-row .content p {
+  color: #6b4d3d;
+}
+
+/* ===== CONFIRM POPUPS: CREAM LIKE THE CARDS ===== */
+
+html[data-theme="dark"] .confirm-layer .confirm-box {
+  background: linear-gradient(145deg, #f4e3c9, #dfc29d);
+  border: 2px solid rgba(255, 231, 198, 0.85);
+  box-shadow: 0 30px 80px rgba(25, 12, 9, 0.45);
+}
+
+html[data-theme="dark"] .confirm-layer .confirm-box h2 {
+  color: #261712;
+}
+
+html[data-theme="dark"] .confirm-layer .confirm-box p {
+  color: #6b4d3d;
+}
+
+html[data-theme="dark"] .confirm-layer .confirm-icon {
+  color: #8a4f26;
+  background: rgba(184, 111, 54, 0.16);
+}
+
+html[data-theme="dark"] .confirm-layer .confirm-icon.danger {
+  color: #9b2f25;
+  background: rgba(179, 85, 75, 0.16);
+}
+
+html[data-theme="dark"] .confirm-layer .confirm-actions .btn.secondary {
+  color: #2d1a14;
+  background: rgba(248, 229, 203, 0.68);
+  border-color: #9c7457;
+}
+
+html[data-theme="dark"] .confirm-layer .confirm-actions .btn.primary {
+  color: #fff8ef;
+  background: #b86f36;
+  border-color: #b86f36;
+  box-shadow: 0 3px 0 #7a4422;
+}
