@@ -3729,3 +3729,892 @@ html[data-theme="dark"] body:has(.how-it-works) .empty > * {
     border-width: 1.5px;
   }
 }
+
+/* =========================================================
+   FRIENDS PAGE
+   ========================================================= */
+
+.friends-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 760px;
+}
+
+/* ให้เนื้อหาอยู่หน้าลิง */
+.friends-page > :not(.friends-monkeys) {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* =========================================================
+   FRIENDS TITLE
+   ใช้กรอบเดิม แต่เปลี่ยนเฉพาะตัวอักษรเป็นรูป
+   ========================================================= */
+
+.friends-title-box {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  min-width: 350px;
+  min-height: 104px;
+  margin: 0;
+  padding: 13px 82px 13px 18px;
+  overflow: hidden;
+}
+
+.friends-title-image {
+  display: block;
+  width: 285px;
+  max-width: 100%;
+  height: 76px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* ซ่อนข้อความหรือ pseudo-element เดิม
+   เฉพาะกรณีกรอบมีข้อความซ้ำ */
+.friends-title-box {
+  color: transparent;
+}
+
+
+/* =========================================================
+   MONKEY SPRITE SHEET
+   รูปลิง 6 ตัวอยู่ในไฟล์เดียว
+   ========================================================= */
+
+.friends-monkeys {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.friend-monkey {
+  position: absolute;
+  display: block;
+  width: 54px;
+  height: 104px;
+
+  background-image:
+    url("/assets/friends-monkey-sprites.png");
+
+  background-repeat: no-repeat;
+
+  /*
+    ไฟล์มีลิงเรียง 6 ตัวในแนวนอน
+    จึงขยายพื้นหลังเป็น 600%
+  */
+  background-size: 600% auto;
+  background-position-y: bottom;
+
+  opacity: 0.88;
+
+  filter:
+    sepia(0.3)
+    saturate(0.84)
+    brightness(0.9)
+    drop-shadow(0 3px 2px rgba(30, 13, 8, 0.25));
+
+  transform-origin: center bottom;
+}
+
+
+/* เลือกลิงแต่ละช่องใน sprite */
+
+.monkey-1 {
+  background-position-x: 0%;
+  top: 315px;
+  left: -35px;
+  animation:
+    monkeyPeekLeft 4.8s ease-in-out infinite;
+}
+
+.monkey-2 {
+  background-position-x: 20%;
+  left: 9%;
+  bottom: 5px;
+  animation:
+    monkeyBounce 4s ease-in-out infinite 0.4s;
+}
+
+.monkey-3 {
+  background-position-x: 40%;
+  left: 32%;
+  bottom: 55px;
+  animation:
+    monkeyPeekUp 4.5s ease-in-out infinite 1s;
+}
+
+.monkey-4 {
+  background-position-x: 60%;
+  right: 33%;
+  bottom: 53px;
+  animation:
+    monkeyPeekUp 5s ease-in-out infinite 0.6s;
+}
+
+.monkey-5 {
+  background-position-x: 80%;
+  top: 400px;
+  right: -32px;
+  animation:
+    monkeyPeekRight 4.4s ease-in-out infinite 0.7s;
+}
+
+.monkey-6 {
+  background-position-x: 100%;
+  right: 4px;
+  bottom: 0;
+  transform-origin: center top;
+  animation:
+    monkeyHang 3.8s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   MONKEY ANIMATIONS
+   ========================================================= */
+
+@keyframes monkeyPeekLeft {
+  0%,
+  20%,
+  100% {
+    transform:
+      translateX(-55%)
+      rotate(-8deg);
+  }
+
+  38%,
+  68% {
+    transform:
+      translateX(20%)
+      rotate(4deg);
+  }
+
+  80% {
+    transform:
+      translateX(4%)
+      rotate(-3deg);
+  }
+}
+
+@keyframes monkeyPeekRight {
+  0%,
+  20%,
+  100% {
+    transform:
+      translateX(55%)
+      rotate(8deg);
+  }
+
+  38%,
+  68% {
+    transform:
+      translateX(-20%)
+      rotate(-4deg);
+  }
+
+  80% {
+    transform:
+      translateX(-4%)
+      rotate(3deg);
+  }
+}
+
+@keyframes monkeyPeekUp {
+  0%,
+  20%,
+  100% {
+    transform:
+      translateY(67%)
+      scale(0.92);
+  }
+
+  40%,
+  70% {
+    transform:
+      translateY(22%)
+      scale(1);
+  }
+
+  82% {
+    transform:
+      translateY(38%)
+      scale(0.97);
+  }
+}
+
+@keyframes monkeyBounce {
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(-3deg);
+  }
+
+  45% {
+    transform:
+      translateY(-7px)
+      rotate(4deg);
+  }
+
+  55% {
+    transform:
+      translateY(-7px)
+      rotate(-4deg);
+  }
+}
+
+@keyframes monkeyHang {
+  0%,
+  100% {
+    transform:
+      rotate(-6deg)
+      translateY(0);
+  }
+
+  50% {
+    transform:
+      rotate(8deg)
+      translateY(4px);
+  }
+}
+
+
+/* ผู้ใช้ที่ปิด animation */
+@media (prefers-reduced-motion: reduce) {
+  .friend-monkey {
+    animation: none !important;
+  }
+}
+
+
+/* มือถือ */
+@media (max-width: 760px) {
+  .friends-title-box {
+    min-width: 265px;
+    min-height: 82px;
+    padding: 10px 60px 10px 14px;
+  }
+
+  .friends-title-image {
+    width: 215px;
+    height: 58px;
+  }
+
+  .friend-monkey {
+    width: 43px;
+    height: 83px;
+  }
+
+  .monkey-3,
+  .monkey-4 {
+    display: none;
+  }
+}
+
+/* =========================================================
+   FRIENDS — FULL PAGE BACKGROUND
+   ========================================================= */
+
+body:has(.friends-page) {
+  background:
+    radial-gradient(
+      circle at 16% 18%,
+      rgba(205, 148, 111, 0.18),
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at 84% 30%,
+      rgba(154, 93, 67, 0.2),
+      transparent 35%
+    ),
+    linear-gradient(
+      180deg,
+      #98715f 0%,
+      #80584b 36%,
+      #5d3931 67%,
+      #2b1815 100%
+    ) !important;
+
+  background-attachment: fixed !important;
+}
+
+/* ลบพื้นหลังแบ่งสี่ช่องของโครงหน้าเดิม */
+body:has(.friends-page) #app,
+body:has(.friends-page) .app-shell,
+body:has(.friends-page) .page-shell,
+body:has(.friends-page) .page-content,
+body:has(.friends-page) main {
+  background: transparent !important;
+}
+
+/* ทำให้พื้นที่ Friends โปร่งใส เห็น gradient ด้านหลัง */
+.friends-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 820px;
+  background: transparent !important;
+}
+
+/* เพิ่มแสงน้ำตาลเบา ๆ โดยไม่บังเนื้อหา */
+.friends-page::before {
+  content: "";
+  position: fixed;
+  z-index: -2;
+  inset: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(235, 187, 143, 0.08),
+      transparent 55%
+    );
+}
+
+/* =========================================================
+   FRIENDS — STARS, TAPE, FIVE MONKEYS
+   ========================================================= */
+
+.friends-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 820px;
+}
+
+.friends-page > :not(.friends-star-field) {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* ---------- ดาวพื้นหลัง ---------- */
+
+.friends-star-field {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.friends-star {
+  position: absolute;
+  display: block;
+  color: rgba(218, 170, 119, 0.7);
+  font-family: Georgia, serif;
+  font-weight: 400;
+  line-height: 1;
+  text-shadow:
+    2px 1px 0 rgba(76, 39, 29, 0.42),
+    -1px -1px 0 rgba(245, 203, 154, 0.15);
+}
+
+.friends-star::after {
+  content: "☆";
+  position: absolute;
+  top: 7px;
+  left: 8px;
+  color: rgba(77, 38, 28, 0.35);
+  transform: rotate(9deg);
+}
+
+.friends-star.star-1 {
+  top: 15px;
+  left: 31%;
+  font-size: 105px;
+  transform: rotate(-13deg);
+}
+
+.friends-star.star-2 {
+  top: 65px;
+  left: 51%;
+  font-size: 62px;
+  transform: rotate(11deg);
+}
+
+.friends-star.star-3 {
+  top: 12px;
+  right: 22%;
+  font-size: 47px;
+  transform: rotate(-8deg);
+}
+
+.friends-star.star-4 {
+  top: 112px;
+  right: 10%;
+  font-size: 116px;
+  transform: rotate(8deg);
+}
+
+.friends-star.star-5 {
+  top: 245px;
+  right: 2%;
+  font-size: 50px;
+  transform: rotate(-9deg);
+}
+
+.friends-star.star-6 {
+  bottom: 25px;
+  left: 3%;
+  font-size: 76px;
+  transform: rotate(13deg);
+}
+
+.friends-star.star-7 {
+  right: 7%;
+  bottom: 26px;
+  font-size: 55px;
+  transform: rotate(-8deg);
+}
+
+
+/* ---------- เทปฟ้าที่หัวข้อ ---------- */
+
+.friends-title-box {
+  position: relative;
+  overflow: visible !important;
+}
+
+.friends-blue-tape {
+  position: absolute;
+  z-index: 5;
+  top: -15px;
+  left: -22px;
+  width: 78px;
+  height: 25px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.13) 0 3px,
+      transparent 3px 9px
+    ),
+    #62899d;
+
+  opacity: 0.9;
+
+  transform: rotate(-9deg);
+
+  clip-path: polygon(
+    0 12%,
+    100% 0,
+    94% 88%,
+    4% 100%
+  );
+
+  box-shadow:
+    0 3px 5px rgba(40, 22, 17, 0.18);
+}
+
+
+/* ---------- ดาวเล็กในป้าย FRIENDS ---------- */
+
+.friends-title-star {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  right: 55px;
+
+  color: #ecd7af;
+  font-family: Georgia, serif;
+  font-size: 40px;
+  line-height: 1;
+
+  transform:
+    translateY(-50%)
+    rotate(-12deg);
+}
+
+
+/* ---------- การ์ดเพื่อน ---------- */
+
+.friends-people-grid {
+  position: relative;
+  overflow: visible !important;
+}
+
+.friends-card {
+  position: relative;
+  overflow: visible !important;
+}
+
+
+/* =========================================================
+   ลิง 3 ตัวเกาะบนการ์ด
+   ========================================================= */
+
+.friend-card-monkey,
+.friend-monkey-side {
+  display: block;
+  width: 52px;
+  height: 94px;
+
+  background-image:
+    url("/assets/friends-monkey-sprites.png");
+
+  background-repeat: no-repeat;
+  background-size: 600% auto;
+  background-position-y: bottom;
+
+  pointer-events: none;
+
+  filter:
+    drop-shadow(
+      0 3px 2px
+      rgba(35, 16, 10, 0.24)
+    );
+}
+
+.friend-card-monkey {
+  position: absolute;
+  z-index: 8;
+
+  top: -58px;
+  left: 50%;
+
+  opacity: 0;
+
+  transform:
+    translateX(-50%)
+    translateY(30px)
+    scale(0.85);
+
+  animation:
+    friendMonkeyEnter 0.65s
+    cubic-bezier(.2, .9, .3, 1.2)
+    forwards,
+    friendMonkeyWave 3.8s
+    ease-in-out infinite;
+}
+
+.card-monkey-1 {
+  background-position-x: 20%;
+  animation-delay: 0.25s, 1.2s;
+}
+
+.card-monkey-2 {
+  background-position-x: 40%;
+  animation-delay: 0.75s, 1.7s;
+}
+
+.card-monkey-3 {
+  background-position-x: 60%;
+  animation-delay: 1.25s, 2.2s;
+}
+
+
+/* =========================================================
+   ลิงด้านซ้ายและขวา
+   ========================================================= */
+
+.friends-side-monkeys {
+  position: absolute !important;
+  z-index: 6 !important;
+
+  top: 350px;
+  left: 0;
+  right: 0;
+
+  pointer-events: none;
+}
+
+.friend-monkey-side {
+  position: absolute;
+  opacity: 0;
+}
+
+.monkey-side-left {
+  left: -32px;
+
+  background-position-x: 0%;
+
+  transform:
+    translateX(-45px)
+    rotate(-6deg);
+
+  animation:
+    friendMonkeyLeft 0.75s
+    ease-out 1.75s forwards,
+    friendMonkeySideFloat 4.2s
+    ease-in-out 2.6s infinite;
+}
+
+.monkey-side-right {
+  right: -32px;
+
+  background-position-x: 80%;
+
+  transform:
+    translateX(45px)
+    rotate(6deg);
+
+  animation:
+    friendMonkeyRight 0.75s
+    ease-out 2.2s forwards,
+    friendMonkeySideFloat 4.6s
+    ease-in-out 3s infinite;
+}
+
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+@keyframes friendMonkeyEnter {
+  from {
+    opacity: 0;
+
+    transform:
+      translateX(-50%)
+      translateY(30px)
+      scale(0.85);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateX(-50%)
+      translateY(0)
+      scale(1);
+  }
+}
+
+@keyframes friendMonkeyWave {
+  0%,
+  100% {
+    transform:
+      translateX(-50%)
+      translateY(0)
+      rotate(-2deg);
+  }
+
+  50% {
+    transform:
+      translateX(-50%)
+      translateY(-4px)
+      rotate(3deg);
+  }
+}
+
+@keyframes friendMonkeyLeft {
+  from {
+    opacity: 0;
+
+    transform:
+      translateX(-45px)
+      rotate(-7deg);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateX(0)
+      rotate(2deg);
+  }
+}
+
+@keyframes friendMonkeyRight {
+  from {
+    opacity: 0;
+
+    transform:
+      translateX(45px)
+      rotate(7deg);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateX(0)
+      rotate(-2deg);
+  }
+}
+
+@keyframes friendMonkeySideFloat {
+  0%,
+  100% {
+    margin-top: 0;
+  }
+
+  50% {
+    margin-top: -5px;
+  }
+}
+
+
+/* ---------- หน้าจอเล็ก ---------- */
+
+@media (max-width: 900px) {
+  .friend-card-monkey {
+    top: -48px;
+    width: 43px;
+    height: 78px;
+  }
+
+  .friend-monkey-side {
+    width: 43px;
+    height: 78px;
+  }
+
+  .monkey-side-left {
+    left: -20px;
+  }
+
+  .monkey-side-right {
+    right: -20px;
+  }
+}
+
+@media (max-width: 650px) {
+  .friends-side-monkeys {
+    display: none;
+  }
+
+  .friends-star.star-2,
+  .friends-star.star-3,
+  .friends-star.star-5 {
+    display: none;
+  }
+}
+
+/* แก้ดาวไม่ให้จมหายหลังพื้นหลัง */
+.friends-page {
+  position: relative !important;
+  isolation: isolate;
+}
+
+.friends-star-field {
+  position: absolute !important;
+  z-index: 1 !important;
+  inset: 0 !important;
+  display: block !important;
+  pointer-events: none;
+}
+
+.friends-page > :not(.friends-star-field) {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* บังคับดาวให้แสดง */
+.friends-star {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+
+/* เทปต้องอยู่หน้ากล่อง */
+.friends-title-box {
+  position: relative !important;
+  overflow: visible !important;
+  isolation: isolate;
+}
+
+.friends-title-image {
+  position: relative;
+  z-index: 2;
+}
+
+.friends-blue-tape {
+  position: absolute !important;
+  z-index: 20 !important;
+
+  top: -14px !important;
+  left: -20px !important;
+
+  display: block !important;
+  visibility: visible !important;
+
+  width: 78px;
+  height: 25px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.15) 0 3px,
+      transparent 3px 9px
+    ),
+    #62899d !important;
+
+  transform: rotate(-9deg);
+
+  clip-path: polygon(
+    0 12%,
+    100% 0,
+    94% 88%,
+    4% 100%
+  );
+
+  box-shadow:
+    0 3px 5px rgba(40, 22, 17, 0.2);
+}
+
+.friends-title-star {
+  position: absolute !important;
+  z-index: 15 !important;
+
+  top: 50% !important;
+  right: 55px !important;
+
+  display: block !important;
+  color: #ecd7af !important;
+  font-size: 40px !important;
+
+  transform:
+    translateY(-50%)
+    rotate(-12deg);
+}
+
+/* ===== Friends: final position adjustments ===== */
+
+/* ขยับป้าย FRIENDS ไปทางขวาเล็กน้อย */
+.friends-title-box {
+  left: 18px !important;
+}
+
+/* ขยายดาวข้างกระดุม + ขยับให้ห่างออกไป */
+.friends-title-star {
+  right: 28px !important;
+  font-size: 46px !important;
+  line-height: 1 !important;
+}
+
+/* เพิ่มดาวด้านหลังอีก 2 ดวง */
+.friends-star-field::before,
+.friends-star-field::after {
+  position: absolute;
+  display: block;
+  color: rgba(222, 166, 105, 0.72);
+  font-family: Georgia, serif;
+  line-height: 1;
+  pointer-events: none;
+  text-shadow:
+    5px 5px 0 rgba(74, 37, 29, 0.32),
+    -2px -2px 0 rgba(244, 207, 159, 0.25);
+}
+
+.friends-star-field::before {
+  content: "☆";
+  top: 330px;
+  left: 8%;
+  font-size: 64px;
+  transform: rotate(-18deg);
+}
+
+.friends-star-field::after {
+  content: "☆";
+  top: 520px;
+  right: 7%;
+  font-size: 52px;
+  transform: rotate(14deg);
+}
