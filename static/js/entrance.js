@@ -1,4 +1,4 @@
-// Automatically reveal the Freesize app after a 2-second wardrobe display.
+// Automatically reveal the Freesize app in about 3 seconds total.
 // Deep links bypass this intro; internal SPA navigation never replays it.
 const entrance=document.getElementById('fs-entrance');
 if(entrance&&['/','/home','/home/'].includes(location.pathname)){
@@ -20,10 +20,10 @@ if(entrance&&['/','/home','/home/'].includes(location.pathname)){
     document.documentElement.classList.add('fs-intro-leaving');
     entrance.classList.add('is-opening');
     // Fallback if transitionend does not fire (background tabs / reduced motion).
-    finishTimer=setTimeout(complete,reduceMotion?50:2050);
+    finishTimer=setTimeout(complete,reduceMotion?50:1750);
   }
-  startTimer=setTimeout(enter,2000);
+  startTimer=setTimeout(enter,1200);
   entrance.addEventListener('transitionend',e=>{
-    if(opening&&e.target.classList.contains('fs-entrance__portal'))complete();
+    if(opening&&e.target.classList.contains('fs-entrance__portal')&&e.propertyName==='transform')complete();
   });
 }else entrance?.remove();

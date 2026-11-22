@@ -14,11 +14,14 @@ with sync_playwright() as p:
     errors=[]
     page.on('pageerror', lambda e: errors.append(str(e)))
     page.goto(base,wait_until='domcontentloaded')
-    # Intro displays for two seconds, then opens automatically without any click.
+    # Intro opens automatically; allow the requested ~3-second total entrance.
     entrance=page.locator('#fs-entrance')
     entrance.wait_for(state='visible',timeout=10000)
     assert entrance.locator('.fs-entrance__hint, .fs-entrance__trigger').count()==0
-    entrance.wait_for(state='detached',timeout=10000)
+    animation_started=page.evaluate('performance.now()')
+    entrance.wait_for(state='detached',timeout=5000)
+    animation_elapsed=page.evaluate('performance.now()')-animation_started
+    assert animation_elapsed < 3300, f'Wardrobe opening animation took too long: {animation_elapsed:.0f}ms'
     page.locator('[data-action="demoLogin"]').click()
     page.locator('.topbar').wait_for(timeout=20000)
 
