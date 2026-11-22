@@ -6054,3 +6054,29 @@ html[data-theme="dark"] body:has(.dash-hero) .stat-tile:hover .stat-icon {
 html[data-theme="dark"] body:has(.dash-hero) .stat-tile strong { color: var(--swag-ink); }
 html[data-theme="dark"] body:has(.dash-hero) .stat-tile > span:last-child { color: var(--swag-ink-soft); }
 
+/* Needs you / Where your clothes are → ครีม */
+html[data-theme="dark"] body:has(.dash-hero) .dash-card {
+  background: var(--swag-cream);
+  border-color: var(--swag-line);
+  box-shadow: 0 8px 22px rgba(30, 12, 8, 0.3);
+}
+html[data-theme="dark"] body:has(.dash-hero) .dash-card-head h2 { color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) .dash-card-head .link { color: #8a5434; }
+html[data-theme="dark"] body:has(.dash-hero) :is(.todo-row, .where-row) {
+  background: var(--swag-cream-2);
+  border-color: #e4cba8;
+}
+html[data-theme="dark"] body:has(.dash-hero) .where-row:hover { background: #f3e2c6; }
+html[data-theme="dark"] body:has(.dash-hero) :is(.todo-row img, .where-row img) { background: #fffaf2; border-color: #e4cba8; }
+html[data-theme="dark"] body:has(.dash-hero) .todo-icon { background: #efdcbf; color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) :is(.todo-text strong, .where-row strong) { color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) :is(.todo-text p, .where-row p) { color: var(--swag-ink-soft); }
+html[data-theme="dark"] body:has(.dash-hero) .dash-card .btn.secondary {
+  background: #fffaf2; color: var(--swag-ink); border-color: #cfae86;
+}
+html[data-theme="dark"] body:has(.dash-hero) .dash-card .pill-count { background: #c0623a; color: #fff; }
+html[data-theme="dark"] body:has(.dash-hero) .calm-state {
+  background: #fbeeda; border-color: #e2c39a; color: #8a4f2c;
+}
+html[data-theme="dark"] body:has(.dash-hero) .calm-state p { color: #9b6a4b; }
+
