@@ -6124,3 +6124,32 @@ html[data-theme="dark"] body:has(.dash-hero) .sticker-mini {
   }
   html[data-theme="dark"] body:has(.dash-hero) { background-size: 0 0, 0 0, 0 0, 100% 100% !important; }
 }
+
+/* ===== HOME: sticker art + chrome icons ตาม mockup ===== */
+html[data-theme="dark"] body:has(.dash-hero) .dash-hero {
+  background:
+    url("/assets/home-hero-swag.webp") right center / auto 100% no-repeat,
+    radial-gradient(ellipse at 20% 30%, #6c3b2a 0%, transparent 60%),
+    linear-gradient(100deg, #5a3122 0%, #5e3423 60%, #5f3423 100%) !important;
+}
+html[data-theme="dark"] body:has(.dash-hero) .dash-hero h1 { font-style: italic; }
+html[data-theme="dark"] body:has(.dash-hero) .stat-icon {
+  background: center / contain no-repeat !important;
+}
+html[data-theme="dark"] body:has(.dash-hero) .stat-icon svg { visibility: hidden; }
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(1) .stat-icon { background-image: url("/assets/home-icon-shirt.png") !important; }
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(2) .stat-icon { background-image: url("/assets/home-icon-hanger.png") !important; }
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(3) .stat-icon { background-image: url("/assets/home-icon-box.png") !important; }
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(4) .stat-icon { background-image: url("/assets/home-icon-bell.png") !important; }
+@media (max-width: 760px) {
+  html[data-theme="dark"] body:has(.dash-hero) .dash-hero {
+    background:
+      radial-gradient(ellipse at 20% 30%, #6c3b2a 0%, transparent 60%),
+      linear-gradient(160deg, #5a3122 0%, #5f3423 100%) !important;
+  }
+  html[data-theme="dark"] body:has(.dash-hero) .dash-hero::after {
+    background-image: url("/assets/home-hero-swag.webp");
+    width: 320px;
+    opacity: 0.32;
+  }
+}
