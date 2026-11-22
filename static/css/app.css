@@ -5395,6 +5395,7 @@ main {
 .ootd-empty-hanger {
   margin-bottom: 4px !important;
 }
+
 /* ===== OOTD CARDS: SMALLER CARD + LIGHTER OUTFIT BACKGROUND ===== */
 
 /* 4 การ์ดต่อแถวเต็มความกว้าง */
@@ -5442,4 +5443,45 @@ html[data-theme="dark"] .ootd-card-wrap .outfit-card .preview {
   .ootd-card-wrap::before {
     font-size: 44px;
   }
+}
+
+/* ===== FRIENDS LIST CARDS: MATCH MY WARDROBE CARDS ===== */
+
+html[data-theme="dark"] .friends-people-grid .friends-card {
+  color: #291914;
+  background: linear-gradient(145deg, #f4e3c9, #dfc29d);
+  border: 2px solid rgba(255, 231, 198, 0.85);
+  box-shadow:
+    0 12px 25px rgba(25, 12, 9, 0.3),
+    inset 0 1px rgba(255, 255, 255, 0.55);
+}
+
+html[data-theme="dark"] .friends-people-grid .friends-card h3 {
+  color: #261712;
+}
+
+html[data-theme="dark"] .friends-people-grid .friends-card .muted {
+  color: #6b4d3d;
+  font-weight: 600;
+}
+
+html[data-theme="dark"] .friends-people-grid .friends-card .preview-rail {
+  background: linear-gradient(145deg, #d4c1aa, #bba58c);
+  border: 1px solid rgba(86, 55, 40, 0.14);
+}
+
+/* ปุ่ม View Closet สีส้มแบบปุ่ม OOTD */
+html[data-theme="dark"] .friends-people-grid .friends-card .btn.primary {
+  color: #fff8ef;
+  background: #b86f36;
+  border-color: #b86f36;
+  font-weight: 800;
+}
+
+/* ปุ่ม Remove สีครีมแบบปุ่ม Edit */
+html[data-theme="dark"] .friends-people-grid .friends-card .btn.secondary {
+  color: #2d1a14;
+  background: rgba(248, 229, 203, 0.68);
+  border-color: #9c7457;
+  font-weight: 800;
 }
