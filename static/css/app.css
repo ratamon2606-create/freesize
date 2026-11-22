@@ -5651,3 +5651,91 @@ body:has(input[placeholder="Search your clothes..."])
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+
+/* ===== LOGIN: BROWN BACKGROUND + CREAM SIGN-IN PANEL ===== */
+
+html[data-theme="dark"] body:has(.auth-wrap) {
+  background:
+    radial-gradient(
+      circle at 16% 18%,
+      rgba(205, 148, 111, 0.18),
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at 84% 30%,
+      rgba(154, 93, 67, 0.2),
+      transparent 35%
+    ),
+    linear-gradient(
+      180deg,
+      #98715f 0%,
+      #80584b 36%,
+      #5d3931 67%,
+      #2b1815 100%
+    ) !important;
+
+  background-attachment: fixed !important;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box {
+  color: #291914;
+  background: linear-gradient(145deg, #f4e3c9, #dfc29d);
+  border: 2px solid rgba(255, 231, 198, 0.85);
+  box-shadow:
+    0 12px 25px rgba(25, 12, 9, 0.3),
+    inset 0 1px rgba(255, 255, 255, 0.55);
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box :is(h1, strong) {
+  color: #261712;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box :is(.muted, .switch, .field label) {
+  color: #6b4d3d;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .switch button {
+  color: #9a5a2c;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .input {
+  color: #2d1a14;
+  background: rgba(255, 248, 238, 0.75);
+  border-color: #b89a7c;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .input::placeholder {
+  color: #8f735f;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .pw-toggle {
+  color: #6b4d3d;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .btn.primary {
+  color: #fff8ef;
+  background: #b86f36;
+  border-color: #b86f36;
+  box-shadow: 0 3px 0 #7a4422;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .btn.secondary {
+  color: #2d1a14;
+  background: rgba(248, 229, 203, 0.68);
+  border-color: #9c7457;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .note {
+  color: #4a3228;
+  background: rgba(255, 248, 238, 0.55);
+  border-color: #c79a6f;
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .note code {
+  color: #4a2a1c;
+  background: rgba(184, 111, 54, 0.16);
+}
+
+html[data-theme="dark"] .auth-wrap .auth-box .divider {
+  background: rgba(107, 77, 61, 0.25);
+}
