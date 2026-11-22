@@ -5997,3 +5997,130 @@ html[data-theme="dark"] .ootd-card-wrap .outfit-card .preview {
   background: linear-gradient(145deg, #d4c1aa, #bba58c) !important;
   border: 1px solid rgba(86, 55, 40, 0.14) !important;
 }
+
+/* ==================================================
+   HOME: Y2K swag theme — ครีมบนน้ำตาลแดง + สติกเกอร์
+   (เปลี่ยนแค่สี/พื้นหลัง ไม่แตะขนาดกล่อง)
+   ================================================== */
+html[data-theme="dark"] body:has(.dash-hero) {
+  --swag-cream: #f6e7cf;
+  --swag-cream-2: #fbf0de;
+  --swag-line: #dcbf98;
+  --swag-ink: #3a2219;
+  --swag-ink-soft: #7a5644;
+  background-color: #3b1d15 !important;
+  background-image:
+    url("/assets/home-star-outline.svg"),
+    url("/assets/home-star-outline.svg"),
+    url("/assets/home-star-outline.svg"),
+    linear-gradient(180deg, #7a4535 0%, #66372a 30%, #4f281e 65%, #3b1d15 100%) !important;
+  background-size: 64px 64px, 96px 96px, 44px 44px, 100% 100% !important;
+  background-position: 24% 742px, 97% 900px, 93% 1150px, 0 0 !important;
+  background-repeat: no-repeat !important;
+}
+
+/* Hero: เลือดหมูเข้ม + สติกเกอร์ฝั่งขวา */
+html[data-theme="dark"] body:has(.dash-hero) .dash-hero {
+  background:
+    url("/assets/home-hero-stickers.svg") right 2% center / auto 108% no-repeat,
+    radial-gradient(ellipse at 78% 40%, #8a4a38 0%, transparent 62%),
+    linear-gradient(100deg, #2a130e 0%, #3f1f17 45%, #6a3627 100%) !important;
+  border: 1px solid #8c5643 !important;
+}
+html[data-theme="dark"] body:has(.dash-hero) .dash-hero h1 { color: #f6e4cc; }
+html[data-theme="dark"] body:has(.dash-hero) .dash-hero small { color: #e3b99a; }
+html[data-theme="dark"] body:has(.dash-hero) .dash-hero p { color: #e8cdb4; }
+
+/* การ์ดสถิติ 4 ช่อง → ครีม */
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile,
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(n) {
+  --stat-accent: #c99a6e;
+  --stat-fill: #f0dcbd;
+  background: var(--swag-cream) !important;
+  border: 1px solid var(--swag-line) !important;
+  box-shadow: 0 6px 16px rgba(30, 12, 8, 0.28);
+}
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:hover,
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:focus-visible {
+  border-color: #b98557 !important;
+  box-shadow: 0 12px 24px rgba(30, 12, 8, 0.38);
+}
+html[data-theme="dark"] body:has(.dash-hero) .stat-icon,
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:hover .stat-icon {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--swag-ink) !important;
+}
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile strong { color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile > span:last-child { color: var(--swag-ink-soft); }
+
+/* Needs you / Where your clothes are → ครีม */
+html[data-theme="dark"] body:has(.dash-hero) .dash-card {
+  background: var(--swag-cream);
+  border-color: var(--swag-line);
+  box-shadow: 0 8px 22px rgba(30, 12, 8, 0.3);
+}
+html[data-theme="dark"] body:has(.dash-hero) .dash-card-head h2 { color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) .dash-card-head .link { color: #8a5434; }
+html[data-theme="dark"] body:has(.dash-hero) :is(.todo-row, .where-row) {
+  background: var(--swag-cream-2);
+  border-color: #e4cba8;
+}
+html[data-theme="dark"] body:has(.dash-hero) .where-row:hover { background: #f3e2c6; }
+html[data-theme="dark"] body:has(.dash-hero) :is(.todo-row img, .where-row img) { background: #fffaf2; border-color: #e4cba8; }
+html[data-theme="dark"] body:has(.dash-hero) .todo-icon { background: #efdcbf; color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) :is(.todo-text strong, .where-row strong) { color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) :is(.todo-text p, .where-row p) { color: var(--swag-ink-soft); }
+html[data-theme="dark"] body:has(.dash-hero) .dash-card .btn.secondary {
+  background: #fffaf2; color: var(--swag-ink); border-color: #cfae86;
+}
+html[data-theme="dark"] body:has(.dash-hero) .dash-card .pill-count { background: #c0623a; color: #fff; }
+html[data-theme="dark"] body:has(.dash-hero) .calm-state {
+  background: #fbeeda; border-color: #e2c39a; color: #8a4f2c;
+}
+html[data-theme="dark"] body:has(.dash-hero) .calm-state p { color: #9b6a4b; }
+
+/* Recent outfits / Recently added → การ์ดครีม */
+html[data-theme="dark"] body:has(.dash-hero) .section-head h2 { color: #f6e4cc; }
+html[data-theme="dark"] body:has(.dash-hero) :is(.section-head a, .subline) { color: #e7c3a6; }
+html[data-theme="dark"] body:has(.dash-hero) .rail .outfit-card,
+html[data-theme="dark"] body:has(.dash-hero) .rail-new {
+  background: var(--swag-cream) !important;
+  border-color: var(--swag-line) !important;
+}
+html[data-theme="dark"] body:has(.dash-hero) .rail .outfit-card .preview {
+  background: linear-gradient(145deg, #e6d3b8, #d6bf9f) !important;
+  border-color: rgba(86, 55, 40, 0.16) !important;
+}
+html[data-theme="dark"] body:has(.dash-hero) .rail .outfit-card :is(.name) { color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) .rail .outfit-card :is(.date) { color: var(--swag-ink-soft); }
+html[data-theme="dark"] body:has(.dash-hero) .rail .outfit-card .tools .btn { color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) .rail-new,
+html[data-theme="dark"] body:has(.dash-hero) .rail-new strong { color: var(--swag-ink) !important; }
+html[data-theme="dark"] body:has(.dash-hero) .rail-new span { background: #efdcbf; color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) .sticker-mini {
+  background: var(--swag-cream) !important;
+  border-color: var(--swag-line) !important;
+  color: var(--swag-ink);
+}
+@media (max-width: 760px) {
+  html[data-theme="dark"] body:has(.dash-hero) .dash-hero {
+    background:
+      radial-gradient(ellipse at 80% 15%, #8a4a38 0%, transparent 60%),
+      linear-gradient(160deg, #2a130e 0%, #3f1f17 55%, #6a3627 100%) !important;
+  }
+  html[data-theme="dark"] body:has(.dash-hero) .dash-hero::after {
+    content: "";
+    display: block;
+    position: absolute;
+    right: -70px;
+    top: -6px;
+    width: 300px;
+    height: 150px;
+    background: url("/assets/home-hero-stickers.svg") center / contain no-repeat;
+    opacity: 0.38;
+    pointer-events: none;
+    z-index: 0;
+  }
+  html[data-theme="dark"] body:has(.dash-hero) { background-size: 0 0, 0 0, 0 0, 100% 100% !important; }
+}
