@@ -6141,3 +6141,15 @@ html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(1) .stat-icon 
 html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(2) .stat-icon { background-image: url("/assets/home-icon-hanger.png") !important; }
 html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(3) .stat-icon { background-image: url("/assets/home-icon-box.png") !important; }
 html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(4) .stat-icon { background-image: url("/assets/home-icon-bell.png") !important; }
+@media (max-width: 760px) {
+  html[data-theme="dark"] body:has(.dash-hero) .dash-hero {
+    background:
+      radial-gradient(ellipse at 20% 30%, #6c3b2a 0%, transparent 60%),
+      linear-gradient(160deg, #5a3122 0%, #5f3423 100%) !important;
+  }
+  html[data-theme="dark"] body:has(.dash-hero) .dash-hero::after {
+    background-image: url("/assets/home-hero-swag.webp");
+    width: 320px;
+    opacity: 0.32;
+  }
+}
