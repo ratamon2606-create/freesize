@@ -5394,6 +5394,56 @@ main {
 
 .ootd-empty-hanger {
   margin-bottom: 4px !important;
+}
+
+/* ===== OOTD CARDS: SMALLER CARD + LIGHTER OUTFIT BACKGROUND ===== */
+
+/* 4 การ์ดต่อแถวเต็มความกว้าง */
+.ootd-swag-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.ootd-card-wrap {
+  padding: 12px;
+}
+
+.ootd-card-wrap::before {
+  font-size: 50px;
+}
+
+/* พื้นหลังหลังเสื้อผ้าสีครีมแทนสีเข้ม */
+html[data-theme="dark"] .ootd-card-wrap .outfit-card .preview {
+  border-color: rgba(104, 66, 43, 0.24) !important;
+  background: radial-gradient(
+    circle at 50% 45%,
+    #f1e3cd 0%,
+    #e2cba8 68%,
+    #d3b893 100%
+  ) !important;
+}
+
+@media (max-width: 1100px) {
+  .ootd-swag-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 850px) {
+  .ootd-swag-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .ootd-swag-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ootd-card-wrap::before {
+    font-size: 44px;
+  }
+}
 
 /* ===== FRIENDS LIST CARDS: MATCH MY WARDROBE CARDS ===== */
 
