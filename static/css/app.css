@@ -6258,3 +6258,15 @@ html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothi
 html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.add-photo-empty strong, .add-photo-empty svg) {
   color: #e7a877;
 }
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.input, textarea, select) {
+  color: var(--pop-text);
+  background: rgba(16, 9, 6, 0.45);
+  border-color: var(--pop-line);
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.input, textarea)::placeholder {
+  color: #8e6e5a;
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.input, textarea, select):focus {
+  border-color: var(--pop-accent);
+  box-shadow: 0 0 0 3px rgba(196, 116, 61, 0.25);
+}
