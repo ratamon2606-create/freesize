@@ -1895,7 +1895,7 @@ body:has(#profile-form) .profile-pic {
 .profile-swag-wings {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 55%;
   z-index: 0;
   width: 260px;
   max-width: none;
@@ -5996,4 +5996,577 @@ html[data-theme="dark"] .ootd-card-wrap .outfit-card {
 html[data-theme="dark"] .ootd-card-wrap .outfit-card .preview {
   background: linear-gradient(145deg, #d4c1aa, #bba58c) !important;
   border: 1px solid rgba(86, 55, 40, 0.14) !important;
+}
+
+/* Login — ชุดสตรีตแวร์และสติกเกอร์ดาว */
+.auth-wrap:has(input[autocomplete="current-password"]) .auth-images {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  margin: 24px auto 0;
+  background: url("/assets/login-swag-outfit.png") center / contain no-repeat;
+}
+
+.auth-wrap:has(input[autocomplete="current-password"]) .auth-images > img {
+  display: none;
+}
+
+.auth-wrap:has(input[autocomplete="current-password"]) .auth-images::after {
+  content: "";
+  position: absolute;
+  top: 9%;
+  right: 27%;
+  width: clamp(32px, 4vw, 58px);
+  aspect-ratio: 1;
+  background: url("/assets/login-swag-star.png") center / contain no-repeat;
+  transform: rotate(12deg);
+  pointer-events: none;
+}
+
+/* Login — พื้นหลังด้านนอกกรอบ */
+body:has(.auth-wrap input[autocomplete="current-password"]) {
+  margin: 0;
+  padding: clamp(16px, 3vw, 48px);
+  min-height: 100svh;
+  background: #705044;
+}
+
+/* Login — กรอบคอลลาจครอบทั้งสองฝั่ง */
+.auth-wrap:has(input[autocomplete="current-password"]) {
+  width: 100%;
+  max-width: 1440px;
+  min-height: 0;
+  margin: 0 auto;
+  padding: clamp(14px, 2vw, 30px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+  align-items: stretch;
+  border: 1px solid #745442;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: none;
+  background: #302019 url("/assets/login-swag-backdrop.png")
+              center / cover no-repeat;
+
+  & > .auth-art {
+    min-height: 0;
+    padding: clamp(24px, 4vw, 64px);
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    color: #f8ead6;
+  }
+
+  & > .auth-box {
+    min-width: 0;
+    padding: clamp(68px, 6vw, 96px) clamp(36px, 4.5vw, 72px);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent url("/assets/login-swag-paper.png")
+                center / 100% 100% no-repeat;
+    color: #342117;
+  }
+
+  & .auth-box h1 {
+    color: #342117;
+  }
+
+  & .auth-box :is(.muted, .switch, .privacy-line, .field label) {
+    color: #604534;
+  }
+
+  & .auth-box .switch button {
+    color: #78401f;
+  }
+}
+
+@media (max-width: 760px) {
+  .auth-wrap:has(input[autocomplete="current-password"]) {
+    grid-template-columns: 1fr;
+    padding: 8px;
+    border-radius: 22px;
+
+    & > .auth-art {
+      padding: 24px 18px 16px;
+    }
+
+    & > .auth-box {
+      padding: 56px 28px;
+    }
+  }
+}
+/* Login — ขยายองค์ประกอบให้ใกล้ภาพคอลลาจต้นแบบ */
+body:has(.auth-wrap input[autocomplete="current-password"]) {
+  padding: 16px 3vw;
+  background:
+    linear-gradient(180deg, #9b7565 0%, #6b453b 52%, #321e1a 100%);
+}
+
+.auth-wrap:has(input[autocomplete="current-password"]) {
+  width: min(1600px, 100%);
+  max-width: 1600px;
+  min-height: min(900px, calc(100svh - 32px));
+  padding: 0;
+  border-radius: 30px;
+  background:
+    url("/assets/login-swag-backdrop.png") center / cover no-repeat;
+}
+
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art {
+  min-height: 820px;
+  padding: 72px 6vw 52px;
+  justify-content: flex-start;
+}
+
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .brand-script {
+  font-size: clamp(28px, 2.5vw, 42px);
+}
+
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .scribble {
+  max-width: 660px;
+  margin-top: 28px;
+  font-size: clamp(48px, 5vw, 82px);
+  line-height: 1.02;
+}
+
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art > p {
+  max-width: 540px;
+  font-size: 18px;
+}
+
+.auth-wrap:has(input[autocomplete="current-password"]) .auth-images {
+  max-width: 720px;
+  margin-top: 42px;
+  transform: translateX(-12px) scale(1.12);
+  transform-origin: left bottom;
+}
+
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-box {
+  padding: 82px clamp(44px, 5vw, 92px);
+  background-size: 104% 103%;
+}
+
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-box .input {
+  background: #aaa4a0;
+  border-color: #c6a27f;
+  color: #fff;
+}
+
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-box .input::placeholder {
+  color: #f8eee3;
+  opacity: 0.85;
+}
+/* ใช้ไฟล์ดาวตกแต่งหน้า Login */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art {
+  position: relative;
+}
+
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art::after {
+  content: "";
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  right: 7%;
+  top: 18%;
+  background: url("/assets/login-swag-star.png") center / contain no-repeat;
+  transform: rotate(-12deg);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ===== Login scrapbook decorations ===== */
+
+.auth-wrap:has(input[autocomplete="current-password"]) {
+  position: relative;
+  overflow: hidden;
+
+  background:
+    url("/assets/login-swag-backdrop.png") center / cover no-repeat;
+}
+
+/* ทำให้ภาพตึกฝั่งขวาโผล่จากขอบ */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-box::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 170px;
+  right: -115px;
+  width: 230px;
+  height: 500px;
+  background: url("/assets/login-swag-backdrop.png") right center / cover no-repeat;
+  filter: grayscale(1) contrast(1.15);
+  clip-path: polygon(25% 0, 100% 8%, 86% 100%, 0 92%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* ให้ฟอร์มอยู่ด้านหน้าภาพตึก */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-box > * {
+  position: relative;
+  z-index: 3;
+}
+/* ===== Fix ตำแหน่งของตกแต่ง Login ===== */
+
+/* ป้าย freesize ไม่ให้ทับโลโก้ */
+.auth-wrap:has(input[autocomplete="current-password"])::before {
+  top: 42px;
+  left: 12%;
+  transform: rotate(-5deg);
+  z-index: 10;
+}
+
+/* ย้าย SWAG ขึ้นไป ไม่ให้ชนหัวข้อ */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art::before {
+  top: 28px;
+  left: 46%;
+  font-size: clamp(45px, 5vw, 82px);
+  z-index: 8;
+}
+
+/* ย้ายดาวให้อยู่ข้าง SWAG */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art::after {
+  top: 125px;
+  left: 70%;
+  width: 82px;
+  height: 82px;
+  z-index: 8;
+}
+
+/* ย้ายแถบสีส้มไปฝั่งซ้าย ไม่ทับเสื้อผ้า */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .auth-images::before {
+  left: -155px;
+  bottom: 245px;
+  width: 170px;
+  height: 55px;
+  transform: rotate(-20deg);
+  z-index: 2;
+}
+
+/* ซ่อนภาพดำที่ทับกระดาษฝั่งขวา */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-box::after {
+  display: none;
+}
+
+/* ===== Login scrapbook stickers ===== */
+
+.auth-wrap:has(input[autocomplete="current-password"]) {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ป้าย freesize */
+.auth-wrap:has(input[autocomplete="current-password"])::before {
+  content: "";
+  position: absolute;
+  z-index: 20;
+  top: 45px;
+  left: 12%;
+  width: 190px;
+  height: 78px;
+  background: url("/assets/login-freesize.png") center / contain no-repeat;
+  transform: rotate(-4deg);
+}
+
+/* คำ SWAG */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art::before {
+  content: "";
+  position: absolute;
+  z-index: 20;
+  top: 38px;
+  left: 42%;
+  width: 285px;
+  height: 105px;
+  background: url("/assets/login-swag.png") center / contain no-repeat;
+  transform: rotate(-6deg);
+}
+
+/* แถบ A little closet */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .scribble::before {
+  content: "";
+  display: block;
+  width: 510px;
+  height: 92px;
+  margin-bottom: 8px;
+  background: url("/assets/login-closet.png") center / contain no-repeat;
+}
+
+/* แถบ a lot of possibilities */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .scribble::after {
+  content: "";
+  display: block;
+  width: 590px;
+  height: 100px;
+  background: url("/assets/login-possibilities.png") center / contain no-repeat;
+}
+
+/* ซ่อนข้อความเดิม */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .scribble {
+  font-size: 0;
+  line-height: 0;
+}
+
+/* จัดคำอธิบายให้อยู่ใต้สติกเกอร์ */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art > p {
+  margin-top: 35px;
+}
+
+/* ===== Login stickers final layout ===== */
+
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art {
+  position: relative;
+  padding-top: 190px;
+  background-repeat: no-repeat;
+
+  background-image:
+    url("/assets/login-closet.png"),
+    url("/assets/login-possibilities.png"),
+    url("/assets/login-swag.png"),
+    url("/assets/login-freesize.png");
+
+  background-size:
+    510px 92px,
+    590px 100px,
+    285px 105px,
+    190px 78px;
+
+  background-position:
+    8% 185px,
+    8% 285px,
+    50% 35px,
+    12% 38px;
+}
+
+/* ปิดข้อความและโลโก้เก่าที่ซ้อน */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .brand-script,
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .scribble {
+  display: none !important;
+}
+
+/* ปิด pseudo-element เก่าทั้งหมด */
+.auth-wrap:has(input[autocomplete="current-password"])::before,
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art::before,
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art::after,
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .auth-images::before {
+  content: none !important;
+}
+
+/* คำอธิบายใต้สติกเกอร์ */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art > p {
+  margin-top: 20px;
+}
+/* ===== Fix ไม่ให้สติกเกอร์ทับกัน ===== */
+
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art {
+  position: relative;
+  padding-top: 190px;
+  overflow: visible;
+
+  background-size:
+    430px 78px,
+    500px 84px,
+    260px 96px,
+    175px 72px;
+
+  background-position:
+    7% 175px,
+    7% 270px,
+    43% 28px,
+    10% 28px;
+}
+
+/* คำอธิบายอยู่ใต้สติกเกอร์ */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art > p {
+  position: relative;
+  z-index: 10;
+  margin-top: 150px;
+  max-width: 540px;
+}
+
+/* ดันรูปเสื้อผ้าลง ไม่ให้ชนข้อความ */
+.auth-wrap:has(input[autocomplete="current-password"]) .auth-images {
+  position: relative;
+  z-index: 8;
+  margin-top: 70px;
+}
+
+/* ปิดข้อความเก่าที่อาจซ้อน */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .brand-script,
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .scribble {
+  display: none !important;
+}
+
+/* ปิดของตกแต่งเก่าทั้งหมด */
+.auth-wrap:has(input[autocomplete="current-password"])::before,
+.auth-wrap:has(input[autocomplete="current-password"])::after,
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art::before,
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art::after,
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .auth-images::before {
+  content: none !important;
+}
+/* ===== จัดตำแหน่งข้อความใหม่ ===== */
+
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art {
+  background-image:
+    url("/assets/login-closet.png"),
+    url("/assets/login-possibilities.png"),
+    url("/assets/login-freesize.png");
+
+  background-size:
+    430px 78px,
+    500px 84px,
+    175px 72px;
+
+  background-position:
+    12% 170px,   /* A little closet ขยับขวา */
+    12% 255px,   /* possibilities ขยับขวาและเข้าใกล้ */
+    14% 28px;    /* freesize ขยับขวา */
+}
+
+/* SWAG เหนือปลายขวาของแถบข้อความ */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  z-index: 30;
+
+  top: 55px;
+  left: 460px;
+  right: auto;
+  bottom: auto;
+
+  width: 150px;
+  height: 60px;
+
+  background: url("/assets/login-swag.png") center / contain no-repeat;
+  transform: rotate(-8deg);
+  opacity: 0.6;
+  pointer-events: none;
+}
+/* จัด freesize + closet + possibilities ให้อยู่เป็นกลุ่ม */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art {
+  background-image:
+    url("/assets/login-closet.png"),
+    url("/assets/login-possibilities.png"),
+    url("/assets/login-freesize.png");
+
+  background-repeat: no-repeat;
+  background-origin: padding-box;
+
+  background-size:
+    430px 78px,
+    500px 84px,
+    175px 72px;
+
+  background-position:
+    120px 130px,
+    120px 200px,
+    120px 40px;
+}
+/* เลื่อน 3 แถบไปซ้าย */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art {
+  background-image:
+    url("/assets/login-closet.png"),
+    url("/assets/login-possibilities.png"),
+    url("/assets/login-freesize.png");
+
+  background-repeat: no-repeat;
+
+  background-size:
+    78% auto,
+    85% auto,
+    175px auto;
+
+  background-position:
+    40px 130px,
+    40px 190px,
+    40px 40px;
+}
+
+/* เลื่อน SWAG กลับเข้าฝั่งซ้าย */
+.auth-wrap:has(input[autocomplete="current-password"]) > .auth-art::before {
+  left: auto;
+  right: 35px;
+  top: 45px;
+  width: 150px;
+  height: 60px;
+}
+/* แก้เฉพาะหน้าจอกว้าง */
+@media (min-width: 1400px) {
+  .auth-wrap:has(input[autocomplete="current-password"]) > .auth-art {
+    background-size:
+      430px auto,
+      500px auto,
+      175px auto;
+
+    background-position:
+      90px 130px,
+      90px 245px,
+      90px 30px;
+  }
+}
+/* เฉพาะหน้าจอกว้าง */
+@media (min-width: 1400px) {
+  .auth-wrap:has(input[autocomplete="current-password"]) > .auth-art {
+    background-image:
+  url("/assets/login-closet.png"),
+  url("/assets/login-possibilities.png"),
+  url("/assets/login-freesize.png"),
+  url("/assets/login-star.png");
+
+background-repeat: no-repeat;
+
+background-size:
+  430px auto,
+  500px auto,
+  175px auto,
+  125px auto;
+
+background-position:
+  90px 110px,
+  90px 195px,
+  90px 30px,
+  75% 155px;
+  }
+}
+/* ดาว เฉพาะหน้าจอขยาย */
+@media (min-width: 1400px) {
+
+  /* ดาวขอบครีม ตรงวงเหลือง */
+  .auth-wrap:has(input[autocomplete="current-password"]) > .auth-art::after {
+    content: "";
+    position: absolute;
+    z-index: 20;
+    top: 155px;
+    left: 610px;
+    width: 125px;
+    height: 125px;
+    background: url("/assets/login-star.png") center / contain no-repeat;
+    pointer-events: none;
+  }
+
+  /* ดาวเงิน ตรงวงแดงบนกางเกง */
+  .auth-wrap:has(input[autocomplete="current-password"]) > .auth-art .auth-images::after {
+    content: "";
+    position: absolute;
+    z-index: 30;
+    top: 18px;
+    left: 385px;
+    width: 92px;
+    height: 92px;
+    background: url("/assets/login-swag-star.png") center / contain no-repeat;
+    pointer-events: none;
+  }
+}
+
+/* หน้าจอย่อเท่านั้น */
+@media (max-width: 1399px) {
+  .auth-wrap:has(input[autocomplete="current-password"]) > .auth-art {
+    background-position:
+      40px 130px,
+      40px 225px,
+      40px 40px;
+  }
 }
