@@ -5888,3 +5888,81 @@ body:has(input[placeholder="Search your clothes..."])
   position: fixed;
   z-index: 200;
 }
+
+/* ===== OOTD STUDIO: BROWN BACKGROUND + STAR STICKERS ===== */
+
+html[data-theme="dark"] body:has(.editor-layout) {
+  isolation: isolate;
+  background: linear-gradient(
+    180deg,
+    #946f5e 0%,
+    #7b5749 25%,
+    #5c3b32 55%,
+    #38211d 78%,
+    #211311 100%
+  ) fixed !important;
+  background-size: 100% 100% !important;
+}
+
+/* ให้เนื้อหาอยู่เหนือดาว (ยกเฉพาะ #app เพื่อไม่ให้ป๊อปอัปยืนยันเลื่อนตำแหน่ง) */
+html[data-theme="dark"] body:has(.editor-layout) #app {
+  position: relative;
+  z-index: 1;
+}
+
+/* ดาวแบบเดียวกับหน้า My Wardrobe */
+html[data-theme="dark"] body:has(.editor-layout)::after {
+  content: "";
+  position: fixed;
+  inset: 105px 0 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.38;
+
+  background-image:
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png"),
+    url("/assets/wardrobe-grunge-star.png");
+
+  background-repeat: no-repeat;
+
+  background-position:
+    40% 1%,
+    56% 6%,
+    70% 2%,
+    97% 22%,
+    99% 70%,
+    76% 97%,
+    30% 99%,
+    1% 62%;
+
+  background-size:
+    120px auto,
+    55px auto,
+    90px auto,
+    75px auto,
+    120px auto,
+    70px auto,
+    95px auto,
+    80px auto;
+}
+
+@media (max-width: 700px) {
+  html[data-theme="dark"] body:has(.editor-layout)::after {
+    opacity: 0.23;
+    background-size:
+      70px auto,
+      35px auto,
+      55px auto,
+      45px auto,
+      70px auto,
+      42px auto,
+      55px auto,
+      48px auto;
+  }
+}
