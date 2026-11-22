@@ -6133,3 +6133,11 @@ html[data-theme="dark"] body:has(.dash-hero) .dash-hero {
     linear-gradient(100deg, #5a3122 0%, #5e3423 60%, #5f3423 100%) !important;
 }
 html[data-theme="dark"] body:has(.dash-hero) .dash-hero h1 { font-style: italic; }
+html[data-theme="dark"] body:has(.dash-hero) .stat-icon {
+  background: center / contain no-repeat !important;
+}
+html[data-theme="dark"] body:has(.dash-hero) .stat-icon svg { visibility: hidden; }
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(1) .stat-icon { background-image: url("/assets/home-icon-shirt.png") !important; }
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(2) .stat-icon { background-image: url("/assets/home-icon-hanger.png") !important; }
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(3) .stat-icon { background-image: url("/assets/home-icon-box.png") !important; }
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(4) .stat-icon { background-image: url("/assets/home-icon-bell.png") !important; }
