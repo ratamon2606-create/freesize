@@ -2845,11 +2845,6 @@ body:has(input[placeholder="Search your clothes..."])
 
 /* ===== BORROWING & TRACKING — COCOA Y2K ===== */
 
-@keyframes borrowingButtonSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 /* พื้นหลังไล่สี + ลาย SVG */
 html[data-theme="dark"] body:has(.how-it-works) {
   min-height: 100vh;
@@ -3183,15 +3178,9 @@ html[data-theme="dark"] body:has(.how-it-works) .empty-button {
     inset 5px 5px 9px rgba(255,255,255,.62),
     0 6px 10px rgba(61, 35, 25, .25) !important;
 
-  animation:
-    borrowingButtonSpin 8s linear infinite;
-
+  /* หมุนด้วย JS (spinBorrowingButtons ใน app.js) เพื่อให้หมุนต่อเนื่องแม้หน้า render ใหม่
+     และเร่ง/ผ่อนความเร็วอย่างนุ่มนวลตอนชี้เมาส์ */
   transform-origin: center;
-}
-
-/* เมื่อนำเมาส์ไปชี้ กระดุมจะหมุนเร็วขึ้น */
-html[data-theme="dark"] body:has(.how-it-works) .empty:hover .empty-button {
-  animation-duration: 2.8s;
 }
 
 /* กล่อง How borrowing works */
