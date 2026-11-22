@@ -5395,27 +5395,3 @@ main {
 .ootd-empty-hanger {
   margin-bottom: 4px !important;
 }
-/* ===== FRIEND BANNER: MATCH WARDROBE CLOTH TITLE ===== */
-
-html[data-theme="dark"] body:has(.profile-hero) .profile-hero {
-  background: linear-gradient(
-    135deg,
-    rgba(65, 43, 34, 0.98),
-    rgba(45, 28, 23, 0.98)
-  );
-  border: 1px solid rgba(225, 181, 139, 0.72);
-  box-shadow:
-    0 7px 16px rgba(29, 15, 12, 0.22),
-    inset 0 0 0 1px rgba(255, 235, 211, 0.07);
-}
-
-/* ผ้าสีเดียวกับป้าย MY WARDROBE พร้อมเส้นประด้านใน */
-html[data-theme="dark"] body:has(.profile-hero) .profile-cover {
-  background: linear-gradient(
-    135deg,
-    rgba(65, 43, 34, 0.98),
-    rgba(45, 28, 23, 0.98)
-  );
-  outline: 1px dashed rgba(224, 181, 141, 0.18);
-  outline-offset: -6px;
-}
