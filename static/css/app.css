@@ -6019,3 +6019,15 @@ html[data-theme="dark"] body:has(.dash-hero) {
   background-repeat: no-repeat !important;
 }
 
+/* Hero: เลือดหมูเข้ม + สติกเกอร์ฝั่งขวา */
+html[data-theme="dark"] body:has(.dash-hero) .dash-hero {
+  background:
+    url("/assets/home-hero-stickers.svg") right 2% center / auto 108% no-repeat,
+    radial-gradient(ellipse at 78% 40%, #8a4a38 0%, transparent 62%),
+    linear-gradient(100deg, #2a130e 0%, #3f1f17 45%, #6a3627 100%) !important;
+  border: 1px solid #8c5643 !important;
+}
+html[data-theme="dark"] body:has(.dash-hero) .dash-hero h1 { color: #f6e4cc; }
+html[data-theme="dark"] body:has(.dash-hero) .dash-hero small { color: #e3b99a; }
+html[data-theme="dark"] body:has(.dash-hero) .dash-hero p { color: #e8cdb4; }
+
