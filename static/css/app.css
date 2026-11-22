@@ -6124,3 +6124,11 @@ html[data-theme="dark"] body:has(.dash-hero) .sticker-mini {
   }
   html[data-theme="dark"] body:has(.dash-hero) { background-size: 0 0, 0 0, 0 0, 100% 100% !important; }
 }
+
+/* ===== HOME: sticker art + chrome icons ตาม mockup ===== */
+html[data-theme="dark"] body:has(.dash-hero) .dash-hero {
+  background:
+    url("/assets/home-hero-swag.webp") right center / auto 100% no-repeat,
+    radial-gradient(ellipse at 20% 30%, #6c3b2a 0%, transparent 60%),
+    linear-gradient(100deg, #5a3122 0%, #5e3423 60%, #5f3423 100%) !important;
+}
