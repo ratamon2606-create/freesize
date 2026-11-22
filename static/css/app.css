@@ -6153,3 +6153,72 @@ html[data-theme="dark"] body:has(.dash-hero) .stat-tile:nth-child(4) .stat-icon 
     opacity: 0.32;
   }
 }
+
+
+/* ===== HOME: warm terracotta paper backdrop to match the Y2K reference ===== */
+html[data-theme="dark"] body:has(.dash-hero) {
+  background-color: #3b1f1c !important;
+  background-image:
+    url("/assets/home-star-outline.svg"),
+    url("/assets/home-star-outline.svg"),
+    url("/assets/home-star-outline.svg"),
+    radial-gradient(ellipse at 14% 7%, rgba(246, 203, 169, .13), transparent 36%),
+    radial-gradient(ellipse at 88% 52%, rgba(31, 10, 8, .16), transparent 43%),
+    repeating-linear-gradient(0deg, rgba(255, 232, 210, .025) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(35, 12, 9, .026) 0 1px, transparent 1px 4px),
+    linear-gradient(180deg, #9a6754 0%, #895a4b 20%, #70453a 48%, #542f29 73%, #3b1f1c 100%) !important;
+  background-size:
+    68px 68px,
+    106px 106px,
+    52px 52px,
+    100% 100%,
+    100% 100%,
+    4px 4px,
+    5px 5px,
+    100% 100% !important;
+  background-position:
+    4% 610px,
+    89% 620px,
+    73% 735px,
+    0 0,
+    0 0,
+    0 0,
+    0 0,
+    0 0 !important;
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    no-repeat,
+    no-repeat,
+    no-repeat,
+    repeat,
+    repeat,
+    no-repeat !important;
+}
+
+/* A small gingham tape detail beside Recent outfits, like the reference. */
+html[data-theme="dark"] body:has(.dash-hero) .section:has(.rail) .section-head h2::after {
+  content: "";
+  display: inline-block;
+  width: 36px;
+  height: 15px;
+  margin-left: 11px;
+  vertical-align: middle;
+  transform: rotate(-8deg) translateY(-2px);
+  background: repeating-conic-gradient(#c49a78 0 25%, #f0ddc5 0 50%) 0 0 / 10px 10px;
+  box-shadow: 0 1px 3px rgba(31, 12, 8, .22);
+}
+
+@media (max-width: 760px) {
+  html[data-theme="dark"] body:has(.dash-hero) {
+    background-position:
+      4% 760px,
+      89% 940px,
+      73% 1120px,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0 !important;
+  }
+}
