@@ -5977,3 +5977,23 @@ html[data-theme="dark"] body:has(.editor-layout)::after {
   transform: scale(0.97);
   transform-origin: top left;
 }
+
+/* ===== OOTD CARDS: MATCH MY WARDROBE CARD COLORS ===== */
+
+html[data-theme="dark"] .ootd-card-wrap {
+  background: linear-gradient(145deg, #f4e3c9, #dfc29d) !important;
+  border: 2px solid rgba(255, 231, 198, 0.85) !important;
+  box-shadow:
+    0 12px 25px rgba(25, 12, 9, 0.3),
+    inset 0 1px rgba(255, 255, 255, 0.55) !important;
+}
+
+html[data-theme="dark"] .ootd-card-wrap .outfit-card {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .ootd-card-wrap .outfit-card .preview {
+  background: linear-gradient(145deg, #d4c1aa, #bba58c) !important;
+  border: 1px solid rgba(86, 55, 40, 0.14) !important;
+}
