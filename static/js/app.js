@@ -325,7 +325,15 @@ function pageWardrobe(){let items=S.wardrobe.filter(matches);return `<div class=
 function clothingCard(i,friend=false){return `<div class="clothing-card" data-action="${friend?'friendItem':'openClothing'}" data-id="${esc(i.id)}" role="button" tabindex="0" aria-label="Open ${esc(i.name)}"><div class="photo"><img loading="lazy" decoding="async" src="${esc(urlItem(i))}" alt="${esc(i.name)}"><span class="card-button" aria-hidden="true"></span></div><div class="clothing-title">${esc(i.name)}</div><div class="meta"><span>${esc(i.color||i.category)}</span><span>${esc(i.category)}</span></div>${badge(i.state,i.holder)}<div class="mini-actions">${friend?`${btn(ico('plus')+' OOTD','addFriendToOOTD',i.id,'soft','tiny')}${btn('Borrow','requestBorrow',i.id,'secondary','tiny')}`:`${btn(ico('plus')+' OOTD','addOwnToOOTD',i.id,'soft','tiny')}${btn(ico('edit')+' Edit','editClothing',i.id,'secondary','tiny')}${btn(ico('trash')+' Delete','deleteClothing',i.id,'secondary','tiny')}`}</div></div>`}
 const empty=(title,desc,action,label)=>`<div class="empty"><span class="empty-button" aria-hidden="true"></span><h3>${title}</h3><p style="margin:10px 0 16px">${desc}</p>${action?btn(label,action,'','primary'):''}</div>`;
 function pageOOTD() {
-  let found = S.outfits.filter(o =>
+  // Cards run in creation order (first saved = 01, new looks added on the
+  // right), so editing an outfit or searching never moves or renumbers them.
+  const byCreation = [...S.outfits].sort((a, b) =>
+    a.created_at.localeCompare(b.created_at) || a.id.localeCompare(b.id)
+  );
+  const lookNumber = new Map(
+    byCreation.map((o, i) => [o.id, String(i + 1).padStart(2, '0')])
+  );
+  let found = byCreation.filter(o =>
     o.title.toLowerCase().includes(S.search.toLowerCase())
   );
 
@@ -393,8 +401,8 @@ function pageOOTD() {
         found.length
           ? `
             <div class="outfit-grid ootd-swag-grid">
-              ${found.map((o, index) =>
-                `<div class="ootd-card-wrap" data-look="${String(index + 1).padStart(2, '0')}">
+              ${found.map(o =>
+                `<div class="ootd-card-wrap" data-look="${lookNumber.get(o.id)}">
                   ${outfitCard(o)}
                 </div>`
               ).join('')}
