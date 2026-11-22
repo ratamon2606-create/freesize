@@ -4618,3 +4618,780 @@ body:has(.friends-page) main {
   font-size: 52px;
   transform: rotate(14deg);
 }
+
+/* ==================================================
+   OOTD — SWAG LIFESTYLE PAGE
+   ================================================== */
+
+.ootd-page {
+  position: relative;
+  isolation: isolate;
+  min-height: calc(100vh - 140px);
+  padding: 18px 12px 90px;
+  overflow: hidden;
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      circle at 48% 10%,
+      rgba(165, 100, 67, 0.28),
+      transparent 38%
+    ),
+    linear-gradient(
+      180deg,
+      #704b3d 0%,
+      #4d2e28 52%,
+      #251714 100%
+    );
+}
+
+/* ให้เนื้อหาอยู่หน้าดาว */
+.ootd-page > :not(.ootd-decor) {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* ---------- ดาวพื้นหลัง ---------- */
+
+.ootd-decor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ootd-star {
+  position: absolute;
+  display: block;
+  color: rgba(219, 155, 96, 0.55);
+  font-family: Georgia, serif;
+  line-height: 1;
+  text-shadow:
+    5px 5px 0 rgba(39, 19, 16, 0.38),
+    -2px -2px 0 rgba(244, 207, 159, 0.15);
+}
+
+.ootd-star.star-1 {
+  top: 65px;
+  left: 34%;
+  font-size: 86px;
+  transform: rotate(-18deg);
+}
+
+.ootd-star.star-2 {
+  top: 36px;
+  right: 23%;
+  font-size: 47px;
+  transform: rotate(14deg);
+}
+
+.ootd-star.star-3 {
+  top: 220px;
+  right: 5%;
+  font-size: 105px;
+  transform: rotate(-12deg);
+}
+
+.ootd-star.star-4 {
+  bottom: 80px;
+  left: 4%;
+  font-size: 78px;
+  transform: rotate(12deg);
+}
+
+.ootd-star.star-5 {
+  right: 8%;
+  bottom: 55px;
+  font-size: 55px;
+  transform: rotate(-8deg);
+}
+
+
+/* ---------- ส่วนหัว ---------- */
+
+.ootd-heading {
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+
+.ootd-title-box {
+  position: relative !important;
+  display: flex !important;
+  align-items: center;
+  width: min(430px, 82vw);
+  min-height: 112px;
+  padding: 22px 75px 22px 30px !important;
+  overflow: visible !important;
+  border: 2px solid #b58a68 !important;
+  border-radius: 9px !important;
+  background:
+    linear-gradient(
+      145deg,
+      #4b332a,
+      #36221d
+    ) !important;
+  box-shadow:
+    0 8px 0 rgba(38, 20, 16, 0.35),
+    0 14px 28px rgba(24, 12, 10, 0.28) !important;
+}
+
+/* เส้นเย็บด้านใน */
+.ootd-title-box::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  z-index: 1;
+  border: 1px dashed rgba(226, 190, 148, 0.48);
+  border-radius: 5px;
+  pointer-events: none;
+}
+
+.ootd-title-image {
+  position: relative;
+  z-index: 3;
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  object-fit: contain;
+}
+
+
+/* ---------- เทปสีฟ้า ---------- */
+
+.ootd-blue-tape {
+  position: absolute;
+  top: -17px;
+  left: -22px;
+  z-index: 8;
+  display: block;
+  width: 88px;
+  height: 29px;
+  transform: rotate(-9deg);
+  opacity: 0.95;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.12) 0 3px,
+      transparent 3px 9px
+    ),
+    #668fa2;
+  clip-path: polygon(
+    0 13%,
+    100% 0,
+    94% 88%,
+    5% 100%
+  );
+  box-shadow: 0 4px 6px rgba(25, 15, 13, 0.2);
+}
+
+
+/* ---------- กระดุมหัวข้อ ---------- */
+
+.ootd-title-button {
+  position: absolute;
+  top: 50%;
+  right: 24px;
+  z-index: 5;
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  color: transparent;
+  border: 3px solid #c69a59;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background:
+    radial-gradient(circle at 35% 35%, #543127 0 3px, transparent 4px),
+    radial-gradient(circle at 65% 35%, #543127 0 3px, transparent 4px),
+    radial-gradient(circle at 35% 65%, #543127 0 3px, transparent 4px),
+    radial-gradient(circle at 65% 65%, #543127 0 3px, transparent 4px),
+    radial-gradient(circle at 35% 25%, #fff3cc, #e3bd7b 65%, #b67b3e);
+  box-shadow:
+    inset 0 0 0 3px rgba(255, 240, 196, 0.48),
+    0 4px 8px rgba(32, 17, 13, 0.35);
+}
+
+.ootd-subtitle {
+  margin: 14px 0 0 10px !important;
+  color: #ead6b8 !important;
+  font-family: Georgia, serif;
+  font-size: 17px;
+  font-style: italic;
+  font-weight: 600;
+}
+
+
+/* ---------- Search และ badge ---------- */
+
+.ootd-toolbar {
+  position: relative;
+  z-index: 3;
+  max-width: 720px;
+  margin-bottom: 30px;
+}
+
+.ootd-toolbar .search {
+  border-color: rgba(206, 145, 91, 0.65);
+  background: rgba(31, 19, 16, 0.9);
+  box-shadow: 0 8px 20px rgba(26, 13, 11, 0.2);
+}
+
+.ootd-toolbar .badge {
+  color: #fff4e3 !important;
+  border-color: #bd7742 !important;
+  background: #a65e31 !important;
+}
+
+
+/* ---------- ตาราง OOTD ---------- */
+
+.ootd-swag-grid {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(230px, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+.ootd-card-wrap {
+  position: relative;
+  min-width: 0;
+  padding: 14px;
+  border: 2px solid #f2d6ad;
+  border-radius: 7px;
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(114, 75, 48, 0.09) 0 1px,
+      transparent 2px
+    ) 0 0 / 13px 13px,
+    linear-gradient(
+      145deg,
+      #f3dfbd,
+      #d7b990
+    );
+  box-shadow:
+    8px 9px 0 rgba(32, 16, 13, 0.35),
+    0 18px 35px rgba(28, 13, 11, 0.24);
+}
+
+/* เลข 01, 02, 03 */
+.ootd-card-wrap::before {
+  content: attr(data-look);
+  position: absolute;
+  top: 7px;
+  left: 12px;
+  z-index: 6;
+  color: #2c1915;
+  font-family: Impact, "Arial Narrow", sans-serif;
+  font-size: 62px;
+  font-style: italic;
+  line-height: 1;
+  text-shadow: 3px 3px 0 #c16d34;
+}
+
+/* เทปบนการ์ด */
+.ootd-card-wrap::after {
+  content: "";
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  z-index: 7;
+  width: 72px;
+  height: 23px;
+  transform: translateX(-50%) rotate(-2deg);
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,.18) 0 4px,
+      transparent 4px 10px
+    ),
+    #caa778;
+  clip-path: polygon(3% 4%, 98% 0, 94% 93%, 0 100%);
+  opacity: 0.92;
+}
+
+/* การ์ดเดิมด้านใน */
+.ootd-card-wrap .outfit-card {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+
+/* ---------- Empty state ---------- */
+
+.ootd-empty-wrap {
+  position: relative;
+  z-index: 3;
+  max-width: 1150px;
+  min-height: 390px;
+  margin: 25px auto 0;
+  padding: 65px 55px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #321d18;
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      rgba(113, 70, 43, 0.08) 0 1px,
+      transparent 2px
+    ) 0 0 / 14px 14px,
+    linear-gradient(
+      145deg,
+      #f4e2c5,
+      #ddbf94
+    );
+  clip-path: polygon(
+    1% 4%, 8% 2%, 16% 4%, 25% 1%,
+    35% 3%, 45% 1%, 56% 4%, 67% 1%,
+    77% 3%, 88% 1%, 99% 4%,
+    98% 20%, 100% 37%, 98% 55%,
+    100% 73%, 98% 96%,
+    88% 98%, 77% 96%, 67% 99%,
+    56% 97%, 45% 99%, 34% 96%,
+    23% 99%, 12% 96%, 2% 98%,
+    3% 78%, 1% 60%, 3% 41%, 1% 23%
+  );
+  filter: drop-shadow(10px 13px 0 rgba(30, 15, 12, 0.3));
+}
+
+.ootd-empty-wrap .empty,
+.ootd-empty-wrap .empty-state {
+  width: 100%;
+  color: #321d18 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.ootd-empty-wrap h2,
+.ootd-empty-wrap h3 {
+  color: #2f1915 !important;
+  font-family: Impact, "Arial Narrow", sans-serif;
+  font-size: clamp(34px, 5vw, 68px);
+  font-style: italic;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.ootd-empty-wrap p {
+  color: #68483a !important;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-style: italic;
+}
+
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1000px) {
+  .ootd-swag-grid {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+
+  .ootd-star.star-3 {
+    opacity: 0.35;
+  }
+}
+
+@media (max-width: 650px) {
+  .ootd-page {
+    padding: 10px 4px 65px;
+  }
+
+  .ootd-title-box {
+    width: min(360px, 88vw);
+    min-height: 92px;
+    padding: 18px 65px 18px 23px !important;
+  }
+
+  .ootd-title-image {
+    max-width: 240px;
+  }
+
+  .ootd-title-button {
+    right: 17px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .ootd-swag-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ootd-card-wrap::before {
+    font-size: 48px;
+  }
+
+  .ootd-empty-wrap {
+    min-height: 330px;
+    padding: 45px 25px;
+  }
+
+  .ootd-star.star-2,
+  .ootd-star.star-3 {
+    display: none;
+  }
+}
+
+/* ==================================================
+   URGENT FIX — OOTD FULL GRADIENT BACKGROUND
+   ================================================== */
+
+.ootd-page {
+  position: relative !important;
+  isolation: isolate;
+  overflow: visible !important;
+
+  /* เอาพื้นหลังสี่เหลี่ยมเดิมออก */
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+/* พื้นหลังเต็มหน้าจอ ไล่สีแบบค่อยเป็นค่อยไป */
+.ootd-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 48% 8%,
+      rgba(169, 105, 73, 0.42) 0%,
+      rgba(128, 76, 59, 0.24) 32%,
+      transparent 58%
+    ),
+    linear-gradient(
+      180deg,
+      #8b6252 0%,
+      #775044 18%,
+      #623d35 38%,
+      #4a2c28 58%,
+      #351f1c 78%,
+      #211412 100%
+    ) !important;
+}
+
+/* เพิ่ม texture เบา ๆ ไม่ให้พื้นหลังแบน */
+.ootd-page::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.18;
+
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(247, 218, 179, 0.23) 0 1px,
+      transparent 1.5px
+    );
+
+  background-size: 18px 18px;
+  mask-image:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.2),
+      transparent 42%
+    );
+}
+
+
+/* ---------- คำว่า SWAG ด้านหลัง ---------- */
+
+.ootd-decor::after {
+  content: "SWAG";
+  position: absolute;
+  top: 20px;
+  left: 51%;
+  z-index: 0;
+
+  color: rgba(42, 24, 20, 0.42);
+  font-family: Impact, "Arial Narrow", sans-serif;
+  font-size: clamp(70px, 8vw, 130px);
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: -5px;
+  line-height: 1;
+
+  transform:
+    translateX(-50%)
+    rotate(-9deg)
+    skewX(-10deg);
+
+  text-shadow:
+    4px 4px 0 rgba(213, 158, 107, 0.10);
+
+  pointer-events: none;
+}
+
+
+/* เส้นขีดใต้ SWAG */
+.ootd-decor::before {
+  content: "";
+  position: absolute;
+  top: 120px;
+  left: 43%;
+  z-index: 0;
+
+  width: 230px;
+  height: 13px;
+  border-top: 4px solid rgba(45, 25, 21, 0.38);
+  border-bottom: 2px solid rgba(45, 25, 21, 0.28);
+
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+
+
+/* ป้องกันพื้นหลังเดิมของตัวครอบหน้า */
+body,
+#app,
+main {
+  background: transparent !important;
+}
+
+/* ใช้รูป SWAG ใหม่แทนตัวอักษรเดิม */
+.ootd-decor::after {
+  content: "" !important;
+  position: absolute;
+  top: 17px;
+  left: 51%;
+  z-index: 0;
+
+  width: 330px;
+  height: 165px;
+
+  background-image: url("/assets/ootd-swag-wordmark.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  opacity: 0.42;
+  transform: translateX(-50%) rotate(-6deg);
+  pointer-events: none;
+}
+
+/* เอาเส้นใต้ SWAG ที่สร้างด้วย CSS ออก เพราะในรูปมีแล้ว */
+.ootd-decor::before {
+  display: none !important;
+}
+
+
+/* ดาวที่เพิ่มอีก 3 ดวง */
+.ootd-star.star-6 {
+  top: 320px;
+  left: 3%;
+  font-size: 48px;
+  transform: rotate(18deg);
+  opacity: 0.65;
+}
+
+.ootd-star.star-7 {
+  top: 480px;
+  right: 20%;
+  font-size: 75px;
+  transform: rotate(-15deg);
+  opacity: 0.52;
+}
+
+.ootd-star.star-8 {
+  bottom: 190px;
+  left: 43%;
+  font-size: 55px;
+  transform: rotate(10deg);
+  opacity: 0.58;
+}
+
+
+/* แก้กล่อง Search ที่ยังเป็นสี่เหลี่ยม */
+.ootd-toolbar .search {
+  position: relative;
+  overflow: hidden !important;
+  border: 1px solid rgba(206, 145, 91, 0.65) !important;
+  border-radius: 999px !important;
+  background: #211613 !important;
+  clip-path: inset(0 round 999px);
+}
+
+.ootd-toolbar .search .input,
+.ootd-toolbar .search input {
+  width: 100%;
+  border: 0 !important;
+  border-radius: 999px !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* กันพื้นหลังเหลี่ยมจาก pseudo-element เดิม */
+.ootd-toolbar .search::before,
+.ootd-toolbar .search::after {
+  border-radius: 999px !important;
+}
+
+/* ทำ toolbar โปร่งใส ไม่ให้มีกล่องสี่เหลี่ยมข้างหลัง */
+.ootd-toolbar,
+.ootd-toolbar::before,
+.ootd-toolbar::after {
+  background-color: transparent !important;
+}
+
+/* คำว่า LIFESTYLE วางใต้ SWAG */
+.ootd-decor::before {
+  content: "" !important;
+  position: absolute;
+  top: 135px;
+  left: 52%;
+  z-index: 1;
+  display: block !important;
+
+  width: 230px;
+  height: 90px;
+
+  background-image: url("/assets/ootd-lifestyle-wordmark.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  opacity: 0.72;
+  transform:
+    translateX(-50%)
+    rotate(-5deg);
+
+  pointer-events: none;
+}
+
+/* ไม้แขวนเสื้อใน Empty state */
+.ootd-empty-hanger {
+  position: relative;
+  z-index: 5;
+  display: block;
+  width: min(310px, 55vw);
+  height: auto;
+  margin: -25px auto 8px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* ซ่อนกระดุมเล็กเดิมของ empty() */
+.ootd-empty-wrap .empty-mark,
+.ootd-empty-wrap .empty-icon,
+.ootd-empty-wrap .button-mark {
+  display: none !important;
+}
+
+/* ลดช่องว่างด้านบนของข้อความหลังเพิ่มไม้แขวน */
+.ootd-empty-wrap .empty,
+.ootd-empty-wrap .empty-state {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* ทำกระดุมบนป้าย MY OOTD ให้เข้มขึ้น */
+.ootd-title-button {
+  border-color: #744020 !important;
+
+  background:
+    radial-gradient(circle at 35% 35%, #ead6ad 0 3px, transparent 4px),
+    radial-gradient(circle at 65% 35%, #ead6ad 0 3px, transparent 4px),
+    radial-gradient(circle at 35% 65%, #ead6ad 0 3px, transparent 4px),
+    radial-gradient(circle at 65% 65%, #ead6ad 0 3px, transparent 4px),
+    radial-gradient(
+      circle at 35% 25%,
+      #a8663d,
+      #6b351f 58%,
+      #3d1d15 100%
+    ) !important;
+
+  box-shadow:
+    inset 0 0 0 3px rgba(231, 181, 126, 0.25),
+    0 5px 9px rgba(29, 13, 10, 0.42) !important;
+}
+
+/* ========================================
+   OOTD CARD — เปลี่ยนเป็นสีกระดาษครีม
+   ======================================== */
+
+.ootd-card-wrap,
+.ootd-card-wrap .outfit-card,
+.ootd-swag-grid .outfit-card {
+  color: #321d17 !important;
+  border-color: #e7c89c !important;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(112, 71, 42, 0.09) 0 1px,
+      transparent 1.5px
+    ) 0 0 / 14px 14px,
+    linear-gradient(
+      145deg,
+      #f4e2c4 0%,
+      #ead1aa 55%,
+      #d8b78c 100%
+    ) !important;
+
+  box-shadow:
+    7px 8px 0 rgba(39, 20, 16, 0.34),
+    0 16px 28px rgba(31, 16, 13, 0.22) !important;
+}
+
+/* บริเวณที่วางเสื้อผ้าให้เข้มกว่าการ์ดนิดเดียว */
+.ootd-card-wrap .outfit-visual,
+.ootd-card-wrap .outfit-preview,
+.ootd-card-wrap .outfit-canvas,
+.ootd-card-wrap .outfit-items {
+  border-color: rgba(104, 66, 43, 0.24) !important;
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      #d8c3a4 0%,
+      #c5aa86 68%,
+      #b79872 100%
+    ) !important;
+}
+
+/* ชื่อชุดและวันที่เปลี่ยนเป็นสีเข้ม */
+.ootd-card-wrap h3,
+.ootd-card-wrap h4,
+.ootd-card-wrap .outfit-title,
+.ootd-card-wrap p,
+.ootd-card-wrap small {
+  color: #382019 !important;
+}
+
+/* ไอคอนแก้ไขและลบ */
+.ootd-card-wrap button,
+.ootd-card-wrap svg {
+  color: #45271f !important;
+  stroke: #45271f !important;
+}
+
+/* ซ่อนกระดุมเดิมตัวแรกใน empty state */
+.ootd-empty-wrap .empty > :first-child,
+.ootd-empty-wrap .empty-state > :first-child {
+  display: none !important;
+}
+
+/* ลดช่องว่างหลังซ่อนกระดุม */
+.ootd-empty-wrap .empty,
+.ootd-empty-wrap .empty-state {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.ootd-empty-hanger {
+  margin-bottom: 4px !important;
+}
