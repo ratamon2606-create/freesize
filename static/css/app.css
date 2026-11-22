@@ -6080,3 +6080,26 @@ html[data-theme="dark"] body:has(.dash-hero) .calm-state {
 }
 html[data-theme="dark"] body:has(.dash-hero) .calm-state p { color: #9b6a4b; }
 
+/* Recent outfits / Recently added → การ์ดครีม */
+html[data-theme="dark"] body:has(.dash-hero) .section-head h2 { color: #f6e4cc; }
+html[data-theme="dark"] body:has(.dash-hero) :is(.section-head a, .subline) { color: #e7c3a6; }
+html[data-theme="dark"] body:has(.dash-hero) .rail .outfit-card,
+html[data-theme="dark"] body:has(.dash-hero) .rail-new {
+  background: var(--swag-cream) !important;
+  border-color: var(--swag-line) !important;
+}
+html[data-theme="dark"] body:has(.dash-hero) .rail .outfit-card .preview {
+  background: linear-gradient(145deg, #e6d3b8, #d6bf9f) !important;
+  border-color: rgba(86, 55, 40, 0.16) !important;
+}
+html[data-theme="dark"] body:has(.dash-hero) .rail .outfit-card :is(.name) { color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) .rail .outfit-card :is(.date) { color: var(--swag-ink-soft); }
+html[data-theme="dark"] body:has(.dash-hero) .rail .outfit-card .tools .btn { color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) .rail-new,
+html[data-theme="dark"] body:has(.dash-hero) .rail-new strong { color: var(--swag-ink) !important; }
+html[data-theme="dark"] body:has(.dash-hero) .rail-new span { background: #efdcbf; color: var(--swag-ink); }
+html[data-theme="dark"] body:has(.dash-hero) .sticker-mini {
+  background: var(--swag-cream) !important;
+  border-color: var(--swag-line) !important;
+  color: var(--swag-ink);
+}
