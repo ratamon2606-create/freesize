@@ -328,9 +328,245 @@ function pageOOTD(){let found=S.outfits.filter(o=>o.title.toLowerCase().includes
 function libraryItems(){return S.studioTab==='mine'?S.wardrobe:S.studioFriendItems}
 function pageStudio(){let e=S.editor;if(!e)return empty('Loading editor…','');let items=libraryItems().filter(i=>(S.filter==='All'||i.category===S.filter)&&(!S.search||i.name.toLowerCase().includes(S.search.toLowerCase())));let selected=e.items[e.selected];let detail=selected?[...S.wardrobe,...S.studioFriendItems].find(i=>i.id===selected.item_id):null;
  return `<div class="heading-line"><div><h1 class="tag-paper">OOTD Studio</h1><p>Pick, layer, drag and arrange your pieces like fabric cutouts.</p></div><div class="heading-right" style="display:flex;gap:9px">${btn('← Gallery','goOOTD','','secondary')}${btn('↶ Undo','undoStudio','','secondary','studio-undo')}${btn(ico('save')+' Save OOTD','saveOOTD','','primary')}</div></div><div class="editor-layout"><aside class="editor-panel"><div class="pill-tabs" style="margin-bottom:12px">${btn('My Wardrobe','studioMine','',''+(S.studioTab==='mine'?'primary':'secondary'),'small')}${btn('Friends','studioFriends','',''+(S.studioTab==='friends'?'primary':'secondary'),'small')}</div>${S.studioTab==='friends'?`<select class="input" id="studio-friend" style="margin-bottom:10px"><option value="">Choose a friend...</option>${(S.friends?.friends||[]).map(f=>`<option value="${f.id}" ${S.studioFriendId===f.id?'selected':''}>${esc(f.display_name)}</option>`).join('')}</select>`:''}<div class="search" style="margin-bottom:10px">${ico('search')}<input id="library-search" class="input" placeholder="Search clothing..." value="${esc(S.search)}"></div><select class="input" id="library-category" style="margin-bottom:12px"><option>All</option>${[...new Set(libraryItems().map(i=>i.category))].map(c=>`<option ${S.filter===c?'selected':''}>${esc(c)}</option>`).join('')}</select><div class="editor-library"><div class="library-grid">${items.map(i=>`<button class="library-item" data-action="putItem" data-id="${esc(i.id)}" title="Add ${esc(i.name)} to canvas"><img loading="lazy" decoding="async" src="${esc(urlItem(i))}"><span>${esc(i.name)}</span></button>`).join('')}</div>${!items.length?`<p class="muted" style="padding:14px;font-size:12px">${S.studioTab==='friends'?'Choose a friend to add their pieces':'No matching clothes — add items in My Wardrobe, or clear your search'}</p>`:''}</div></aside><div class="editor-canvas-wrap"><div class="editor-canvas" id="editor-canvas">${e.items.map((item,index)=>{const i=[...S.wardrobe,...S.studioFriendItems].find(p=>p.id===item.item_id)||item;return item.image_path||i.image_path?`<div class="editor-object ${e.selected===index?'selected':''}" data-index="${index}" style="left:${item.x*100}%;top:${item.y*100}%;width:${item.w*100}%;z-index:${item.z}"><img draggable="false" src="${esc(item.image_path||i.image_path)}" alt="${esc(i.name||'Item')}">${e.selected===index?['nw','ne','sw','se'].map(c=>`<span class="handle ${c}" data-corner="${c}"></span>`).join(''):''}</div>`:''}).join('')}${!e.items.length?'<div style="position:absolute;inset:0;display:grid;place-content:center;text-align:center;color:#9a8574;pointer-events:none"><div style="font-family:Georgia;font-size:35px">Your blank canvas</div><div style="margin-top:10px;font-size:13px">Click clothes on the left to start styling</div></div>':''}</div><div class="editor-caption">Drag to move · Drag a corner or use the slider to resize · Select an item to change its layer · No mannequin, no snapping</div></div><aside class="editor-panel"><h3>Outfit Details</h3><div class="field" style="margin-bottom:16px"><label>OOTD Title *</label><input id="editor-title" class="input" maxlength="80" placeholder="e.g. Café Day" value="${esc(e.title)}"></div><div class="divider"></div><h3>Selected Item</h3>${selected?`<img loading="lazy" decoding="async" class="inspector-img" src="${esc(detail?.image_path||selected.image_path||'')}" alt=""><strong>${esc(detail?.name||selected.name||'Item')}</strong><p style="font-size:12px;margin:8px 0 15px;color:#846b58">Owner: ${esc(detail?.owner||selected.owner_name||'Friend')}</p><div class="note" style="margin-bottom:15px">Outfit planning only — this does not borrow or transfer clothing.</div><div class="field"><label>Size: <span id="size-percent">${Math.round(selected.w*100)}%</span></label><input type="range" class="range" id="item-size" min="8" max="95" value="${Math.round(selected.w*100)}"></div><div class="divider"></div><label class="muted" style="font-size:12px">Layer order</label><div class="inspector-buttons" style="margin-top:9px">${btn(ico('up')+' Forward','layerForward','','secondary','small')}${btn(ico('down')+' Backward','layerBackward','','secondary','small')}</div><div class="divider"></div>${btn(ico('trash')+' Remove from canvas','removeCanvas','','danger')}`:'<p class="muted" style="font-size:13px;line-height:1.7">Click an item on the canvas to see its name, owner, and editing controls.</p>'}<div class="divider"></div><p class="muted" style="font-size:12px">${e.items.length} pieces in current outfit</p></aside></div>`}
-function pageFriends(){let f=S.friends||{friends:[],incoming:[],outgoing:[]};let list=f[S.friendTab]||[];return `<div class="heading-line"><div><h1 class="tag-paper">Friends</h1><p>Find your people, share your closet</p></div><div class="heading-right">${btn(ico('plus')+' Add Friend','openAddFriend','','primary')}</div></div><div class="page-toolbar"><div class="search" style="max-width:620px;width:100%">${ico('search')}<input id="friend-search" class="input" placeholder="Search username to add a friend..."></div>${btn('Search','searchFriend','','secondary')}</div><div class="pill-tabs" style="margin:0 0 18px">${[['friends','My Friends',f.friends.length],['incoming','Incoming Requests',f.incoming.length],['outgoing','Sent Requests',f.outgoing.length]].map(([k,label,n])=>`<button class="pill ${S.friendTab===k?'active':''}" data-action="friendTab" data-id="${k}">${label} (${n})</button>`).join('')}</div>${list.length?`<div class="people-grid">${list.map(friendCard).join('')}</div>`:empty('Nothing here yet',S.friendTab==='friends'?'Search for your friends by username.':'No pending requests at the moment.','openAddFriend','Find a Friend')}`}
-function friendCard(f){let pics=S.previews[f.id]||[];return `<div class="paper friend-card"><div class="intro">${avatar(f,'mid')}<div><h3>${esc(f.display_name)}</h3><p class="muted" style="font-size:12px">@${esc(f.username)}</p></div></div>${S.friendTab==='friends'?`<div class="preview-rail">${pics.slice(0,3).map(i=>`<img loading="lazy" decoding="async" src="${esc(urlItem(i))}" alt="${esc(i.name)}">`).join('')||'<span class="muted">Visit their closet</span>'}</div><div class="actions">${btn('View Closet','viewFriend',f.id,'primary','small')}${btn('Remove','removeFriend',f.friendship_id,'secondary','small')}</div>`:`<div style="margin-top:15px;display:flex;gap:8px">${S.friendTab==='incoming'?btn(ico('check')+' Accept','acceptFriend',f.friendship_id,'sage'):''}${btn(S.friendTab==='incoming'?'Reject':'Cancel',S.friendTab==='incoming'?'rejectFriend':'cancelFriend',f.friendship_id,'secondary')}</div>`}</div>`}
+function pageFriends() {
+  let f = S.friends || {
+    friends: [],
+    incoming: [],
+    outgoing: []
+  };
 
+  let list = f[S.friendTab] || [];
+
+const showMonkeys =
+  S.friendTab === 'friends' &&
+  f.friends.length > 0;
+
+const stars = `
+  <div class="friends-star-field" aria-hidden="true">
+    <span class="friends-star star-1">☆</span>
+    <span class="friends-star star-2">☆</span>
+    <span class="friends-star star-3">☆</span>
+    <span class="friends-star star-4">☆</span>
+    <span class="friends-star star-5">☆</span>
+    <span class="friends-star star-6">☆</span>
+    <span class="friends-star star-7">☆</span>
+  </div>
+`;
+
+const sideMonkeys = showMonkeys
+  ? `
+    <div class="friends-side-monkeys" aria-hidden="true">
+      <span class="friend-monkey-side monkey-side-left"></span>
+      <span class="friend-monkey-side monkey-side-right"></span>
+    </div>
+  `
+  : '';
+
+  return `
+    <div class="friends-page">
+      ${stars}
+      ${sideMonkeys}
+
+      <div class="heading-line">
+        <div>
+<h1 class="tag-paper friends-title-box">
+  <span
+    class="friends-blue-tape"
+    aria-hidden="true"
+  ></span>
+
+  <img
+    class="friends-title-image"
+    src="/assets/friends-title-distressed.png"
+    alt="Friends"
+  >
+
+  <span
+    class="friends-title-star"
+    aria-hidden="true"
+  >
+    ☆
+  </span>
+</h1>
+
+          <p>Find your people, share your closet</p>
+        </div>
+
+        <div class="heading-right">
+          ${btn(
+            ico('plus') + ' Add Friend',
+            'openAddFriend',
+            '',
+            'primary'
+          )}
+        </div>
+      </div>
+
+      <div class="page-toolbar">
+        <div
+          class="search"
+          style="max-width:620px;width:100%"
+        >
+          ${ico('search')}
+
+          <input
+            id="friend-search"
+            class="input"
+            placeholder="Search username to add a friend..."
+          >
+        </div>
+
+        ${btn(
+          'Search',
+          'searchFriend',
+          '',
+          'secondary'
+        )}
+      </div>
+
+      <div
+        class="pill-tabs"
+        style="margin:0 0 18px"
+      >
+        ${
+          [
+            ['friends', 'My Friends', f.friends.length],
+            ['incoming', 'Incoming Requests', f.incoming.length],
+            ['outgoing', 'Sent Requests', f.outgoing.length]
+          ]
+            .map(([k, label, n]) => `
+              <button
+                class="pill ${S.friendTab === k ? 'active' : ''}"
+                data-action="friendTab"
+                data-id="${k}"
+              >
+                ${label} (${n})
+              </button>
+            `)
+            .join('')
+        }
+      </div>
+
+      ${
+        list.length
+          ? `
+            <div class="people-grid friends-people-grid">
+              ${list
+  .map((friend, index) =>
+    friendCard(friend, index, showMonkeys)
+  )
+  .join('')}
+            </div>
+          `
+          : empty(
+              'Nothing here yet',
+              S.friendTab === 'friends'
+                ? 'Search for your friends by username.'
+                : 'No pending requests at the moment.',
+              'openAddFriend',
+              'Find a Friend'
+            )
+      }
+    </div>
+  `;
+}
+function friendCard(f, index = 0, showMonkeys = false) {
+  const pics = S.previews[f.id] || [];
+
+  const cardMonkey =
+    showMonkeys && index < 3
+      ? `
+        <span
+          class="friend-card-monkey card-monkey-${index + 1}"
+          aria-hidden="true"
+        ></span>
+      `
+      : '';
+
+  return `
+    <div class="paper friend-card friends-card">
+      ${cardMonkey}
+
+      <div class="intro">
+        ${avatar(f, 'mid')}
+
+        <div>
+          <h3>${esc(f.display_name)}</h3>
+
+          <p class="muted" style="font-size:12px">
+            @${esc(f.username)}
+          </p>
+        </div>
+      </div>
+
+      ${
+        S.friendTab === 'friends'
+          ? `
+            <div class="preview-rail">
+              ${
+                pics
+                  .slice(0, 3)
+                  .map(i => `
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      src="${esc(urlItem(i))}"
+                      alt="${esc(i.name)}"
+                    >
+                  `)
+                  .join('')
+                ||
+                '<span class="muted">Visit their closet</span>'
+              }
+            </div>
+
+            <div class="actions">
+              ${btn(
+                'View Closet',
+                'viewFriend',
+                f.id,
+                'primary',
+                'small'
+              )}
+
+              ${btn(
+                'Remove',
+                'removeFriend',
+                f.friendship_id,
+                'secondary',
+                'small'
+              )}
+            </div>
+          `
+          : `
+            <div style="margin-top:15px;display:flex;gap:8px">
+              ${
+                S.friendTab === 'incoming'
+                  ? btn(
+                      ico('check') + ' Accept',
+                      'acceptFriend',
+                      f.friendship_id,
+                      'sage'
+                    )
+                  : ''
+              }
+
+              ${btn(
+                S.friendTab === 'incoming'
+                  ? 'Reject'
+                  : 'Cancel',
+                S.friendTab === 'incoming'
+                  ? 'rejectFriend'
+                  : 'cancelFriend',
+                f.friendship_id,
+                'secondary'
+              )}
+            </div>
+          `
+      }
+    </div>
+  `;
+}
 function borrowActions(r){let st=r.status,owner=r.is_owner;let actions=[];if(owner&&st==='pending')actions=[['Approve','approve','sage'],['Reject','reject','danger']];else if(owner&&st==='approved')actions=[['Confirm Handover','handover','primary']];else if(owner&&st==='return_requested')actions=[['Confirm Return','confirm_return','sage']];else if(!owner&&['pending','approved'].includes(st))actions=[['Cancel Request','cancel','secondary']];else if(!owner&&st==='borrowed')actions=[['Request Return','request_return','primary']];return actions.map(([label,a,k])=>btn(label,'borrowAction',r.id+'|'+a,k,'small')).join('')}
 // Plain-language status for the current user: {msg, need: does it need MY action?}
 function borrowInfo(r){const st=r.status,owner=r.is_owner,b=esc(r.borrower?.display_name||'Your friend'),o=esc(r.owner?.display_name||'the owner');
