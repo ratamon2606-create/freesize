@@ -5395,3 +5395,90 @@ main {
 .ootd-empty-hanger {
   margin-bottom: 4px !important;
 }
+/* ===== FRIEND CLOTHING CARDS: MATCH MY WARDROBE CARDS ===== */
+
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card {
+  color: #291914;
+  background: linear-gradient(145deg, #f4e3c9, #dfc29d);
+  border: 2px solid rgba(255, 231, 198, 0.85);
+  box-shadow:
+    0 12px 25px rgba(25, 12, 9, 0.3),
+    inset 0 1px rgba(255, 255, 255, 0.55);
+}
+
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card:hover {
+  border-color: rgba(255, 231, 198, 0.95);
+  box-shadow:
+    0 15px 28px rgba(25, 12, 9, 0.34),
+    inset 0 1px rgba(255, 255, 255, 0.55);
+}
+
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  .photo {
+  background: linear-gradient(145deg, #d4c1aa, #bba58c);
+  border: 1px solid rgba(86, 55, 40, 0.14);
+  box-shadow: none;
+}
+
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  .clothing-title {
+  color: #261712;
+}
+
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  .meta {
+  color: #6b4d3d;
+  font-weight: 600;
+}
+
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  :is(.badge, .badge.green) {
+  color: #fff0db;
+  background: #b86f36;
+  border-color: transparent;
+  font-weight: 800;
+}
+
+/* ปุ่ม OOTD สีส้มแบบหน้า My Wardrobe */
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  .mini-actions
+  .btn.soft {
+  color: #fff8ef;
+  background: #b86f36;
+  border-color: #b86f36;
+  font-weight: 800;
+}
+
+/* ปุ่ม Borrow สีครีมแบบปุ่ม Edit */
+html[data-theme="dark"]
+  body:has(.profile-hero)
+  .friend-closet-grid
+  .clothing-card
+  .mini-actions
+  .btn.secondary {
+  color: #2d1a14;
+  background: rgba(248, 229, 203, 0.68);
+  border-color: #9c7457;
+  font-weight: 800;
+}
