@@ -5605,3 +5605,20 @@ html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-info .date 
 html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-info .btn {
   color: #2e211a;
 }
+
+/* ===== FRIEND OUTFITS EMPTY BOX: MATCH FRIEND WARDROBE CARDS ===== */
+
+html[data-theme="dark"] body:has(.profile-hero) .empty {
+  color: #5e4b3e;
+  background: linear-gradient(
+    180deg,
+    #dfcfb8 0%,
+    #d1b99a 100%
+  );
+  border: 1px dashed #aa8e70;
+  box-shadow: 0 7px 17px rgba(12, 7, 5, 0.25);
+}
+
+html[data-theme="dark"] body:has(.profile-hero) .empty h3 {
+  color: #2e211a;
+}
