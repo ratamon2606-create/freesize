@@ -5512,3 +5512,47 @@ html[data-theme="dark"] body:has(#profile-form) {
 
   background-attachment: fixed !important;
 }
+
+/* ===== FRIEND PROFILE OUTFITS: MATCH FRIEND WARDROBE CARDS ===== */
+
+html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-card {
+  color: #2e211a;
+  background: linear-gradient(
+    180deg,
+    #dfcfb8 0%,
+    #d1b99a 100%
+  );
+  border: 1px solid #aa8e70;
+  box-shadow: 0 7px 17px rgba(12, 7, 5, 0.25);
+}
+
+html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-card:hover {
+  border-color: #b99a78;
+  box-shadow: 0 11px 24px rgba(12, 7, 5, 0.32);
+}
+
+/* กล่องรูปชุดด้านใน แบบเดียวกับกล่องรูปเสื้อ */
+html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-card .preview {
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(222, 211, 196, 0.52),
+      transparent 62%
+    ),
+    #a99a88;
+  border: 1px solid #c5b29a;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+/* ชื่อชุด วันที่ และไอคอน */
+html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-info .name {
+  color: #2e211a;
+}
+
+html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-info .date {
+  color: #5e4b3e;
+}
+
+html[data-theme="dark"] body:has(.profile-hero) .outfit-grid .outfit-info .btn {
+  color: #2e211a;
+}
