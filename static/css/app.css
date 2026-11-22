@@ -6305,3 +6305,6 @@ html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothi
 html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .divider {
   background: rgba(255, 220, 190, 0.12);
 }
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .more-details {
+  border-top-color: rgba(255, 220, 190, 0.14);
+}
