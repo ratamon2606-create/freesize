@@ -5496,3 +5496,19 @@ html[data-theme="dark"]
 
   background-attachment: fixed !important;
 }
+
+/* ===== MY PROFILE: SHOW ITS BROWN GRADIENT AGAIN ===== */
+
+/* ไล่สีเดิมของหน้า My Profile ถูกกฎ body transparent ทับ จึงใส่ !important */
+html[data-theme="dark"] body:has(#profile-form) {
+  background:
+    linear-gradient(
+      180deg,
+      #8f6855 0%,
+      #69493e 38%,
+      #3f2924 70%,
+      #211510 100%
+    ) !important;
+
+  background-attachment: fixed !important;
+}
