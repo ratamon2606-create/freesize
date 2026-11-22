@@ -5877,3 +5877,14 @@ html[data-theme="dark"] .confirm-layer .confirm-actions .btn.primary {
   border-color: #b86f36;
   box-shadow: 0 3px 0 #7a4422;
 }
+
+/* ===== MY WARDROBE: KEEP CONFIRM POPUP CENTERED ===== */
+
+/* กฎ "body > *" ของหน้า My Wardrobe ทำให้ป๊อปอัปยืนยันเป็น position: relative
+   แล้วไปโผล่ท้ายหน้า จึงตั้งกลับเป็น fixed ให้เหมือนหน้า OOTD */
+html[data-theme="dark"]
+body:has(input[placeholder="Search your clothes..."])
+> .confirm-layer {
+  position: fixed;
+  z-index: 200;
+}
