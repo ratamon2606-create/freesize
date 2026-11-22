@@ -6287,3 +6287,21 @@ html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothi
 html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .more-details summary {
   color: #e7a877;
 }
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .btn.primary {
+  color: #fff6ec;
+  background: var(--pop-accent);
+  border-color: var(--pop-accent);
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .btn.secondary {
+  color: var(--pop-text);
+  background: transparent;
+  border-color: #8a5d45;
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .btn.danger {
+  color: #f0a093;
+  background: transparent;
+  border-color: #a5544a;
+}
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .divider {
+  background: rgba(255, 220, 190, 0.12);
+}
