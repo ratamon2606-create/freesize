@@ -9,7 +9,7 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(28.8 334.8)">
 <title>Architecture</title>
 <polygon fill="white" stroke="transparent" points="-28.8,28.8 -28.8,-334.8 1225.8,-334.8 1225.8,28.8 -28.8,28.8"/>
-<text text-anchor="middle" x="598.5" y="-285.2" font-family="DejaVu Sans" font-size="21.00" fill="#473528">WardrobeShare — Self&#45;contained Hybrid Web Application</text>
+<text text-anchor="middle" x="598.5" y="-285.2" font-family="DejaVu Sans" font-size="21.00" fill="#473528">Freesize — Self&#45;contained Hybrid Web Application</text>
 <!-- browser -->
 <g id="node1" class="node">
 <title>browser</title>
