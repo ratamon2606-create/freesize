@@ -7012,3 +7012,33 @@ html[data-theme="dark"] body:has(.dash-hero) .dash-hero p { max-width: 38%; }
       linear-gradient(100deg, #3a241d 0%, #553629 50%, #6e4636 100%) !important;
   }
 }
+/* ===== HERO: จอกลาง/ย่อหน้าต่าง — สติกเกอร์อยู่ขวาเหมือนเดิม แต่ไม่หดเล็กเกินไป ===== */
+@media (min-width: 761px) and (max-width: 1100px) {
+  html[data-theme="dark"] body:has(.dash-hero) .dash-hero {
+    background:
+      url("/assets/hero-swag-sticker.png") right 6px center / max(58%, 420px) auto no-repeat,
+      url("/assets/star-outline-sm.png") right 2% bottom 8% / 20px auto no-repeat,
+      url("/assets/halftone-1.png") right 0 top 0 / 26% auto no-repeat,
+      url("/assets/halftone-2.png") right 0 bottom 0 / 22% auto no-repeat,
+      radial-gradient(ellipse at 18% 30%, rgba(160, 112, 88, .35) 0%, transparent 60%),
+      linear-gradient(100deg, #3a241d 0%, #553629 50%, #6e4636 100%) !important;
+  }
+  /* ปุ่มขึ้นบรรทัดใหม่แทนการทับสติกเกอร์ */
+  html[data-theme="dark"] body:has(.dash-hero) .dash-hero .hero-actions {
+    flex-wrap: wrap;
+    /* กว้างพอให้ห่างจากสติกเกอร์อย่างน้อย ~40px */
+    max-width: calc(100vw - 162px - max(58vw - 46px, 420px));
+  }
+}
+
+/* ===== NOTIFICATIONS: หัวข้อสไตล์เดียวกับหน้า Friends ===== */
+.notify-title-image {
+  width: 430px;
+  height: 62px;
+}
+@media (max-width: 760px) {
+  .notify-title-image {
+    width: min(250px, calc(100vw - 150px));
+    height: 36px;
+  }
+}
