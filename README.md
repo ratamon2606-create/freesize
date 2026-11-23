@@ -12,6 +12,7 @@ A self-hosted social wardrobe application for organizing clothing, styling outfi
 
 ## Overview
 
+Youtube link: [Freesize](https://youtu.be/pssf54WoNos)
 Freesize lets people maintain a digital wardrobe, create and save outfit compositions, discover clothing shared by accepted friends, and manage physical borrowing. Images are stored on the host, not in a third-party storage API. Optional background removal runs inside the Python application with a locally provisioned ONNX model.
 
 ### Features
@@ -195,6 +196,54 @@ GitHub Actions additionally checks:
 5. Dependency vulnerability audit
 
 A successful CI run on `main` can publish an immutable, commit-tagged web image to GHCR. The repository's branch protection requires a reviewed PR and passing checks before merging. Test results do not replace any genuine screenshots or demonstration evidence separately required by an instructor.
+
+## Screenshots and submission evidence
+
+The screenshots below document the FreeSize user interface and database validation. They were captured on 23 November 2026. User account email in the profile screenshot is redacted for privacy. All screenshots retain their feature context.
+
+**Evidence limits:** A screenshot of an edit form or confirmation dialog shows the UI workflow, but does not by itself prove a successful database update or deletion. The automated database tests and [test evidence](docs/screenshots/evidence/) document transaction rollback and SQL-to-MongoDB recovery on a separate disposable database.
+
+### Web application (23 screenshots)
+
+| Feature | Screenshot evidence |
+| --- | --- |
+| Home | [Signed-in home dashboard](docs/screenshots/01-home-overview.png) |
+| Authentication | [Login page and sign-up entry point](docs/screenshots/02-login-page.png) |
+| Profile | [Profile management form (email redacted)](docs/screenshots/03-profile-redacted.png) |
+| Wardrobe | [Wardrobe gallery and item controls](docs/screenshots/04-wardrobe-gallery.png) |
+| Wardrobe | [Create clothing form](docs/screenshots/05-add-clothing-dialog.png) |
+| Wardrobe | [Update clothing form](docs/screenshots/06-edit-clothing-dialog.png) |
+| Wardrobe | [Delete confirmation dialog](docs/screenshots/07-delete-clothing-confirmation.png) |
+| OOTD | [Saved outfit gallery](docs/screenshots/08-ootd-gallery.png) |
+| OOTD | [Drag-and-layer OOTD editor](docs/screenshots/09-ootd-studio.png) |
+| OOTD | [Outfit detail and original owner labels](docs/screenshots/10-ootd-preview-ownership.png) |
+| Friends | [Friend cards, requests and controls](docs/screenshots/11-friends-list.png) |
+| Friends | [Accepted friend wardrobe](docs/screenshots/12-friend-wardrobe.png) |
+| Friends | [Accessible friend outfit gallery](docs/screenshots/13-friend-outfits.png) |
+| Borrowing | [Borrowing requests page, empty state](docs/screenshots/14-borrowing-requests.png) |
+| Borrowing | [Active loan with step-by-step status](docs/screenshots/15-lent-to-friends.png) |
+| Borrowing | [Borrowed-by-me tab, empty state](docs/screenshots/16-borrowed-by-me.png) |
+| Borrowing | [Returned loan history](docs/screenshots/17-borrowing-history.png) |
+| MongoDB UI | [Notifications and reminders](docs/screenshots/18-notifications.png) |
+| MongoDB UI | [Activity entries and personal notes](docs/screenshots/19-activity-notes.png) |
+| MongoDB UI | [Borrow status log and personal notes](docs/screenshots/20-borrow-status-log.png) |
+
+| Wardrobe | [Successful clothing update](docs/screenshots/27-clothing-update-success.png) |
+| Wardrobe | [Successful clothing removal](docs/screenshots/28-clothing-delete-success.png) |
+| Activity | [Clothing update and removal audit entries](docs/screenshots/29-clothing-activity-audit.png) |
+
+### Database and integration tests (6 screenshots)
+
+| Verification | Screenshot evidence |
+| --- | --- |
+| Database | [PostgreSQL table listing (9 tables)](docs/screenshots/21-postgresql-tables.png) |
+| Database | [MongoDB collections and document counts](docs/screenshots/22-mongodb-collections.png) |
+| Database | [JOIN query results for requests, loans and clothing states](docs/screenshots/23-sql-join-results.png) |
+| Testing | [Combined rollback and outbox evidence view](docs/screenshots/24-transaction-and-outbox-combined.png) |
+| Testing | [Forced SQL failure with before/after rollback verification](docs/screenshots/25-transaction-rollback.png) |
+| Testing | [SQL outbox recovery after transient MongoDB error](docs/screenshots/26-outbox-retry.png) |
+
+The SQL rollback test intentionally raises an exception after two writes, verifies unchanged pre/post SQL state, and confirms no loan record was persisted. The outbox retry test simulates a failed MongoDB write before verifying eventual delivery. The underlying machine-readable files are [rollback-postgres.json](docs/screenshots/evidence/rollback-postgres.json) and [nosql-integration.json](docs/screenshots/evidence/nosql-integration.json).
 
 ## Deployment and operations
 
