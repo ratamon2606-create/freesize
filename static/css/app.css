@@ -6697,7 +6697,8 @@ html[data-theme="dark"] body:has(.dash-hero) .dash-hero {
     linear-gradient(100deg, #5a3122 0%, #5e3423 60%, #5f3423 100%) !important;
 }
 html[data-theme="dark"] body:has(.dash-hero) .dash-hero h1 { font-style: italic; }
-html[data-theme="dark"] body:has(.dash-hero) .stat-icon {
+html[data-theme="dark"] body:has(.dash-hero) .stat-icon,
+html[data-theme="dark"] body:has(.dash-hero) .stat-tile:hover .stat-icon {
   background: center / contain no-repeat !important;
 }
 html[data-theme="dark"] body:has(.dash-hero) .stat-icon svg { visibility: hidden; }
