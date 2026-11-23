@@ -6787,8 +6787,8 @@ html[data-theme="dark"] body:has(.dash-hero) .section:has(.rail) .section-head h
   }
 }
 
-/* ===== ADD / EDIT CLOTHING POPUP: น้ำตาลเข้ม ไม่สว่างเกิน ===== */
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) {
+/* ===== ADD / EDIT CLOTHING + ADD FRIEND POPUP: น้ำตาลเข้ม ไม่สว่างเกิน ===== */
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) {
   --pop-text: #f4e2cc;
   --pop-soft: #c9a88f;
   --pop-line: #6b4636;
@@ -6798,77 +6798,77 @@ html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothi
   border: 1px solid #7a5040;
   box-shadow: 0 30px 80px rgba(10, 4, 2, 0.6), inset 0 1px 0 rgba(255, 220, 190, 0.08);
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.modal-title, h2, h3, strong, label) {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) :is(.modal-title, h2, h3, strong, label) {
   color: var(--pop-text);
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.muted, p, small, .field small, .add-hint, .add-photo-empty span) {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) :is(.muted, p, small, .field small, .add-hint, .add-photo-empty span) {
   color: var(--pop-soft);
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .modal-close {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) .modal-close {
   color: var(--pop-text);
   background: rgba(255, 225, 195, 0.08);
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .modal-close:hover {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) .modal-close:hover {
   background: rgba(255, 225, 195, 0.16);
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.add-photo, .upload-preview) {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) :is(.add-photo, .upload-preview) {
   background: linear-gradient(150deg, #3d281f, #2f1e17);
   border-color: #8a5d45;
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .add-photo:hover {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) .add-photo:hover {
   background: linear-gradient(150deg, #47302500, #3a261d), #3a261d;
   border-color: var(--pop-accent);
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.add-photo-empty strong, .add-photo-empty svg) {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) :is(.add-photo-empty strong, .add-photo-empty svg) {
   color: #e7a877;
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.input, textarea, select) {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) :is(.input, textarea, select) {
   color: var(--pop-text);
   background: rgba(16, 9, 6, 0.45);
   border-color: var(--pop-line);
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.input, textarea)::placeholder {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) :is(.input, textarea)::placeholder {
   color: #8e6e5a;
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) :is(.input, textarea, select):focus {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) :is(.input, textarea, select):focus {
   border-color: var(--pop-accent);
   box-shadow: 0 0 0 3px rgba(196, 116, 61, 0.25);
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .chip span {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) .chip span {
   color: #ecd3ba;
   background: #3a261d;
   border-color: var(--pop-line);
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .chip:hover span {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) .chip:hover span {
   background: #46302500;
   background-color: #462f25;
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .chip input:checked + span {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) .chip input:checked + span {
   color: #fff6ec;
   background: var(--pop-accent);
   border-color: var(--pop-accent);
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .more-details summary {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) .more-details summary {
   color: #e7a877;
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .btn.primary {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) .btn.primary {
   color: #fff6ec;
   background: var(--pop-accent);
   border-color: var(--pop-accent);
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .btn.secondary {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) .btn.secondary {
   color: var(--pop-text);
   background: transparent;
   border-color: #8a5d45;
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .btn.danger {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) .btn.danger {
   color: #f0a093;
   background: transparent;
   border-color: #a5544a;
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .divider {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) .divider {
   background: rgba(255, 220, 190, 0.12);
 }
-html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form)) .more-details {
+html[data-theme="dark"] .modal-layer .modal:has(:is(#clothing-form, #edit-clothing-form, #add-friend-form)) .more-details {
   border-top-color: rgba(255, 220, 190, 0.14);
 }
