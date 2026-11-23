@@ -1,5 +1,5 @@
 digraph Architecture {
-  graph [rankdir=LR, bgcolor="white", pad="0.4", nodesep="0.6", ranksep="0.75", label="WardrobeShare — Self-contained Hybrid Web Application", labelloc=t, fontsize=21, fontname="DejaVu Sans", fontcolor="#473528"];
+  graph [rankdir=LR, bgcolor="white", pad="0.4", nodesep="0.6", ranksep="0.75", label="Freesize — Self-contained Hybrid Web Application", labelloc=t, fontsize=21, fontname="DejaVu Sans", fontcolor="#473528"];
   node [shape=box, style="rounded,filled", fillcolor="#FBF5EC", color="#A38A71", fontname="DejaVu Sans", fontsize=12, margin="0.23,0.16"];
   edge [color="#87664B", fontname="DejaVu Sans", fontsize=10, arrowsize=0.8];
   browser [label="User's browser\nHTML · CSS · JavaScript\nOOTD canvas + CRUD screens", fillcolor="#F3E2C9"];

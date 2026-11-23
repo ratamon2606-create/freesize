@@ -4,106 +4,285 @@
 
 **Your wardrobe, your friends, endless outfit combinations.**
 
-A social wardrobe web application for organizing real clothing, building outfits with friends, and tracking shared pieces — all in one place.
+A self-hosted social wardrobe application for organizing clothing, styling outfits with friends, and keeping track of borrowed items.
 
-**Project status:** Closed-beta candidate · Self-hosted · Not yet publicly deployed
+**Status:** Working closed-beta deployment on a privately accessed Ubuntu host (Tailscale HTTPS). This is **not** a publicly accessible internet service.
 
 </div>
 
-## About the project
+## Overview
 
-Freesize helps friends turn their individual closets into a shared creative space. Upload and organize your clothes, automatically remove image backgrounds using an **offline local AI model**, arrange garment cutouts on a free-form OOTD canvas, save your looks, explore friends' wardrobes, and manage borrowing with a clear ownership trail.
+Freesize lets people maintain a digital wardrobe, create and save outfit compositions, discover clothing shared by accepted friends, and manage physical borrowing. Images are stored on the host, not in a third-party storage API. Optional background removal runs inside the Python application with a locally provisioned ONNX model.
 
-The interface uses a warm **vintage textile / brown gingham** design with real clothing photos rather than vector garments.
+### Features
 
-## Features
-
-| Area | What you can do |
+| Module | Functionality |
 | --- | --- |
-| Account & profile | Register without an invitation code, sign in/out, edit your profile and avatar; shared site access stays restricted by Tailscale |
-| My Wardrobe | Upload or take clothing photos, remove backgrounds locally, manage details, edit/delete items, track current holder |
-| OOTD Gallery & Studio | Build outfits on a drag-and-drop canvas, resize and layer clothes, save/edit/delete slots, inspect item ownership |
-| Friends | Search usernames, send/accept/reject requests, manage friends, explore their permitted wardrobes |
-| Borrowing | Request, approve/reject, hand over, return, confirm receipt, and view history |
-| Notifications & activity | Receive and manage notifications; review personal activity and borrowing notes |
+| Accounts & profiles | Register, log in/out, edit profile and avatar, manage account |
+| My Wardrobe | Add clothes from a camera or file, edit details, remove items, track owner and current holder |
+| OOTD Studio & Gallery | Drag, resize, and layer clothing on a canvas; save, revisit, edit, or delete outfits |
+| Friends | Search by username, request/accept/reject friendships, view accessible wardrobes |
+| Borrowing | Request an item, approve/reject, hand it over, request return, confirm receipt, view history |
+| Notifications & activity | Manage personal reminders, activity/journal entries, and borrowing notes |
 
-### Privacy by design
+**Privacy rule:** When someone views a friend's saved outfit, the server checks access to *every* clothing item in that outfit. If any referenced owner is not accessible to the viewer, the whole outfit (including its preview) is hidden. Putting a garment on a digital canvas never transfers its physical ownership or possession.
 
-A friend's saved OOTD is visible **only if the viewer is permitted to access every clothing item in it**. If even one garment belongs to someone outside the viewer's accepted friend circle, the **whole outfit is hidden server-side**, including its preview. Using a friend's garment in a digital OOTD **does not** change who owns or physically holds it.
+## Technology stack
 
-## Technology
-
-| Layer | Stack |
+| Layer | Implementation |
 | --- | --- |
 | Frontend | HTML, CSS, vanilla JavaScript |
-| Backend | Python, FastAPI |
-| SQL | Self-hosted PostgreSQL (9 tables) |
-| NoSQL | Self-hosted MongoDB (4 collections) |
-| Background removal | `rembg` / U²-NetP ONNX model, in-process, offline |
-| Storage | Local server filesystem and persistent Docker volumes |
-| Infrastructure | Docker Compose, Caddy (HTTPS), GitHub Actions |
+| Backend | Python 3.11, FastAPI, Uvicorn |
+| Relational database | Self-hosted PostgreSQL 16 |
+| Document database | Self-hosted MongoDB 7 |
+| Background removal | `rembg` with the U²-NetP ONNX model, running **in-process** and offline |
+| File storage | Server filesystem / persistent Docker volume for uploads |
+| Containers | Docker and Docker Compose |
+| Delivery | GitHub Actions, GHCR image publishing, Ubuntu systemd deploy agent, Tailscale SSH trigger |
+| HTTPS | Tailscale HTTPS on the active private deployment; a Caddy-based VPS configuration is also included but is a separate deployment path |
 
-**Database design:** SQL stores relational ownership, friends, loan state and atomic transactions. MongoDB stores flexible outfit compositions, notifications and logs. A transactional **outbox** carries changes from SQL to MongoDB with retry; this is *eventual consistency*, not a cross-database ACID transaction.
+There is **one FastAPI application**, not a separate AI microservice. PostgreSQL and MongoDB are not exposed to the public internet by the supplied local Compose setup.
+
+## System architecture
 
 ![System architecture](docs/diagrams/architecture.png)
 
-Other design references: [SQL ERD](docs/diagrams/sql_erd.png) · [NoSQL Schema](docs/diagrams/nosql_schema.png).
+The browser communicates with the FastAPI application, which handles authentication, permissions, CRUD operations, SQL transactions, image processing, and cross-database synchronization. PostgreSQL holds structured entities and transactional state; MongoDB stores flexible documents; uploaded images and the AI model remain on the local host.
 
-## Run locally
+### SQL ER diagram — PostgreSQL
 
-Requirements: Docker and Docker Compose on Linux (Ubuntu recommended).
+![SQL entity-relationship diagram](docs/diagrams/sql_erd.png)
 
-```bash
-cp .env.example .env
-# Edit .env and replace the example POSTGRES_PASSWORD with a unique local password.
-# SEED_DEMO=1 enables sample accounts/items for a disposable local demo.
-# SEED_DEMO=0 on a fresh database keeps the app free of demo users and items.
-docker compose up -d --build
-docker compose ps
-curl http://localhost:3000/api/ready
+The **nine SQL tables** are:
+
+| Table | Purpose |
+| --- | --- |
+| `users` | Accounts and profile information |
+| `sessions` | Authentication sessions |
+| `clothing_items` | Garments, owners, current holders, and item state |
+| `clothing_upload_requests` | Deduplicate repeated uploads using user ID + request token |
+| `friendships` | Friendship requests and accepted connections |
+| `outfit_slots` | Saved outfit identities and owners |
+| `borrow_requests` | Borrowing requests and their statuses |
+| `loans` | Actual handovers and returns |
+| `outbox_events` | Pending or processed events delivered to MongoDB |
+
+The database defines primary/foreign keys and constraints. Borrowing operations use SQL transactions and row locking where appropriate; forced-error tests verify rollback after multi-step modifications. A repeated wardrobe upload with the same request token returns the existing item instead of creating duplicates.
+
+### NoSQL document schema — MongoDB
+
+![MongoDB document schema](docs/diagrams/nosql_schema.png)
+
+The **four MongoDB collections** are:
+
+| Collection | Purpose |
+| --- | --- |
+| `outfit_compositions` | Flexible arrays of positioned/layered outfit items |
+| `notifications` | Notifications and user-owned reminders |
+| `activity_logs` | Activity events and personal journal entries |
+| `borrow_status_logs` | Borrowing events and personal notes |
+
+Example outfit composition (illustrative IDs):
+
+```json
+{
+  "slot_id": "outfit-slot-id",
+  "owner_id": "outfit-owner-id",
+  "items": [
+    { "item_id": "shirt-id", "owner_id": "shirt-owner-id", "x": 0.1, "y": 0.2, "w": 0.42, "z": 2 },
+    { "item_id": "skirt-id", "owner_id": "skirt-owner-id", "x": 0.4, "y": 0.48, "w": 0.36, "z": 3 }
+  ]
+}
 ```
 
-Open **http://localhost:3000**. By default the web service is bound to localhost; this is **not a public deployment**. For a real environment, see [Production Release Checklist](docs/PRODUCTION_RELEASE_CHECKLIST_TH.md).
+The coordinates are normalized for the OOTD canvas. Item ownership is verified against PostgreSQL, not trusted from browser-supplied values. User-owned editable records support their corresponding CRUD operations; system-generated audit/security events are not arbitrarily editable or deletable.
 
-### Offline background removal
+### SQL–NoSQL synchronization
 
-The model weights are not stored in Git. Place the verified `u2netp.onnx` file in `models/u2netp.onnx` on the host. The model is loaded inside the web backend; the app does not call a third-party background-removal API.
+Business updates are committed atomically *within PostgreSQL*, along with an `outbox_events` row. An in-process worker applies the corresponding MongoDB change and can retry delivery using stable identifiers. **This is eventual consistency across the two databases, not a distributed ACID transaction.** PostgreSQL rollback and outbox retry are covered by integration tests.
 
-For production, configure `REQUIRE_BACKGROUND_AI=1` and verify the readiness endpoint and actual image cutout before launch.
+## Local setup
 
-## Tests and CI/CD
+### Prerequisites
 
-Before opening a pull request, run:
+- Docker Engine with the Docker Compose plugin
+- Git
+- A machine capable of running PostgreSQL, MongoDB, and the Python web image (Ubuntu/Linux recommended)
+- Optional: a trusted `u2netp.onnx` model file for offline background removal
+
+### 1. Clone and configure
+
+```bash
+git clone https://github.com/ratamon2606-create/freesize.git
+cd freesize
+cp .env.example .env
+mkdir -p models
+```
+
+Edit `.env` and **replace** `POSTGRES_PASSWORD` with your own password. The included environment template is for local use, not production secrets. Important options:
+
+| Variable | Local behavior |
+| --- | --- |
+| `WEB_PORT=3000` | Browser address is `http://localhost:3000` |
+| `SEED_DEMO=1` | Seed demo content in a disposable local database; use `0` for a fresh, non-demo database |
+| `COOKIE_SECURE=0` | Allows HTTP cookies on localhost; use secure cookies for HTTPS deployments |
+| `LOCAL_AI_MODELS_DIR=./models` | Directory containing the optional model weights |
+| `REQUIRE_BACKGROUND_AI=0` | Does not require AI model availability for readiness checks |
+
+**Do not commit `.env`, real uploads, database data, SSH keys, or ONNX model weights.**
+
+### 2. Start the application
+
+```bash
+docker compose up -d --build
+docker compose ps
+curl -fsS http://localhost:3000/api/ready
+```
+
+Open **http://localhost:3000**. The development web port binds to `127.0.0.1`, so it is not directly exposed as a public web service. Startup may take time on the first build while Docker downloads the required images and Python packages.
+
+### 3. Optional offline AI setup
+
+Place a verified U²-NetP model at:
+
+```text
+models/u2netp.onnx
+```
+
+The Docker image includes the local inference library, but **the model weights are deliberately excluded from Git**. With `REQUIRE_BACKGROUND_AI=0`, the rest of the app can be used without the weights, but background-removal functionality should not be assumed to work. For an environment that must support background removal, install the model, set `REQUIRE_BACKGROUND_AI=1`, restart/recreate the web service, and test an actual image cutout as well as `/api/ready`. No external inference API is called.
+
+### 4. Shut down the disposable local environment
+
+```bash
+docker compose down
+```
+
+This stops local containers **without removing named volumes**. Do **not** use `down -v` against a project whose PostgreSQL, MongoDB, or uploaded images you need to keep.
+
+## API overview
+
+The following are application-owned endpoints, not third-party APIs. Most routes require an authenticated session cookie.
+
+| Area | Selected endpoints |
+| --- | --- |
+| Authentication | `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout` |
+| Profile | `GET /api/me`, `PATCH /api/me`, `DELETE /api/me`, `POST /api/me/avatar` |
+| Wardrobe | `GET /api/wardrobe`, `POST /api/wardrobe`, `PATCH /api/wardrobe/{id}`, `DELETE /api/wardrobe/{id}` |
+| Friends | `GET /api/users/search?q=`, `GET /api/friends`, `POST /api/friends`, `PATCH /api/friends/{id}`, `DELETE /api/friends/{id}` |
+| OOTD | `GET /api/ootds`, `POST /api/ootds`, `PATCH /api/ootds/{id}`, `DELETE /api/ootds/{id}` |
+| Borrowing | `GET /api/borrowing`, `POST /api/borrowing`, `PATCH /api/borrowing/{id}`, `DELETE /api/borrowing/{id}` |
+| Notifications / activity | `GET /api/notifications`, `GET /api/activity` and related create/update/delete routes for permitted records |
+| Service health | `GET /api/health`, `GET /api/ready` |
+
+In HTTPS environments, mutating browser requests must pass the application's same-origin validation against the configured `PUBLIC_ORIGIN`.
+
+## Testing and GitHub CI
+
+Use the supplied pre-push gate from the repository root on a Docker-capable development machine:
 
 ```bash
 bash scripts/prepush_gate.sh
 ```
 
-The pre-push gate checks source requirements, preview tests, real PostgreSQL + MongoDB integration, rollback behavior, and Docker image build. **Always review the output**: a successful earlier run is not proof that later changes passed.
+The gate runs source/static checks, Python/JavaScript validation, preview tests, **real PostgreSQL + MongoDB integration tests**, transactional rollback checks, and a Docker build. It creates a separate disposable Compose project for testing rather than intentionally modifying the live database volumes.
 
-GitHub Actions provides PR checks for API, browser UI, hybrid databases, Docker build and dependency security. Production delivery is **disabled by default** until a server, HTTPS domain, secrets and deployment approval have been configured. Deployment uses immutable image digests, health checks and automatic **web image rollback**; database backups/restores are a separate process.
+GitHub Actions additionally checks:
 
-See [Collaboration Guide](docs/CONTRIBUTING_TH.md) and [Production Release Checklist](docs/PRODUCTION_RELEASE_CHECKLIST_TH.md).
+1. Unit and API (preview)
+2. Browser UI smoke
+3. Hybrid DB (PostgreSQL + MongoDB)
+4. Build container images
+5. Dependency vulnerability audit
 
-## Project documentation
+A successful CI run on `main` can publish an immutable, commit-tagged web image to GHCR. The repository's branch protection requires a reviewed PR and passing checks before merging. Test results do not replace any genuine screenshots or demonstration evidence separately required by an instructor.
 
-- [Architecture](docs/ARCHITECTURE.md)
-- [API reference](docs/API_QUICK_REFERENCE.md)
-- [SQL ERD explanation](docs/SQL_ERD.md) and [MongoDB schema](docs/NOSQL_SCHEMA.md)
-- [Requirement evidence matrix](docs/REQUIREMENT_EVIDENCE_MATRIX.md)
-- [Screenshots checklist](docs/screenshots/README.md)
-- [Presentation outline](docs/PRESENTATION_OUTLINE.md)
+## Deployment and operations
 
-## Contributing
+### Currently used: private Ubuntu laptop/server
 
-We welcome contributions from the project team, especially UI and accessibility improvements. Create a branch such as `ui/wardrobe-layout`, open a pull request against `main`, include screenshots of visual changes, and wait for required checks and review before merge. **Do not push directly to `main`.**
+The active closed-beta setup uses a **separately configured `freesize-friends` Docker Compose project** (web on local port `3100`, persistent PostgreSQL/MongoDB and uploads) accessed through Tailscale HTTPS. Its host-local `.env.friends` and `compose.friends.yml` contain deployment-specific configuration and are **not part of this public source repository**. Do not attempt to recreate that environment by guessing credentials or hostnames; use the local setup above for a new installation.
 
-Please never commit `.env`, private uploads, ONNX weights, real-user screenshots, database files or credentials. See [the Thai contributing guide](docs/CONTRIBUTING_TH.md).
+Release flow:
 
-## Notes
+```text
+Feature branch -> Pull request -> Review + 5 CI checks -> Merge main
+-> Successful main CI -> GHCR image publish
+-> GitHub Actions Tailscale SSH notification (when enabled)
+-> Ubuntu systemd deploy agent -> Verified current-main release
+-> Pull immutable image -> Recreate web only -> Health checks
+-> Success, or web-image rollback and pause on a failed health check
+```
 
-Freesize is the **public-facing project name**. Some internal folders, Docker services and code identifiers still use the earlier name `wardrobeshare` to preserve existing working configurations; renaming internals should be a separate, tested pull request.
+A **30-minute systemd timer** also checks for eligible releases, including when GitHub's notification is unavailable. The agent refuses stale commits, insufficient disk space, missing GitHub release approvals/checks, or unhealthy services. Only the web image is swapped; the deploy process does **not** run `git pull`, rebuild an image locally, or delete PostgreSQL/MongoDB volumes. If `main` changes while the image is being pulled, it leaves the running web unchanged and retries on a future check.
 
-This is a student hybrid-database project and a closed-beta candidate. Public hosting, end-to-end production rollback/restore testing, and final instructor submission evidence are separate release tasks. No public URL is claimed yet.
+For an **already configured** Ubuntu deploy host, operators can inspect the setup with:
 
-**License:** No open-source license has been selected. Permission to contribute as a collaborator does not require making the repository open-source.
+```bash
+python3 scripts/freesize_local_deploy.py status
+python3 scripts/freesize_local_deploy.py plan
+systemctl list-timers freesize-local-deploy.timer
+sudo journalctl -u freesize-local-deploy.service -n 60 --no-pager -o cat
+docker ps --filter name=freesize-friends
+curl -fsS http://127.0.0.1:3100/api/ready
+```
+
+Once the host has been configured and verified, controlled deploy operations are:
+
+```bash
+# Run one scheduled-agent check now:
+sudo systemctl start freesize-local-deploy.service
+
+# Stop/start accepting future automatic releases:
+python3 scripts/freesize_local_deploy.py pause
+python3 scripts/freesize_local_deploy.py resume
+
+# Roll back to the locally retained previous web image (pauses the agent):
+python3 scripts/freesize_local_deploy.py rollback
+```
+
+Treat rollback as an operator action: verify the target image and health afterwards. These commands act on the active local host and should not be run blindly on a newly cloned development checkout. Never manually prune the current/rollback image while it is needed for recovery.
+
+The private push trigger is implemented by `.github/workflows/notify-laptop-after-release.yml` and `scripts/install_freesize_push_trigger.sh`. It uses Tailscale networking and a restricted SSH account; **never** commit or paste private SSH keys, OAuth secrets, or host-only environment files. A superseded-release or failed-trigger notification should be investigated from the systemd journal before changing the running service.
+
+### Alternative VPS deployment path
+
+The `deploy/` directory also contains a **separate**, opt-in VPS configuration using Caddy HTTPS, PostgreSQL, MongoDB, pinned GHCR images, health checks, and backup/restore scripts. The `production` job in `.github/workflows/release.yml` is gated by `DEPLOY_ENABLED=true` and must not be treated as the active laptop/Tailscale deployment. VPS provisioning, DNS, secrets, secure model storage, off-host backups and deployment approval are operator responsibilities.
+
+### Backups, restores, and data safety
+
+- Keep backups of **PostgreSQL, MongoDB, and uploaded photos**; an application-image rollback does not restore or reverse database updates.
+- The VPS sample `deploy/backup-data.sh` creates per-database dumps and an uploads archive with checksums. This is **not** an atomic snapshot of both databases together, and it does not automatically back up the active laptop deployment.
+- Copy encrypted backups to storage **outside** the host, with access controls; test restoration in a separate disposable Compose project before considering a production restore.
+- Before any real restore, confirm verified backup files, stop writes, arrange a maintenance window, and assess the recovery point. Never execute destructive restore commands against live data casually.
+- Never use `docker compose down -v`, indiscriminate volume pruning, or unreviewed schema changes against a live deployment.
+
+## Repository structure
+
+```text
+freesize/
+├── README.md
+├── app.py
+├── Dockerfile
+├── docker-compose.yml
+├── docker-compose.gate.yml
+├── compose.autodeploy.yml
+├── requirements.txt
+├── requirements-inference.txt
+├── .env.example
+├── static/                # Web UI, CSS, JavaScript, and image assets
+├── tests/                 # API, UI, database, safety and deployment tests
+├── scripts/               # Pre-push checks and local deployment agent
+├── deploy/                # Optional VPS configuration and backup scripts
+├── .github/workflows/     # CI, release, notification and rollback workflows
+└── docs/diagrams/         # Required architecture, SQL ERD, Mongo schema PNGs
+```
+
+## Collaboration and security notes
+
+Create a feature branch, open a pull request into `main`, allow the GitHub checks to run, and obtain the required review. Do not push directly to protected `main`. For UI changes, test desktop/mobile layout and ensure the backend/database behavior is unchanged. Confirm that `git status` does not include `.env`, personal photographs, private model binaries, credentials, or live database dumps before pushing.
+
+The app is designed for a limited-access student project/closed beta. It is **not claimed to be a fully hardened public SaaS**. Production deployment needs appropriately configured HTTPS, access restrictions, backups, restoration tests, and careful operational review. Internal technical tables and immutable system audit records are not editable by arbitrary users; cross-database consistency is eventual.
+
+**Naming note:** The public-facing project is **Freesize**. Some internal Compose names, database identifiers and paths still use the original `wardrobeshare` name for compatibility.
+
+**License:** No open-source license has been selected. Access to this repository does not imply a grant to reuse its code beyond applicable law and explicit permission.

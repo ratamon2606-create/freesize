@@ -1,5 +1,5 @@
 digraph ER {
- graph [rankdir=LR, bgcolor="white", pad="0.2", nodesep="0.36", ranksep="0.7", label="WardrobeShare — PostgreSQL Entity-Relationship Diagram", labelloc=t, fontsize=21, fontname="DejaVu Sans", fontcolor="#473528"];
+ graph [rankdir=LR, bgcolor="white", pad="0.2", nodesep="0.36", ranksep="0.7", label="Freesize — PostgreSQL Entity-Relationship Diagram", labelloc=t, fontsize=21, fontname="DejaVu Sans", fontcolor="#473528"];
  node [shape=record, style="rounded,filled", fontname="DejaVu Sans",fontsize=11, color="#A58A6B", fillcolor="#FCF7EF",margin="0.15,0.1"];
  edge [color="#9D826B",arrowsize=0.65,fontsize=9,fontname="DejaVu Sans"];
  users [label="{users|id PK\lusername UK\lemail UK\lpassword_hash\l}",fillcolor="#F0DFCA"];
