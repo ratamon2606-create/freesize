@@ -1,5 +1,5 @@
 digraph NoSQL {
- graph [rankdir=LR, bgcolor="white", pad="0.4", nodesep="0.55", ranksep="0.7", label="WardrobeShare — MongoDB Document Schema & Cross-DB Flow", labelloc=t, fontsize=21, fontname="DejaVu Sans", fontcolor="#473528"];
+ graph [rankdir=LR, bgcolor="white", pad="0.4", nodesep="0.55", ranksep="0.7", label="Freesize — MongoDB Document Schema & Cross-DB Flow", labelloc=t, fontsize=21, fontname="DejaVu Sans", fontcolor="#473528"];
  node [shape=box, style="rounded,filled", fillcolor="#FCF7EF", color="#A38A71", fontname="DejaVu Sans", fontsize=12, margin="0.25,0.18"];
  edge [color="#9D826B",fontsize=10,fontname="DejaVu Sans"];
  slot [label="SQL outfit_slots\nPK id", fillcolor="#E0E9DA"];

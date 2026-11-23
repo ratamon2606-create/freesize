@@ -9,7 +9,7 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(14.4 489.4)">
 <title>ER</title>
 <polygon fill="white" stroke="transparent" points="-14.4,14.4 -14.4,-489.4 1250.4,-489.4 1250.4,14.4 -14.4,14.4"/>
-<text text-anchor="middle" x="618" y="-454.2" font-family="DejaVu Sans" font-size="21.00" fill="#473528">WardrobeShare — PostgreSQL Entity&#45;Relationship Diagram</text>
+<text text-anchor="middle" x="618" y="-454.2" font-family="DejaVu Sans" font-size="21.00" fill="#473528">Freesize — PostgreSQL Entity&#45;Relationship Diagram</text>
 <!-- users -->
 <g id="node1" class="node">
 <title>users</title>
