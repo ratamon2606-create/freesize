@@ -1,10 +1,10 @@
 {
   "db_engine": "MongoDB",
   "collections": [
+    "activity_logs",
     "notifications",
     "outfit_compositions",
-    "borrow_status_logs",
-    "activity_logs"
+    "borrow_status_logs"
   ],
   "borrow_status_events": 9,
   "outbox_retry_attempts": 1,
