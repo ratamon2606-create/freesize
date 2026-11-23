@@ -202,7 +202,7 @@ The screenshots below document the FreeSize user interface and database validati
 
 **Evidence limits:** A screenshot of an edit form or confirmation dialog shows the UI workflow, but does not by itself prove a successful database update or deletion. The automated database tests and [test evidence](docs/screenshots/evidence/) document transaction rollback and SQL-to-MongoDB recovery on a separate disposable database.
 
-### Web application (20 screenshots)
+### Web application (23 screenshots)
 
 | Feature | Screenshot evidence |
 | --- | --- |
@@ -226,6 +226,10 @@ The screenshots below document the FreeSize user interface and database validati
 | MongoDB UI | [Notifications and reminders](docs/screenshots/18-notifications.png) |
 | MongoDB UI | [Activity entries and personal notes](docs/screenshots/19-activity-notes.png) |
 | MongoDB UI | [Borrow status log and personal notes](docs/screenshots/20-borrow-status-log.png) |
+
+| Wardrobe | [Successful clothing update](docs/screenshots/27-clothing-update-success.png) |
+| Wardrobe | [Successful clothing removal](docs/screenshots/28-clothing-delete-success.png) |
+| Activity | [Clothing update and removal audit entries](docs/screenshots/29-clothing-activity-audit.png) |
 
 ### Database and integration tests (6 screenshots)
 
