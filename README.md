@@ -12,6 +12,7 @@ A self-hosted social wardrobe application for organizing clothing, styling outfi
 
 ## Overview
 
+Youtube link: [Freesize](https://youtu.be/pssf54WoNos)
 Freesize lets people maintain a digital wardrobe, create and save outfit compositions, discover clothing shared by accepted friends, and manage physical borrowing. Images are stored on the host, not in a third-party storage API. Optional background removal runs inside the Python application with a locally provisioned ONNX model.
 
 ### Features
